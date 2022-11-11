@@ -1,9 +1,23 @@
+import 'package:account/views/bubble_stories.dart';
 import 'package:account/views/dashboard.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 
-class PurchasesScreen extends StatelessWidget {
+class PurchasesScreen extends StatefulWidget {
   const PurchasesScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PurchasesScreen> createState() => _PurchasesScreenState();
+}
+
+class _PurchasesScreenState extends State<PurchasesScreen> {
+  final List suppliers = [
+    "Suppier_name_1",
+    "Suppier_name_2",
+    "Suppier_name_3",
+    "Suppier_name_4",
+    "Suppier_name_5",
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +70,38 @@ class PurchasesScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          Container(
+            child: Text(
+              'Suppliers Recent Transactions',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.greenAccent,
+                fontSize: 24,
+              ),
+            ),
+          ),
+          Container(
+            height: 130,
+            /*child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  BubbleStories(text: 'Telugu'),
+                  BubbleStories(text: 'English'),
+                  BubbleStories(text: 'Hindi'),
+                  BubbleStories(text: 'Kanada'),
+                  BubbleStories(text: 'Rajasthani'),
+                ],
+              ),*/
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: suppliers.length,
+              itemBuilder: (context, index) {
+                return BubbleStories(
+                  text: suppliers[index],
+                );
+              },
+            ),
           ),
         ],
       ),
