@@ -1,20 +1,29 @@
-import 'package:account/global/global.dart';
-import 'package:account/model/menus.dart';
-import 'package:account/uploadScreens/menus_upload_screen.dart';
-import 'package:account/widgets/info_design.dart';
-import 'package:account/widgets/my_drawer.dart';
-import 'package:account/widgets/progress_bar.dart';
-import 'package:account/widgets/text_widget_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:account/global/global.dart';
+import 'package:account/model/items.dart';
+import 'package:account/model/menus.dart';
+import 'package:account/uploadScreens/items_upload_screen.dart';
+import 'package:account/uploadScreens/menus_upload_screen.dart';
+import 'package:account/widgets/info_design.dart';
+import 'package:account/widgets/items_design.dart';
+import 'package:account/widgets/my_drawer.dart';
+import 'package:account/widgets/progress_bar.dart';
+import 'package:account/widgets/text_widget_header.dart';
 
-class SuppliersScreen extends StatelessWidget {
-  const SuppliersScreen({Key? key}) : super(key: key);
+class ItemsScreen extends StatefulWidget {
+  final Menus? model;
+  ItemsScreen({this.model});
+
+  @override
+  _ItemsScreenState createState() => _ItemsScreenState();
+}
+
+class _ItemsScreenState extends State<ItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -30,8 +39,7 @@ class SuppliersScreen extends StatelessWidget {
           )),
         ),
         title: Text(
-          //sharedPreferences!.getString("name")!,
-          'Suppliers Screen',
+          sharedPreferences!.getString("name")!,
           style: const TextStyle(fontSize: 30, fontFamily: "Lobster"),
         ),
         centerTitle: true,
@@ -39,29 +47,34 @@ class SuppliersScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(
-              Icons.post_add,
+              Icons.library_add,
               color: Colors.cyan,
             ),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (c) => const MenusUploadScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (c) => ItemsUploadScreen(model: widget.model)));
             },
           ),
         ],
       ),
+      drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: [
           /*SliverPersistentHeader(
               pinned: true,
-              delegate: 
-              TextWidgetHeader(title: "Search Suppliers"),
-              ),*/
+              delegate: TextWidgetHeader(
+                  title:
+                      "My " + widget.model!.menuTitle.toString() + "'s Items"),
+                      ),*/
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("sellers")
                 .doc(sharedPreferences!.getString("uid"))
                 .collection("menus")
-                .orderBy("publishedDate", descending: true)
+                .doc(widget.model!.menuID)
+                .collection("items")
                 .snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData
@@ -74,11 +87,11 @@ class SuppliersScreen extends StatelessWidget {
                       crossAxisCount: 1,
                       staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
-                        Menus model = Menus.fromJson(
+                        Items model = Items.fromJson(
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
                         );
-                        return InfoDesignWidget(
+                        return ItemsDesignWidget(
                           model: model,
                           context: context,
                         );
@@ -90,12 +103,5 @@ class SuppliersScreen extends StatelessWidget {
         ],
       ),
     );
-    /*Scaffold(
-      appBar: AppBar(
-        actions: [],
-        title: Text('Suppliers Screen'),
-      ),
-      drawer: MyDrawer(),
-    );*/
   }
 }
