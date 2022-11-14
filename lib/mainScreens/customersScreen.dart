@@ -51,9 +51,12 @@ class CustomersScreen extends StatelessWidget {
       ),
       body: CustomScrollView(
         slivers: [
-          SliverPersistentHeader(
+          /*SliverPersistentHeader(
               pinned: true,
-              delegate: TextWidgetHeader(title: "Search Customers")),
+              delegate: 
+              TextWidgetHeader(title: "Search Customers"),
+              ),
+          */
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("sellers")

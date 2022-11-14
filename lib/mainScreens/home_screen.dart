@@ -107,90 +107,100 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: MyDrawer(),
       body: Column(
         children: [
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (c) => const PurchasesScreen()));
-                },
-                child: DashBoard(
-                  name: 'purchase',
-                  type: 'Cash',
-                  amount: '40000',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (c) => const PurchasesScreen()));
-                },
-                child: DashBoard(
-                  name: 'purchase',
-                  type: 'Credit',
-                  amount: '40000',
-                ),
-              ),
-            ],
-          ),
-          Row(
-            //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => const SalesScreen()));
-                },
-                child: Container(
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              //scrollDirection: Axis.horizontal,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const PurchasesScreen()));
+                  },
                   child: DashBoard(
-                    name: 'Sales',
+                    name: 'purchase',
                     type: 'Cash',
                     amount: '40000',
                   ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => const SalesScreen()));
-                },
-                child: Container(
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const PurchasesScreen()));
+                  },
                   child: DashBoard(
-                    name: 'Sales',
+                    name: 'purchase',
                     type: 'Credit',
                     amount: '40000',
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: () {},
-                child: Container(
-                  child: DashBoard(
-                    name: 'Total',
-                    type: 'Cash',
-                    amount: '40000',
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => const SalesScreen()));
+                  },
+                  child: Container(
+                    child: DashBoard(
+                      name: 'Sales',
+                      type: 'Cash',
+                      amount: '40000',
+                    ),
                   ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Container(
-                  child: DashBoard(
-                    name: 'Total',
-                    type: 'Credit',
-                    amount: '40000',
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => const SalesScreen()));
+                  },
+                  child: Container(
+                    child: DashBoard(
+                      name: 'Sales',
+                      type: 'Credit',
+                      amount: '40000',
+                    ),
                   ),
                 ),
-              )
-            ],
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Container(
+                    child: DashBoard(
+                      name: 'Total',
+                      type: 'Cash',
+                      amount: '40000',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Container(
+                    child: DashBoard(
+                      name: 'Total',
+                      type: 'Credit',
+                      amount: '40000',
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           Container(
             child: Text(
@@ -203,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Container(
-            height: 130,
+            height: 200,
             /*child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -235,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Container(
-            height: 130,
+            height: 200,
             /*child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [

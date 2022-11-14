@@ -125,7 +125,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
                       }
                     },
                   ),
-                  Row(
+                  /*Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
@@ -140,11 +140,15 @@ class _MySplashScreenState extends State<MySplashScreen> {
                           style: TextStyle(fontSize: 18),
                         ),
                         onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (c) => const AuthScreen()));
                           //Navigator.of(context).pushNamed(LoginScreen.routeName);
                         },
                       ),
                     ],
-                  ),
+                  ),*/
                 ],
               )
             ],

@@ -1,4 +1,5 @@
 import 'package:account/mainScreens/itemsScreen.dart';
+import 'package:account/views/bubble_stories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
@@ -45,19 +46,19 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              const SizedBox(
-                height: 4.0,
+              SizedBox(
+                height: 30.0,
               ),
               Divider(
                 height: 4,
                 thickness: 3,
                 color: Colors.grey[300],
               ),
-              Image.network(
+              /*Image.network(
                 widget.model!.thumbnailUrl!,
                 height: 220.0,
                 fit: BoxFit.cover,
-              ),
+              ),*/
               const SizedBox(
                 height: 1.0,
               ),
@@ -73,7 +74,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
                       fontFamily: "Train",
                     ),
                   ),
-                  IconButton(
+                  /*IconButton(
                     icon: const Icon(
                       Icons.delete_sweep,
                       color: Colors.pinkAccent,
@@ -82,7 +83,14 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
                       //delete menu
                       deleteMenu(widget.model!.menuID!);
                     },
+                  ),*/
+                  Text(
+                    '  20000'.toString(),
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
                   ),
+                  //BubbleStories(text: widget.model!.menuTitle!)
                 ],
               ),
 

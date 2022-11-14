@@ -1,7 +1,14 @@
+import 'package:account/global/global.dart';
+import 'package:account/model/menus.dart';
 import 'package:account/views/bubble_stories.dart';
 import 'package:account/views/dashboard.dart';
 import 'package:account/widgets/my_drawer.dart';
+import 'package:account/widgets/progress_bar.dart';
+import 'package:account/widgets/text_widget_header.dart';
+import 'package:account/widgets/transactions_info_design.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class PurchasesScreen extends StatefulWidget {
   const PurchasesScreen({Key? key}) : super(key: key);
@@ -39,69 +46,42 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
         title: Text('Purchases Screen'),
       ),
       drawer: MyDrawer(),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (c) => const PurchasesScreen()));
-                },
-                child: DashBoard(
-                  name: 'purchase',
-                  type: 'Cash',
-                  amount: '40000',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (c) => const PurchasesScreen()));
-                },
-                child: DashBoard(
-                  name: 'purchase',
-                  type: 'Credit',
-                  amount: '40000',
-                ),
-              ),
-            ],
+      body: CustomScrollView(
+        slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: TextWidgetHeader(title: "Purchases"),
           ),
-          Container(
-            child: Text(
-              'Suppliers Recent Transactions',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.greenAccent,
-                fontSize: 24,
-              ),
-            ),
-          ),
-          Container(
-            height: 130,
-            /*child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  BubbleStories(text: 'Telugu'),
-                  BubbleStories(text: 'English'),
-                  BubbleStories(text: 'Hindi'),
-                  BubbleStories(text: 'Kanada'),
-                  BubbleStories(text: 'Rajasthani'),
-                ],
-              ),*/
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: suppliers.length,
-              itemBuilder: (context, index) {
-                return BubbleStories(
-                  text: suppliers[index],
-                );
-              },
-            ),
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("sellers")
+                .doc(sharedPreferences!.getString("uid"))
+                .collection("menus")
+                .orderBy("publishedDate", descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              return !snapshot.hasData
+                  ? SliverToBoxAdapter(
+                      child: Center(
+                        child: circularProgress(),
+                      ),
+                    )
+                  : SliverStaggeredGrid.countBuilder(
+                      crossAxisCount: 1,
+                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      itemBuilder: (context, index) {
+                        Menus model = Menus.fromJson(
+                          snapshot.data!.docs[index].data()!
+                              as Map<String, dynamic>,
+                        );
+                        return InfoDesignWidget(
+                          model: model,
+                          context: context,
+                        );
+                      },
+                      itemCount: snapshot.data!.docs.length,
+                    );
+            },
           ),
         ],
       ),
