@@ -33,7 +33,7 @@ class _AuthScreenState extends State<AuthScreen> {
           title: const Text(
             "ShopAccount",
             style: TextStyle(
-              fontSize: 60,
+              fontSize: 40,
               color: Colors.white,
               fontFamily: "Lobster",
             ),

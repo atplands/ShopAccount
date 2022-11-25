@@ -1,0 +1,571 @@
+import 'dart:io';
+
+import 'package:account/mainScreens/customersScreen.dart';
+import 'package:account/mainScreens/suppliersScreen.dart';
+import 'package:account/model/customers.dart';
+import 'package:account/model/suppliers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:account/global/global.dart';
+import 'package:account/widgets/error_dialog.dart';
+import 'package:account/widgets/progress_bar.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as storageRef;
+
+class SuppTransUploadScreen extends StatefulWidget {
+  final Suppliers? model;
+  SuppTransUploadScreen({this.model});
+
+  @override
+  _SuppTransUploadScreenState createState() => _SuppTransUploadScreenState();
+}
+
+class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
+  XFile? imageXFile;
+  final ImagePicker _picker = ImagePicker();
+
+  TextEditingController transNameController = TextEditingController();
+  TextEditingController transTypeController = TextEditingController();
+  TextEditingController transInfoController = TextEditingController();
+  TextEditingController transDateController = TextEditingController();
+  TextEditingController transDueDateController = TextEditingController();
+  TextEditingController transClosedDateController = TextEditingController();
+  TextEditingController transPaymentDetailsController = TextEditingController();
+  TextEditingController transAmountController = TextEditingController();
+
+  bool uploading = false;
+  String uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+
+  defaultScreen() {
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Colors.cyan,
+              Colors.amber,
+            ],
+            begin: FractionalOffset(0.0, 0.0),
+            end: FractionalOffset(1.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          )),
+        ),
+        title: const Text(
+          "Add Transactions",
+          style: TextStyle(fontSize: 30, fontFamily: "Lobster"),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (c) => const SuppliersScreen()));
+          },
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          colors: [
+            Colors.cyan,
+            Colors.amber,
+          ],
+          begin: FractionalOffset(0.0, 0.0),
+          end: FractionalOffset(1.0, 0.0),
+          stops: [0.0, 1.0],
+          tileMode: TileMode.clamp,
+        )),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.shop_two,
+                color: Colors.white,
+                size: 200.0,
+              ),
+              ElevatedButton(
+                child: const Text(
+                  "Add New Transaction",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.amber),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  takeImage(context);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  takeImage(mContext) {
+    return showDialog(
+      context: mContext,
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text(
+            "Bill Image",
+            style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          ),
+          children: [
+            SimpleDialogOption(
+              child: const Text(
+                "Capture with Camera",
+                style: TextStyle(color: Colors.grey),
+              ),
+              onPressed: captureImageWithCamera,
+            ),
+            SimpleDialogOption(
+              child: const Text(
+                "Select from Gallery",
+                style: TextStyle(color: Colors.grey),
+              ),
+              onPressed: pickImageFromGallery,
+            ),
+            SimpleDialogOption(
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  captureImageWithCamera() async {
+    Navigator.pop(context);
+
+    imageXFile = await _picker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 720,
+      maxWidth: 1280,
+    );
+
+    setState(() {
+      imageXFile;
+    });
+  }
+
+  pickImageFromGallery() async {
+    Navigator.pop(context);
+
+    imageXFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 720,
+      maxWidth: 1280,
+    );
+
+    setState(() {
+      imageXFile;
+    });
+  }
+
+  suppTransUploadFormScreen() {
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Colors.cyan,
+              Colors.amber,
+            ],
+            begin: FractionalOffset(0.0, 0.0),
+            end: FractionalOffset(1.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          )),
+        ),
+        title: const Text(
+          "Uploading New Transaction",
+          style: TextStyle(fontSize: 20, fontFamily: "Lobster"),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            clearMenusUploadForm();
+          },
+        ),
+        actions: [
+          TextButton(
+            child: const Text(
+              "Add",
+              style: TextStyle(
+                color: Colors.cyan,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: "Varela",
+                letterSpacing: 3,
+              ),
+            ),
+            onPressed: uploading ? null : () => validateUploadForm(),
+          ),
+        ],
+      ),
+      body: ListView(
+        children: [
+          uploading == true ? linearProgress() : const Text(""),
+          Container(
+            height: 230,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: FileImage(File(imageXFile!.path)),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.perm_device_information,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: transNameController,
+                decoration: const InputDecoration(
+                  hintText: "Transaction Name",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.title,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: transTypeController,
+                decoration: const InputDecoration(
+                  hintText: "Cash Or Credit",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.title,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: transDateController,
+                decoration: const InputDecoration(
+                  hintText: "Transaction Date",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.title,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: transAmountController,
+                decoration: const InputDecoration(
+                  hintText: "Transaction Amount",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.title,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: transInfoController,
+                decoration: const InputDecoration(
+                  hintText: "description",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.title,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: transDueDateController,
+                decoration: const InputDecoration(
+                  hintText: "Bill Due Date",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.description,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                controller: transClosedDateController,
+                decoration: const InputDecoration(
+                  hintText: "Bill Closed Date",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.camera,
+              color: Colors.cyan,
+            ),
+            title: Container(
+              width: 250,
+              child: TextField(
+                keyboardType: TextInputType.number,
+                style: const TextStyle(color: Colors.black),
+                controller: transPaymentDetailsController,
+                decoration: const InputDecoration(
+                  hintText: "Partial Payment Details",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            color: Colors.amber,
+            thickness: 1,
+          ),
+        ],
+      ),
+    );
+  }
+
+  clearMenusUploadForm() {
+    setState(() {
+      transNameController.clear();
+      transTypeController.clear();
+      transInfoController.clear();
+      transPaymentDetailsController.clear();
+      transAmountController.clear();
+      transDateController.clear();
+      transDueDateController.clear();
+      transClosedDateController.clear();
+
+      imageXFile = null;
+    });
+  }
+
+  validateUploadForm() async {
+    if (imageXFile != null) {
+      if (transNameController.text.isNotEmpty &&
+          transTypeController.text.isNotEmpty &&
+          transInfoController.text.isNotEmpty &&
+          transPaymentDetailsController.text.isNotEmpty &&
+          transAmountController.text.isNotEmpty &&
+          transDateController.text.isNotEmpty &&
+          transDueDateController.text.isNotEmpty &&
+          transClosedDateController.text.isNotEmpty) {
+        setState(() {
+          uploading = true;
+        });
+
+        //upload image
+        String downloadUrl = await uploadImage(File(imageXFile!.path));
+
+        //save info to firestore
+        saveInfo(downloadUrl);
+      } else {
+        showDialog(
+            context: context,
+            builder: (c) {
+              return ErrorDialog(
+                message: "Please write name and info for Transaction.",
+              );
+            });
+      }
+    } else {
+      showDialog(
+          context: context,
+          builder: (c) {
+            return ErrorDialog(
+              message: "Please pick an image for Transaction.",
+            );
+          });
+    }
+  }
+
+  saveInfo(String downloadUrl) {
+    final ref = FirebaseFirestore.instance
+        .collection("shops")
+        .doc(sharedPreferences!.getString("uid"))
+        .collection("suppliers")
+        .doc(widget.model!.supplierID)
+        .collection("suppTrans");
+
+    ref.doc(uniqueIdName).set({
+      "custTransID": uniqueIdName,
+      "custID": widget.model!.supplierID,
+      "shopUID": sharedPreferences!.getString("uid"),
+      "shopName": sharedPreferences!.getString("name"),
+      "transName": transNameController.text.toString(),
+      "transType": transTypeController.text.toString(),
+      "transInfo": transInfoController.text.toString(),
+      "transPaymentDetails": transPaymentDetailsController.text.toString(),
+      "transAmount": int.parse(transAmountController.text),
+      "transDate": DateTime.now(),
+      "transDueDate": DateTime.now(),
+      "transClosedDate": DateTime.now(),
+      //"transDate": DateTime.parse(transDateController.text),
+      //"transDueDate": DateTime.parse(transDueDateController.text),
+      //"transClosedDate": DateTime.parse(transClosedDateController.text),
+      "publishedDate": DateTime.now(),
+      "status": "available",
+      "thumbnailUrl": downloadUrl,
+    }).then((value) {
+      final itemsRef = FirebaseFirestore.instance.collection("suppTrans");
+
+      itemsRef.doc(uniqueIdName).set({
+        "custTransID": uniqueIdName,
+        "custID": widget.model!.supplierID,
+        "shopUID": sharedPreferences!.getString("uid"),
+        "shopName": sharedPreferences!.getString("name"),
+        "transName": transNameController.text.toString(),
+        "transType": transTypeController.text.toString(),
+        "transInfo": transInfoController.text.toString(),
+        "transPaymentDetails": transPaymentDetailsController.text.toString(),
+        "transAmount": int.parse(transAmountController.text),
+        "transDate": DateTime.now(),
+        "transDueDate": DateTime.now(),
+        "transClosedDate": DateTime.now(),
+        //"transDate": DateTime.parse(transDateController.text),
+        //"transDueDate": DateTime.parse(transDueDateController.text),
+        //"transClosedDate": DateTime.parse(transClosedDateController.text),
+        "publishedDate": DateTime.now(),
+        "status": "available",
+        "thumbnailUrl": downloadUrl,
+      });
+    }).then((value) {
+      clearMenusUploadForm();
+
+      setState(() {
+        uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+        uploading = false;
+      });
+    });
+  }
+
+  uploadImage(mImageFile) async {
+    storageRef.Reference reference =
+        storageRef.FirebaseStorage.instance.ref().child("suppTrans");
+
+    storageRef.UploadTask uploadTask =
+        reference.child(uniqueIdName + ".jpg").putFile(mImageFile);
+
+    storageRef.TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+
+    String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadURL;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return imageXFile == null ? defaultScreen() : suppTransUploadFormScreen();
+  }
+}

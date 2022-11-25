@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future readDataAndSetDataLocally(User currentUser) async {
     await FirebaseFirestore.instance
-        .collection("sellers")
+        .collection("shops")
         .doc(currentUser.uid)
         .get()
         .then((snapshot) async {
@@ -79,6 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
             .setString("email", snapshot.data()!["sellerEmail"]);
         await sharedPreferences!
             .setString("name", snapshot.data()!["sellerName"]);
+        await sharedPreferences!
+            .setString("aboutUs", snapshot.data()!["aboutUs"]);
+        await sharedPreferences!.setString("phone", snapshot.data()!["phone"]);
         await sharedPreferences!
             .setString("photoUrl", snapshot.data()!["sellerAvatarUrl"]);
 

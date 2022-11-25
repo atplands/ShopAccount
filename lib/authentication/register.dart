@@ -30,6 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  TextEditingController aboutUsController = TextEditingController();
 
   XFile? imageXFile;
   final ImagePicker _picker = ImagePicker();
@@ -84,7 +85,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             emailController.text.isNotEmpty &&
             nameController.text.isNotEmpty &&
             phoneController.text.isNotEmpty &&
-            locationController.text.isNotEmpty) {
+            locationController.text.isNotEmpty &&
+            aboutUsController.text.isNotEmpty) {
           //start uploading image
           showDialog(
               context: context,
@@ -163,12 +165,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future saveDataToFirestore(User currentUser) async {
-    FirebaseFirestore.instance.collection("sellers").doc(currentUser.uid).set({
+    FirebaseFirestore.instance.collection("shops").doc(currentUser.uid).set({
       "sellerUID": currentUser.uid,
       "sellerEmail": currentUser.email,
       "sellerName": nameController.text.trim(),
       "sellerAvatarUrl": sellerImageUrl,
       "phone": phoneController.text.trim(),
+      "aboutUs": aboutUsController.text.trim(),
       "address": completeAddress,
       "status": "approved",
       "earnings": 0.0,
@@ -181,6 +184,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await sharedPreferences!.setString("uid", currentUser.uid);
     await sharedPreferences!.setString("email", currentUser.email.toString());
     await sharedPreferences!.setString("name", nameController.text.trim());
+    await sharedPreferences!.setString("phone", phoneController.text.trim());
+    await sharedPreferences!
+        .setString("aboutUs", aboutUsController.text.trim());
     await sharedPreferences!.setString("photoUrl", sellerImageUrl);
   }
 
@@ -248,6 +254,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     data: Icons.phone,
                     controller: phoneController,
                     hintText: "Phone",
+                    isObsecre: false,
+                  ),
+                  CustomTextField(
+                    data: Icons.book_rounded,
+                    controller: aboutUsController,
+                    hintText: "AboutShop",
                     isObsecre: false,
                   ),
                   CustomTextField(
