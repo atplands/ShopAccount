@@ -1,9 +1,12 @@
 import 'package:account/global/global.dart';
 import 'package:account/model/menus.dart';
+import 'package:account/model/suppliers.dart';
 import 'package:account/uploadScreens/menus_upload_screen.dart';
+import 'package:account/uploadScreens/suppliers_upload_screen.dart';
 import 'package:account/widgets/info_design.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
+import 'package:account/widgets/supplier_info_design.dart';
 import 'package:account/widgets/text_widget_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +46,10 @@ class SuppliersScreen extends StatelessWidget {
               color: Colors.cyan,
             ),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (c) => const MenusUploadScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (c) => const SuppliersUploadScreen()));
             },
           ),
         ],
@@ -58,9 +63,9 @@ class SuppliersScreen extends StatelessWidget {
               ),*/
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection("sellers")
+                .collection("shops")
                 .doc(sharedPreferences!.getString("uid"))
-                .collection("menus")
+                .collection("suppliers")
                 .orderBy("publishedDate", descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
@@ -74,11 +79,11 @@ class SuppliersScreen extends StatelessWidget {
                       crossAxisCount: 1,
                       staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
-                        Menus model = Menus.fromJson(
+                        Suppliers model = Suppliers.fromJson(
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
                         );
-                        return InfoDesignWidget(
+                        return SuppliersInfoDesignWidget(
                           model: model,
                           context: context,
                         );
@@ -90,12 +95,5 @@ class SuppliersScreen extends StatelessWidget {
         ],
       ),
     );
-    /*Scaffold(
-      appBar: AppBar(
-        actions: [],
-        title: Text('Suppliers Screen'),
-      ),
-      drawer: MyDrawer(),
-    );*/
   }
 }

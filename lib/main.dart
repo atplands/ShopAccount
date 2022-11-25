@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // Application name
-      title: 'Flutter Stateful Clicker Counter',
+      title: 'Shop Account',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // Application theme data, you can set the colors for the application as

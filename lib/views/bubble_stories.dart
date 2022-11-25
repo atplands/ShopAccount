@@ -40,6 +40,24 @@ class BubbleStories extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
+            /*ExpansionTile(
+              title: Text(
+                '${text}'.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              children: [
+                ListTile(
+                  title: Text(
+                    '  20000'.toString(),
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ],
+            ),*/
             Text(
               '  ${text}'.toString(),
               style: TextStyle(

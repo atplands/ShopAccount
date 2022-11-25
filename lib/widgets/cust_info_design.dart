@@ -1,29 +1,29 @@
+import 'package:account/mainScreens/custTransScreen.dart';
 import 'package:account/mainScreens/itemsScreen.dart';
-import 'package:account/views/bubble_stories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:account/global/global.dart';
 //import 'package:foodpanda_sellers_app/mainScreens/itemsScreen.dart';
-import 'package:account/model/menus.dart';
+import 'package:account/model/customers.dart';
 
-class InfoDesignWidget extends StatefulWidget {
-  Menus? model;
+class CustInfoDesignWidget extends StatefulWidget {
+  Customers? model;
   BuildContext? context;
 
-  InfoDesignWidget({this.model, this.context});
+  CustInfoDesignWidget({this.model, this.context});
 
   @override
-  _InfoDesignWidgetState createState() => _InfoDesignWidgetState();
+  _CustInfoDesignWidgetState createState() => _CustInfoDesignWidgetState();
 }
 
-class _InfoDesignWidgetState extends State<InfoDesignWidget> {
-  deleteMenu(String menuID) {
+class _CustInfoDesignWidgetState extends State<CustInfoDesignWidget> {
+  deleteMenu(String custID) {
     FirebaseFirestore.instance
-        .collection("sellers")
+        .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("menus")
-        .doc(menuID)
+        .collection("customers")
+        .doc(custID)
         .delete();
 
     //Fluttertoast.showToast(msg: "Menu Deleted Successfully.");
@@ -36,7 +36,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (c) => ItemsScreen(model: widget.model)));
+                builder: (c) => CustTransScreen(model: widget.model)));
       },
       splashColor: Colors.amber,
       child: Padding(
@@ -46,19 +46,19 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              SizedBox(
-                height: 30.0,
+              const SizedBox(
+                height: 4.0,
               ),
               Divider(
                 height: 4,
                 thickness: 3,
                 color: Colors.grey[300],
               ),
-              /*Image.network(
+              Image.network(
                 widget.model!.thumbnailUrl!,
                 height: 220.0,
                 fit: BoxFit.cover,
-              ),*/
+              ),
               const SizedBox(
                 height: 1.0,
               ),
@@ -66,51 +66,24 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExpansionTile(
-                    title: Text(
-                      widget.model!.menuTitle!,
-                      style: const TextStyle(
-                        color: Colors.cyan,
-                        fontSize: 20,
-                        fontFamily: "Train",
-                      ),
-                    ),
-                    children: [
-                      ListTile(
-                        title: Text(
-                          '  20000'.toString(),
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   Text(
-                    widget.model!.menuTitle!,
+                    widget.model!.custName!,
                     style: const TextStyle(
                       color: Colors.cyan,
                       fontSize: 20,
                       fontFamily: "Train",
                     ),
                   ),
-                  /*IconButton(
+                  IconButton(
                     icon: const Icon(
                       Icons.delete_sweep,
                       color: Colors.pinkAccent,
                     ),
                     onPressed: () {
                       //delete menu
-                      deleteMenu(widget.model!.menuID!);
+                      deleteMenu(widget.model!.custID!);
                     },
-                  ),*/
-                  Text(
-                    '  20000'.toString(),
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
                   ),
-                  //BubbleStories(text: widget.model!.menuTitle!)
                 ],
               ),
 

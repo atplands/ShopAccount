@@ -1,29 +1,30 @@
 import 'package:account/mainScreens/itemsScreen.dart';
-import 'package:account/views/bubble_stories.dart';
+import 'package:account/mainScreens/suppTransScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:account/global/global.dart';
 //import 'package:foodpanda_sellers_app/mainScreens/itemsScreen.dart';
-import 'package:account/model/menus.dart';
+import 'package:account/model/suppliers.dart';
 
-class InfoDesignWidget extends StatefulWidget {
-  Menus? model;
+class SuppliersInfoDesignWidget extends StatefulWidget {
+  Suppliers? model;
   BuildContext? context;
 
-  InfoDesignWidget({this.model, this.context});
+  SuppliersInfoDesignWidget({this.model, this.context});
 
   @override
-  _InfoDesignWidgetState createState() => _InfoDesignWidgetState();
+  _SuppliersInfoDesignWidgetState createState() =>
+      _SuppliersInfoDesignWidgetState();
 }
 
-class _InfoDesignWidgetState extends State<InfoDesignWidget> {
-  deleteMenu(String menuID) {
+class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
+  deleteMenu(String supplierID) {
     FirebaseFirestore.instance
-        .collection("sellers")
+        .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("menus")
-        .doc(menuID)
+        .collection("suppliers")
+        .doc(supplierID)
         .delete();
 
     //Fluttertoast.showToast(msg: "Menu Deleted Successfully.");
@@ -36,7 +37,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (c) => ItemsScreen(model: widget.model)));
+                builder: (c) => SuppTransScreen(model: widget.model)));
       },
       splashColor: Colors.amber,
       child: Padding(
@@ -46,71 +47,68 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              SizedBox(
-                height: 30.0,
+              const SizedBox(
+                height: 4.0,
               ),
               Divider(
                 height: 4,
                 thickness: 3,
                 color: Colors.grey[300],
               ),
-              /*Image.network(
+              Image.network(
                 widget.model!.thumbnailUrl!,
                 height: 220.0,
                 fit: BoxFit.cover,
-              ),*/
+              ),
               const SizedBox(
                 height: 1.0,
               ),
 
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ExpansionTile(
-                    title: Text(
-                      widget.model!.menuTitle!,
-                      style: const TextStyle(
-                        color: Colors.cyan,
-                        fontSize: 20,
-                        fontFamily: "Train",
-                      ),
-                    ),
-                    children: [
-                      ListTile(
-                        title: Text(
-                          '  20000'.toString(),
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   Text(
-                    widget.model!.menuTitle!,
+                    widget.model!.supplierName!,
                     style: const TextStyle(
                       color: Colors.cyan,
                       fontSize: 20,
                       fontFamily: "Train",
                     ),
                   ),
-                  /*IconButton(
+                  Text(
+                    widget.model!.supplierInfo!,
+                    style: const TextStyle(
+                      color: Colors.cyan,
+                      fontSize: 20,
+                      fontFamily: "Train",
+                    ),
+                  ),
+                  Text(
+                    widget.model!.supplierContact!,
+                    style: const TextStyle(
+                      color: Colors.cyan,
+                      fontSize: 20,
+                      fontFamily: "Train",
+                    ),
+                  ),
+                  Text(
+                    widget.model!.supplierAddress!,
+                    style: const TextStyle(
+                      color: Colors.cyan,
+                      fontSize: 20,
+                      fontFamily: "Train",
+                    ),
+                  ),
+                  IconButton(
                     icon: const Icon(
                       Icons.delete_sweep,
                       color: Colors.pinkAccent,
                     ),
                     onPressed: () {
                       //delete menu
-                      deleteMenu(widget.model!.menuID!);
+                      deleteMenu(widget.model!.supplierID!);
                     },
-                  ),*/
-                  Text(
-                    '  20000'.toString(),
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
                   ),
-                  //BubbleStories(text: widget.model!.menuTitle!)
                 ],
               ),
 
