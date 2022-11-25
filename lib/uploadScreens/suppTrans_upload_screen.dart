@@ -1,19 +1,24 @@
 import 'dart:io';
 
+import 'package:account/main.dart';
+import 'package:account/mainScreens/custTransScreen.dart';
 import 'package:account/mainScreens/customersScreen.dart';
 import 'package:account/mainScreens/suppliersScreen.dart';
 import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:account/global/global.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/progress_bar.dart';
+import 'package:flutter/semantics.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storageRef;
 
 class SuppTransUploadScreen extends StatefulWidget {
   final Suppliers? model;
+
   SuppTransUploadScreen({this.model});
 
   @override
@@ -21,6 +26,11 @@ class SuppTransUploadScreen extends StatefulWidget {
 }
 
 class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
+  DateTime? todayDateTime = DateTime.now();
+  DateTime? transDateTime;
+  DateTime? transDueDateTime;
+  DateTime? transClosedDateTime;
+  String? billType = 'Credit';
   XFile? imageXFile;
   final ImagePicker _picker = ImagePicker();
 
@@ -64,8 +74,8 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (c) => const SuppliersScreen()));
+            Navigator.push(
+                context, MaterialPageRoute(builder: (c) => SuppliersScreen()));
           },
         ),
       ),
@@ -183,7 +193,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
     });
   }
 
-  suppTransUploadFormScreen() {
+  custTransUploadFormScreen() {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -256,7 +266,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.perm_device_information,
+              Icons.title,
               color: Colors.cyan,
             ),
             title: Container(
@@ -278,19 +288,38 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.title,
+              Icons.menu,
               color: Colors.cyan,
             ),
             title: Container(
               width: 250,
-              child: TextField(
+              /*decoration: InputDecoration(
+                border: InputBorder.none,
+              ),*/
+              child: DropdownButton<String>(
+                value: billType,
+                //icon: Icon(Icons.menu),
                 style: const TextStyle(color: Colors.black),
-                controller: transTypeController,
-                decoration: const InputDecoration(
-                  hintText: "Cash Or Credit",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
-                ),
+                //itemHeight: 2,
+                underline: Container(color: Colors.white),
+                onChanged: (String? newValue) {
+                  setState(
+                    () {
+                      transTypeController.text = newValue.toString();
+                      billType = newValue.toString();
+                    },
+                  );
+                },
+                items: const [
+                  DropdownMenuItem<String>(
+                    value: 'Cash',
+                    child: Text('Cash'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'Credit',
+                    child: Text('Credit'),
+                  ),
+                ],
               ),
             ),
           ),
@@ -300,19 +329,44 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.title,
+              Icons.calendar_today,
               color: Colors.cyan,
             ),
             title: Container(
               width: 250,
-              child: TextField(
-                style: const TextStyle(color: Colors.black),
-                controller: transDateController,
-                decoration: const InputDecoration(
-                  hintText: "Transaction Date",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
-                ),
+              padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+              margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+              child: CupertinoButton(
+                padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                child: transDateTime == null
+                    ? Text(
+                        'Transaction Date',
+                        style: const TextStyle(color: Colors.grey),
+                      )
+                    : Text(
+                        '${transDateTime}',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                //style: const TextStyle(color: Colors.grey),
+
+                onPressed: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) => SizedBox(
+                      height: 250,
+                      child: CupertinoDatePicker(
+                        backgroundColor: Colors.white,
+                        initialDateTime: todayDateTime,
+                        onDateTimeChanged: (DateTime newTime) {
+                          setState(
+                            () => transDateTime = newTime,
+                          );
+                        },
+                        use24hFormat: true,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -322,12 +376,13 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.title,
+              Icons.currency_exchange,
               color: Colors.cyan,
             ),
             title: Container(
               width: 250,
               child: TextField(
+                keyboardType: TextInputType.number,
                 style: const TextStyle(color: Colors.black),
                 controller: transAmountController,
                 decoration: const InputDecoration(
@@ -344,7 +399,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.title,
+              Icons.perm_device_information,
               color: Colors.cyan,
             ),
             title: Container(
@@ -353,7 +408,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: transInfoController,
                 decoration: const InputDecoration(
-                  hintText: "description",
+                  hintText: "Transacgtion Info",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -366,19 +421,44 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.title,
+              Icons.calendar_month_sharp,
               color: Colors.cyan,
             ),
             title: Container(
               width: 250,
-              child: TextField(
-                style: const TextStyle(color: Colors.black),
-                controller: transDueDateController,
-                decoration: const InputDecoration(
-                  hintText: "Bill Due Date",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
-                ),
+              padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+              margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+              child: CupertinoButton(
+                padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                child: transDateTime == null
+                    ? Text(
+                        'Bill Due Date',
+                        style: const TextStyle(color: Colors.grey),
+                      )
+                    : Text(
+                        '${transDueDateTime}',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                //style: const TextStyle(color: Colors.grey),
+
+                onPressed: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) => SizedBox(
+                      height: 250,
+                      child: CupertinoDatePicker(
+                        backgroundColor: Colors.white,
+                        initialDateTime: todayDateTime,
+                        onDateTimeChanged: (DateTime newTime) {
+                          setState(
+                            () => transDueDateTime = newTime,
+                          );
+                        },
+                        use24hFormat: true,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -388,19 +468,44 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.description,
+              Icons.calendar_view_day_outlined,
               color: Colors.cyan,
             ),
             title: Container(
               width: 250,
-              child: TextField(
-                style: const TextStyle(color: Colors.black),
-                controller: transClosedDateController,
-                decoration: const InputDecoration(
-                  hintText: "Bill Closed Date",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
-                ),
+              padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+              margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+              child: CupertinoButton(
+                padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                child: transDateTime == null
+                    ? Text(
+                        'Bill Closed Date',
+                        style: const TextStyle(color: Colors.grey),
+                      )
+                    : Text(
+                        '${transClosedDateTime}',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                //style: const TextStyle(color: Colors.grey),
+
+                onPressed: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) => SizedBox(
+                      height: 250,
+                      child: CupertinoDatePicker(
+                        backgroundColor: Colors.white,
+                        initialDateTime: todayDateTime,
+                        onDateTimeChanged: (DateTime newTime) {
+                          setState(
+                            () => transClosedDateTime = newTime,
+                          );
+                        },
+                        use24hFormat: true,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -416,7 +521,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
             title: Container(
               width: 250,
               child: TextField(
-                keyboardType: TextInputType.number,
+                //keyboardType: TextInputType.number,
                 style: const TextStyle(color: Colors.black),
                 controller: transPaymentDetailsController,
                 decoration: const InputDecoration(
@@ -508,9 +613,9 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
       "transInfo": transInfoController.text.toString(),
       "transPaymentDetails": transPaymentDetailsController.text.toString(),
       "transAmount": int.parse(transAmountController.text),
-      "transDate": DateTime.now(),
-      "transDueDate": DateTime.now(),
-      "transClosedDate": DateTime.now(),
+      "transDate": DateTime.parse(transDateTime.toString()),
+      "transDueDate": DateTime.parse(transDueDateTime.toString()),
+      "transClosedDate": DateTime.parse(transClosedDateTime.toString()),
       //"transDate": DateTime.parse(transDateController.text),
       //"transDueDate": DateTime.parse(transDueDateController.text),
       //"transClosedDate": DateTime.parse(transClosedDateController.text),
@@ -521,8 +626,8 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
       final itemsRef = FirebaseFirestore.instance.collection("suppTrans");
 
       itemsRef.doc(uniqueIdName).set({
-        "custTransID": uniqueIdName,
-        "custID": widget.model!.supplierID,
+        "suppTransID": uniqueIdName,
+        "suppID": widget.model!.supplierID,
         "shopUID": sharedPreferences!.getString("uid"),
         "shopName": sharedPreferences!.getString("name"),
         "transName": transNameController.text.toString(),
@@ -530,9 +635,9 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
         "transInfo": transInfoController.text.toString(),
         "transPaymentDetails": transPaymentDetailsController.text.toString(),
         "transAmount": int.parse(transAmountController.text),
-        "transDate": DateTime.now(),
-        "transDueDate": DateTime.now(),
-        "transClosedDate": DateTime.now(),
+        "transDate": DateTime.parse(transDateTime.toString()),
+        "transDueDate": DateTime.parse(transDueDateTime.toString()),
+        "transClosedDate": DateTime.parse(transClosedDateTime.toString()),
         //"transDate": DateTime.parse(transDateController.text),
         //"transDueDate": DateTime.parse(transDueDateController.text),
         //"transClosedDate": DateTime.parse(transClosedDateController.text),
@@ -552,7 +657,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
 
   uploadImage(mImageFile) async {
     storageRef.Reference reference =
-        storageRef.FirebaseStorage.instance.ref().child("suppTrans");
+        storageRef.FirebaseStorage.instance.ref().child("custTrans");
 
     storageRef.UploadTask uploadTask =
         reference.child(uniqueIdName + ".jpg").putFile(mImageFile);
@@ -566,6 +671,6 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return imageXFile == null ? defaultScreen() : suppTransUploadFormScreen();
+    return imageXFile == null ? defaultScreen() : custTransUploadFormScreen();
   }
 }
