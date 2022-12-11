@@ -428,7 +428,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
               child: CupertinoButton(
                 padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                child: transDateTime == null
+                child: transDueDateTime == null
                     ? Text(
                         'Bill Due Date',
                         style: const TextStyle(color: Colors.grey),
@@ -475,7 +475,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
               child: CupertinoButton(
                 padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                child: transDateTime == null
+                child: transClosedDateTime == null
                     ? Text(
                         'Bill Closed Date',
                         style: const TextStyle(color: Colors.grey),
@@ -557,13 +557,14 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
   validateUploadForm() async {
     if (imageXFile != null) {
       if (transNameController.text.isNotEmpty &&
-          transTypeController.text.isNotEmpty &&
-          transInfoController.text.isNotEmpty &&
-          transPaymentDetailsController.text.isNotEmpty &&
-          transAmountController.text.isNotEmpty &&
-          transDateController.text.isNotEmpty &&
-          transDueDateController.text.isNotEmpty &&
-          transClosedDateController.text.isNotEmpty) {
+              transTypeController.text.isNotEmpty &&
+              transInfoController.text.isNotEmpty &&
+              transPaymentDetailsController.text.isNotEmpty &&
+              transAmountController.text.isNotEmpty
+          //transDateController.text.isNotEmpty &&
+          //transDueDateController.text.isNotEmpty &&
+          //transClosedDateController.text.isNotEmpty
+          ) {
         setState(() {
           uploading = true;
         });
@@ -626,6 +627,9 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
       itemsRef.doc(uniqueIdName).set({
         "custTransID": uniqueIdName,
         "custID": widget.model!.custID,
+        "custName": widget.model!.custName,
+        "custContact": widget.model!.custContact,
+        "custAddress": widget.model!.custAddress,
         "shopUID": sharedPreferences!.getString("uid"),
         "shopName": sharedPreferences!.getString("name"),
         "transName": transNameController.text.toString(),

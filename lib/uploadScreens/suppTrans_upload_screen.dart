@@ -408,7 +408,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: transInfoController,
                 decoration: const InputDecoration(
-                  hintText: "Transacgtion Info",
+                  hintText: "Transaction Info",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -430,7 +430,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
               margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
               child: CupertinoButton(
                 padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                child: transDateTime == null
+                child: transDueDateTime == null
                     ? Text(
                         'Bill Due Date',
                         style: const TextStyle(color: Colors.grey),
@@ -477,7 +477,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
               margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
               child: CupertinoButton(
                 padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                child: transDateTime == null
+                child: transClosedDateTime == null
                     ? Text(
                         'Bill Closed Date',
                         style: const TextStyle(color: Colors.grey),
@@ -559,13 +559,14 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
   validateUploadForm() async {
     if (imageXFile != null) {
       if (transNameController.text.isNotEmpty &&
-          transTypeController.text.isNotEmpty &&
-          transInfoController.text.isNotEmpty &&
-          transPaymentDetailsController.text.isNotEmpty &&
-          transAmountController.text.isNotEmpty &&
-          transDateController.text.isNotEmpty &&
-          transDueDateController.text.isNotEmpty &&
-          transClosedDateController.text.isNotEmpty) {
+              transTypeController.text.isNotEmpty &&
+              transInfoController.text.isNotEmpty &&
+              transPaymentDetailsController.text.isNotEmpty &&
+              transAmountController.text.isNotEmpty
+          //transDateController.text.isNotEmpty &&
+          //transDueDateController.text.isNotEmpty &&
+          //transClosedDateController.text.isNotEmpty
+          ) {
         setState(() {
           uploading = true;
         });
@@ -604,8 +605,11 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
         .collection("suppTrans");
 
     ref.doc(uniqueIdName).set({
-      "custTransID": uniqueIdName,
-      "custID": widget.model!.supplierID,
+      "suppTransID": uniqueIdName,
+      "supplierID": widget.model!.supplierID,
+      "supplierName": widget.model!.supplierName,
+      "supplierContact": widget.model!.supplierInfo,
+      "supplierAddress": widget.model!.supplierAddress,
       "shopUID": sharedPreferences!.getString("uid"),
       "shopName": sharedPreferences!.getString("name"),
       "transName": transNameController.text.toString(),
@@ -627,7 +631,10 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
 
       itemsRef.doc(uniqueIdName).set({
         "suppTransID": uniqueIdName,
-        "suppID": widget.model!.supplierID,
+        "supplierID": widget.model!.supplierID,
+        "supplierName": widget.model!.supplierName,
+        "supplierContact": widget.model!.supplierInfo,
+        "supplierAddress": widget.model!.supplierAddress,
         "shopUID": sharedPreferences!.getString("uid"),
         "shopName": sharedPreferences!.getString("name"),
         "transName": transNameController.text.toString(),
@@ -657,7 +664,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
 
   uploadImage(mImageFile) async {
     storageRef.Reference reference =
-        storageRef.FirebaseStorage.instance.ref().child("custTrans");
+        storageRef.FirebaseStorage.instance.ref().child("suppTrans");
 
     storageRef.UploadTask uploadTask =
         reference.child(uniqueIdName + ".jpg").putFile(mImageFile);

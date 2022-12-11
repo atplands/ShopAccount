@@ -1,4 +1,5 @@
 import 'package:account/mainScreens/itemsScreen.dart';
+import 'package:account/model/supTrans.dart';
 import 'package:account/views/bubble_stories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class InfoDesignWidget extends StatefulWidget {
 class _InfoDesignWidgetState extends State<InfoDesignWidget> {
   deleteMenu(String menuID) {
     FirebaseFirestore.instance
-        .collection("sellers")
+        .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
         .collection("menus")
         .doc(menuID)

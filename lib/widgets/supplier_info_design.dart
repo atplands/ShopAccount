@@ -1,11 +1,14 @@
+import 'package:account/mainScreens/custTransScreen.dart';
 import 'package:account/mainScreens/itemsScreen.dart';
 import 'package:account/mainScreens/suppTransScreen.dart';
+import 'package:account/mainScreens/suppliersEditScreen.dart';
+import 'package:account/model/suppliers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:account/global/global.dart';
 //import 'package:foodpanda_sellers_app/mainScreens/itemsScreen.dart';
-import 'package:account/model/suppliers.dart';
+import 'package:account/model/customers.dart';
 
 class SuppliersInfoDesignWidget extends StatefulWidget {
   Suppliers? model;
@@ -19,13 +22,18 @@ class SuppliersInfoDesignWidget extends StatefulWidget {
 }
 
 class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
-  deleteMenu(String supplierID) {
+  deleteMenu(String custID) {
     FirebaseFirestore.instance
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("suppliers")
-        .doc(supplierID)
-        .delete();
+        .collection("customers")
+        .doc(custID)
+        .delete()
+        .then(
+      (value) {
+        FirebaseFirestore.instance.collection("customers").doc(custID).delete();
+      },
+    );
 
     //Fluttertoast.showToast(msg: "Menu Deleted Successfully.");
   }
@@ -35,9 +43,11 @@ class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (c) => SuppTransScreen(model: widget.model)));
+          context,
+          MaterialPageRoute(
+            builder: (c) => SuppTransScreen(model: widget.model),
+          ),
+        );
       },
       splashColor: Colors.amber,
       child: Padding(
@@ -64,7 +74,7 @@ class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
                 height: 1.0,
               ),
 
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -75,29 +85,19 @@ class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
                       fontFamily: "Train",
                     ),
                   ),
-                  Text(
-                    widget.model!.supplierInfo!,
-                    style: const TextStyle(
-                      color: Colors.cyan,
-                      fontSize: 20,
-                      fontFamily: "Train",
+                  IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.lightGreenAccent,
                     ),
-                  ),
-                  Text(
-                    widget.model!.supplierContact!,
-                    style: const TextStyle(
-                      color: Colors.cyan,
-                      fontSize: 20,
-                      fontFamily: "Train",
-                    ),
-                  ),
-                  Text(
-                    widget.model!.supplierAddress!,
-                    style: const TextStyle(
-                      color: Colors.cyan,
-                      fontSize: 20,
-                      fontFamily: "Train",
-                    ),
+                    onPressed: () {
+                      //delete menu
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) => SupplierEditScreen()));
+                      //deleteMenu(widget.model!.custID!);
+                    },
                   ),
                   IconButton(
                     icon: const Icon(

@@ -1,9 +1,12 @@
 import 'package:account/global/global.dart';
+//import 'package:account/mainScreens/purchase_Info_design.dart';
 import 'package:account/model/menus.dart';
+import 'package:account/model/supTrans.dart';
 import 'package:account/views/bubble_stories.dart';
 import 'package:account/views/dashboard.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
+import 'package:account/widgets/purchase_Info_design.dart';
 import 'package:account/widgets/text_widget_header.dart';
 import 'package:account/widgets/transactions_info_design.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,63 +30,139 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Colors.cyan,
-              Colors.amber,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                Colors.cyan,
+                Colors.amber,
+              ],
+              begin: FractionalOffset(0.0, 0.0),
+              end: FractionalOffset(1.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp,
+            )),
+          ),
+          actions: [],
+          title: Text('Purchases Screen'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(
+                icon: Icon(
+                  Icons.money,
+                  color: Colors.white,
+                ),
+                text: "Credit",
+              ),
+              Tab(
+                icon: Icon(
+                  Icons.money_off_csred_outlined,
+                  color: Colors.white,
+                ),
+                text: "Cash",
+              ),
             ],
-            begin: FractionalOffset(0.0, 0.0),
-            end: FractionalOffset(1.0, 0.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp,
-          )),
+            indicatorColor: Colors.white38,
+            indicatorWeight: 6,
+          ),
         ),
-        actions: [],
-        title: Text('Purchases Screen'),
-      ),
-      drawer: MyDrawer(),
-      body: CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: TextWidgetHeader(title: "Purchases"),
-          ),
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("sellers")
-                .doc(sharedPreferences!.getString("uid"))
-                .collection("menus")
-                .orderBy("publishedDate", descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              return !snapshot.hasData
-                  ? SliverToBoxAdapter(
-                      child: Center(
-                        child: circularProgress(),
-                      ),
-                    )
-                  : SliverStaggeredGrid.countBuilder(
-                      crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
-                      itemBuilder: (context, index) {
-                        Menus model = Menus.fromJson(
-                          snapshot.data!.docs[index].data()!
-                              as Map<String, dynamic>,
-                        );
-                        return InfoDesignWidget(
-                          model: model,
-                          context: context,
-                        );
+        drawer: MyDrawer(),
+        body: Container(
+          child: TabBarView(
+            children: [
+              Container(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: TextWidgetHeader(title: "Purchases"),
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          //.collection("shops")
+                          //.doc(sharedPreferences!.getString("uid"))
+                          .collection("suppTrans")
+                          .where("transType", isEqualTo: "Credit ")
+                          //.orderBy("publishedDate", descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        return !snapshot.hasData
+                            ? SliverToBoxAdapter(
+                                child: Center(
+                                  child: circularProgress(),
+                                ),
+                              )
+                            : SliverStaggeredGrid.countBuilder(
+                                crossAxisCount: 1,
+                                staggeredTileBuilder: (c) =>
+                                    StaggeredTile.fit(1),
+                                itemBuilder: (context, index) {
+                                  SupTrans model = SupTrans.fromJson(
+                                    snapshot.data!.docs[index].data()!
+                                        as Map<String, dynamic>,
+                                  );
+                                  return PurInfoDesignWidget(
+                                    model: model,
+                                    context: context,
+                                  );
+                                },
+                                itemCount: snapshot.data!.docs.length,
+                              );
                       },
-                      itemCount: snapshot.data!.docs.length,
-                    );
-            },
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: TextWidgetHeader(title: "Purchases"),
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          //.collection("shops")
+                          //.doc(sharedPreferences!.getString("uid"))
+                          .collection("suppTrans")
+                          .where("transType", isEqualTo: "Cash")
+                          //.orderBy("publishedDate", descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        return !snapshot.hasData
+                            ? SliverToBoxAdapter(
+                                child: Center(
+                                  child: circularProgress(),
+                                ),
+                              )
+                            : SliverStaggeredGrid.countBuilder(
+                                crossAxisCount: 1,
+                                staggeredTileBuilder: (c) =>
+                                    StaggeredTile.fit(1),
+                                itemBuilder: (context, index) {
+                                  SupTrans model = SupTrans.fromJson(
+                                    snapshot.data!.docs[index].data()!
+                                        as Map<String, dynamic>,
+                                  );
+                                  return PurInfoDesignWidget(
+                                    model: model,
+                                    context: context,
+                                  );
+                                },
+                                itemCount: snapshot.data!.docs.length,
+                              );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

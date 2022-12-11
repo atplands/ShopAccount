@@ -166,13 +166,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future saveDataToFirestore(User currentUser) async {
     FirebaseFirestore.instance.collection("shops").doc(currentUser.uid).set({
-      "sellerUID": currentUser.uid,
-      "sellerEmail": currentUser.email,
-      "sellerName": nameController.text.trim(),
-      "sellerAvatarUrl": sellerImageUrl,
+      "shopUID": currentUser.uid,
+      "shopEmail": currentUser.email,
+      "shopName": nameController.text.trim(),
+      "shopAvatarUrl": sellerImageUrl,
       "phone": phoneController.text.trim(),
       "aboutUs": aboutUsController.text.trim(),
-      "address": completeAddress,
+      "address": locationController.text.trim(),
       "status": "approved",
       "earnings": 0.0,
       "lat": position!.latitude,
@@ -184,9 +184,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await sharedPreferences!.setString("uid", currentUser.uid);
     await sharedPreferences!.setString("email", currentUser.email.toString());
     await sharedPreferences!.setString("name", nameController.text.trim());
+    await sharedPreferences!.setString("pwd", passwordController.text.trim());
     await sharedPreferences!.setString("phone", phoneController.text.trim());
     await sharedPreferences!
         .setString("aboutUs", aboutUsController.text.trim());
+    await sharedPreferences!
+        .setString("address", locationController.text.trim());
     await sharedPreferences!.setString("photoUrl", sellerImageUrl);
   }
 

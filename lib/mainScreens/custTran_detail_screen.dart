@@ -1,5 +1,7 @@
+import 'package:account/mainScreens/custTransEditScreen.dart';
 import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/model/custTrans.dart';
+import 'package:account/uploadScreens/custTrans_upload_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,13 +41,33 @@ class _CustTransDetailsScreenState extends State<CustTransDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppBar(
-        title: sharedPreferences!.getString("name"),
+      appBar: AppBar(
+        title: Text(sharedPreferences!.getString("name").toString()),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.edit,
+              semanticLabel: ("Edit"),
+              color: Color(0xff09a20e),
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (c) =>
+                          CustTransEditScreen(model: widget.model!)));
+            },
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(widget.model!.thumbnailUrl.toString()),
+          Container(
+            width: 120,
+            height: 80,
+            child: Image.network(widget.model!.thumbnailUrl.toString()),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
