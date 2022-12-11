@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:account/mainScreens/customersScreen.dart';
+import 'package:account/model/customers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:account/global/global.dart';
@@ -55,7 +57,7 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (c) => const HomeScreen()));
+                context, MaterialPageRoute(builder: (c) => CustomersScreen()));
           },
         ),
       ),
@@ -398,7 +400,25 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
       "publishedDate": DateTime.now(),
       "status": "available",
       "thumbnailUrl": downloadUrl,
-    });
+    }).then(
+      (value) {
+        final custRef = FirebaseFirestore.instance.collection("customers");
+
+        custRef.doc(uniqueIdName).set(
+          {
+            "custID": uniqueIdName,
+            "shopUID": sharedPreferences!.getString("uid"),
+            "custName": custNameController.text.toString(),
+            "custInfo": custInfoController.text.toString(),
+            "custContact": custContactController.text.toString(),
+            "custAddress": custAddressController.text.toString(),
+            "publishedDate": DateTime.now(),
+            "status": "available",
+            "thumbnailUrl": downloadUrl,
+          },
+        );
+      },
+    );
 
     clearMenusUploadForm();
 

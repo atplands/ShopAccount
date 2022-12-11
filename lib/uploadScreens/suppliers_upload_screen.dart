@@ -388,16 +388,31 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
         .doc(sharedPreferences!.getString("uid"))
         .collection("suppliers");
 
-    ref.doc(uniqueIdName).set({
-      "supplierID": uniqueIdName,
-      "shopUID": sharedPreferences!.getString("uid"),
-      "supplierName": suppNameController.text.toString(),
-      "supplierInfo": suppInfoController.text.toString(),
-      "supplierContact": suppContactController.text.toString(),
-      "supplierAddress": suppAddressController.text.toString(),
-      "publishedDate": DateTime.now(),
-      "status": "available",
-      "thumbnailUrl": downloadUrl,
+    ref.doc(uniqueIdName).set(
+      {
+        "supplierID": uniqueIdName,
+        "shopUID": sharedPreferences!.getString("uid"),
+        "supplierName": suppNameController.text.toString(),
+        "supplierInfo": suppInfoController.text.toString(),
+        "supplierContact": suppContactController.text.toString(),
+        "supplierAddress": suppAddressController.text.toString(),
+        "publishedDate": DateTime.now(),
+        "status": "available",
+        "thumbnailUrl": downloadUrl,
+      },
+    ).then((value) {
+      final suppRef = FirebaseFirestore.instance.collection("suppliers");
+      suppRef.doc(uniqueIdName).set({
+        "supplierID": uniqueIdName,
+        "shopUID": sharedPreferences!.getString("uid"),
+        "supplierName": suppNameController.text.toString(),
+        "supplierInfo": suppInfoController.text.toString(),
+        "supplierContact": suppContactController.text.toString(),
+        "supplierAddress": suppAddressController.text.toString(),
+        "publishedDate": DateTime.now(),
+        "status": "available",
+        "thumbnailUrl": downloadUrl,
+      });
     });
 
     clearMenusUploadForm();

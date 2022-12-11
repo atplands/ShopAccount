@@ -1,4 +1,5 @@
 import 'package:account/mainScreens/home_screen.dart';
+import 'package:account/mainScreens/suppTransEditScreen.dart';
 import 'package:account/mainScreens/suppTransScreen.dart';
 import 'package:account/model/custTrans.dart';
 import 'package:account/model/supTrans.dart';
@@ -44,13 +45,38 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppBar(
-        title: sharedPreferences!.getString("name"),
+      appBar: AppBar(
+        title: Text(sharedPreferences!.getString("name").toString()),
+        actions: [
+          TextButton(
+            child: const Text(
+              "Edit",
+              style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: "Varela",
+                letterSpacing: 3,
+              ),
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (c) =>
+                          SuppTransEditScreen(model: widget.model!)));
+            },
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(widget.model!.thumbnailUrl.toString()),
+          Container(
+            height: 380.0,
+            child: Image.network(widget.model!.thumbnailUrl.toString(),
+                height: 200.0, fit: BoxFit.cover),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

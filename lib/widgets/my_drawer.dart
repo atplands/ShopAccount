@@ -1,5 +1,9 @@
 import 'package:account/mainScreens/customersScreen.dart';
+import 'package:account/mainScreens/profileEditScreen.dart';
+import 'package:account/mainScreens/purchaseOrderPendingScreen.dart';
 import 'package:account/mainScreens/purchasesScreen.dart';
+import 'package:account/mainScreens/salesOrderPendingScreen.dart';
+import 'package:account/mainScreens/salesPriceListScreen.dart';
 import 'package:account/mainScreens/salesScreen.dart';
 import 'package:account/mainScreens/suppliersScreen.dart';
 import 'package:flutter/material.dart';
@@ -39,10 +43,29 @@ class MyDrawer extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  sharedPreferences!.getString("name")!,
-                  style: TextStyle(
-                      color: Colors.black, fontSize: 20, fontFamily: "Train"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      sharedPreferences!.getString("name")!,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: "Train"),
+                    ),
+                    SizedBox(
+                      width: 4.0,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: (() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (c) => const ProfileEditScreen()));
+                      }),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -152,6 +175,69 @@ class MyDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (c) => SuppliersScreen()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.local_shipping,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Price List",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => SalesPriceListScreen()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.local_shipping,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Sales Orders Pending",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => SalesOrderPendingList()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.local_shipping,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Purchase Orders Pending",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => PurchaseOrdersPending()));
                   },
                 ),
                 const Divider(

@@ -1,4 +1,5 @@
 import 'package:account/mainScreens/custTransScreen.dart';
+import 'package:account/mainScreens/customersEditScreen.dart';
 import 'package:account/mainScreens/itemsScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,12 @@ class _CustInfoDesignWidgetState extends State<CustInfoDesignWidget> {
         .doc(sharedPreferences!.getString("uid"))
         .collection("customers")
         .doc(custID)
-        .delete();
+        .delete()
+        .then(
+      (value) {
+        FirebaseFirestore.instance.collection("customers").doc(custID).delete();
+      },
+    );
 
     //Fluttertoast.showToast(msg: "Menu Deleted Successfully.");
   }
@@ -34,9 +40,11 @@ class _CustInfoDesignWidgetState extends State<CustInfoDesignWidget> {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (c) => CustTransScreen(model: widget.model)));
+          context,
+          MaterialPageRoute(
+            builder: (c) => CustTransScreen(model: widget.model),
+          ),
+        );
       },
       splashColor: Colors.amber,
       child: Padding(
@@ -73,6 +81,20 @@ class _CustInfoDesignWidgetState extends State<CustInfoDesignWidget> {
                       fontSize: 20,
                       fontFamily: "Train",
                     ),
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.lightGreenAccent,
+                    ),
+                    onPressed: () {
+                      //delete menu
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) => CustomerEditScreen()));
+                      //deleteMenu(widget.model!.custID!);
+                    },
                   ),
                   IconButton(
                     icon: const Icon(

@@ -9,8 +9,8 @@ class SupTrans {
   String? transType;
   Timestamp? transDate;
   Timestamp? publishedDate;
-  Timestamp? dueDate;
-  Timestamp? closedDate;
+  Timestamp? transDueDate;
+  Timestamp? transClosedDate;
   String? thumbnailUrl;
   String? paymentDetails;
   String? status;
@@ -25,8 +25,8 @@ class SupTrans {
     this.transType,
     this.transDate,
     this.publishedDate,
-    this.dueDate,
-    this.closedDate,
+    this.transDueDate,
+    this.transClosedDate,
     this.thumbnailUrl,
     this.paymentDetails,
     this.transAmount,
@@ -41,8 +41,8 @@ class SupTrans {
     transType = json['transType'];
     transDate = json['transDate'];
     publishedDate = json['publishedDate'];
-    dueDate = json['dueDate'];
-    closedDate = json['closedDate'];
+    transDueDate = json['transDueDate'];
+    transClosedDate = json['transClosedDate'];
     thumbnailUrl = json['thumbnailUrl'];
     paymentDetails = json['paymentDetails'];
     status = json['status'];
@@ -59,8 +59,8 @@ class SupTrans {
     data['transAmount'] = transAmount;
     data['transDate'] = transDate;
     data['publishedDate'] = publishedDate;
-    data['dueDate'] = dueDate;
-    data['closedDate'] = closedDate;
+    data['transDueDate'] = transDueDate;
+    data['transClosedDate'] = transClosedDate;
     data['thumbnailUrl'] = thumbnailUrl;
     data['paymentDetails'] = paymentDetails;
     data['status'] = status;

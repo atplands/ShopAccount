@@ -1,7 +1,10 @@
 import 'package:account/global/global.dart';
+import 'package:account/model/custTrans.dart';
 import 'package:account/model/menus.dart';
 import 'package:account/views/bubble_stories.dart';
 import 'package:account/views/dashboard.dart';
+import 'package:account/widgets/sales_info_design.dart';
+import 'package:account/widgets/sales_text_widget_header.dart';
 import 'package:account/widgets/transactions_info_design.dart';
 //import 'package:account/widgets/transactions_info_design.dartinfo_design.dart';
 import '../widgets/my_drawer.dart';
@@ -30,165 +33,64 @@ class _SalesScreenState extends State<SalesScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Colors.cyan,
-              Colors.amber,
-            ],
-            begin: FractionalOffset(0.0, 0.0),
-            end: FractionalOffset(1.0, 0.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp,
-          )),
-        ),
-        actions: [],
-        title: Text('Sales Screen'),
-      ),
-      drawer: MyDrawer(),
-      body: CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: TextWidgetHeader(title: "Sales"),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                Colors.cyan,
+                Colors.amber,
+              ],
+              begin: FractionalOffset(0.0, 0.0),
+              end: FractionalOffset(1.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp,
+            )),
           ),
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("sellers")
-                .doc(sharedPreferences!.getString("uid"))
-                .collection("menus")
-                .orderBy("publishedDate", descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              return !snapshot.hasData
-                  ? SliverToBoxAdapter(
-                      child: Center(
-                        child: circularProgress(),
-                      ),
-                    )
-                  : SliverStaggeredGrid.countBuilder(
-                      crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
-                      itemBuilder: (context, index) {
-                        Menus model = Menus.fromJson(
-                          snapshot.data!.docs[index].data()!
-                              as Map<String, dynamic>,
-                        );
-                        return InfoDesignWidget(
-                          model: model,
-                          context: context,
-                        );
-                      },
-                      itemCount: snapshot.data!.docs.length,
-                    );
-            },
-          ),
-        ],
-      ),
-
-      /*body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) => const SalesScreen()));
-                    },
-                    child: Container(
-                      child: DashBoard(
-                        name: 'Sales',
-                        type: 'Cash',
-                        amount: '40000',
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) => const SalesScreen()));
-                    },
-                    child: Container(
-                      child: DashBoard(
-                        name: 'Sales',
-                        type: 'Credit',
-                        amount: '40000',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              child: Text(
-                'Customers Recent Transactions',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.greenAccent,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            Container(
-              height: 220,
-              /*child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    BubbleStories(text: 'Telugu'),
-                    BubbleStories(text: 'English'),
-                    BubbleStories(text: 'Hindi'),
-                    BubbleStories(text: 'Kanada'),
-                    BubbleStories(text: 'Rajasthani'),
-                  ],
+          actions: [],
+          title: Text('Sales Screen'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(
+                /*icon: Icon(
+                  Icons.money,
+                  color: Colors.white,
                 ),*/
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: customers.length,
-                itemBuilder: (context, index) {
-                  return BubbleStories(
-                    text: customers[index],
-                  );
-                },
+                text: "Credit",
               ),
-            ),
-            Container(
-              child: Text('Customers Trans'),
-            ),
-            Container(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: customers.length,
-                itemBuilder: (context, index) {
-                  return BubbleStories(
-                    text: customers[index],
-                  );
-                },
+              Tab(
+                /*icon: Icon(
+                  Icons.money_off,
+                  color: Colors.white,
+                ),*/
+                text: "Cash",
               ),
-            ),
-
-            /*Container(
-              child: CustomScrollView(
+            ],
+            indicatorColor: Colors.white38,
+            indicatorWeight: 6,
+          ),
+        ),
+        drawer: MyDrawer(),
+        body: Container(
+          child: TabBarView(
+            children: [
+              CustomScrollView(
                 slivers: [
                   SliverPersistentHeader(
-                      pinned: true,
-                      delegate: TextWidgetHeader(title: "Search Suppliers")),
+                    pinned: true,
+                    delegate: SalesTextWidgetHeader(title: "Sales"),
+                  ),
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection("sellers")
-                        .doc(sharedPreferences!.getString("uid"))
-                        .collection("menus")
-                        .orderBy("publishedDate", descending: true)
+                        //.collection("sellers")
+                        //.doc(sharedPreferences!.getString("uid"))
+                        .collection("custTrans")
+                        .where("transType", isEqualTo: "Credit")
+
+                        //.orderBy("publishedDate", descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       return !snapshot.hasData
@@ -201,11 +103,11 @@ class _SalesScreenState extends State<SalesScreen> {
                               crossAxisCount: 1,
                               staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                               itemBuilder: (context, index) {
-                                Menus model = Menus.fromJson(
+                                CustTrans model = CustTrans.fromJson(
                                   snapshot.data!.docs[index].data()!
                                       as Map<String, dynamic>,
                                 );
-                                return InfoDesignWidget(
+                                return SaleInfoDesignWidget(
                                   model: model,
                                   context: context,
                                 );
@@ -216,10 +118,182 @@ class _SalesScreenState extends State<SalesScreen> {
                   ),
                 ],
               ),
-            ),*/
-          ],
+              CustomScrollView(
+                slivers: [
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: SalesTextWidgetHeader(title: "Sales"),
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        //.collection("sellers")
+                        //.doc(sharedPreferences!.getString("uid"))
+                        .collection("custTrans")
+                        .where("transType", isEqualTo: "Cash")
+                        //.orderBy("publishedDate", descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      return !snapshot.hasData
+                          ? SliverToBoxAdapter(
+                              child: Center(
+                                child: circularProgress(),
+                              ),
+                            )
+                          : SliverStaggeredGrid.countBuilder(
+                              crossAxisCount: 1,
+                              staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                              itemBuilder: (context, index) {
+                                CustTrans model = CustTrans.fromJson(
+                                  snapshot.data!.docs[index].data()!
+                                      as Map<String, dynamic>,
+                                );
+                                return SaleInfoDesignWidget(
+                                  model: model,
+                                  context: context,
+                                );
+                              },
+                              itemCount: snapshot.data!.docs.length,
+                            );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),*/
+
+        /*body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (c) => const SalesScreen()));
+                      },
+                      child: Container(
+                        child: DashBoard(
+                          name: 'Sales',
+                          type: 'Cash',
+                          amount: '40000',
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (c) => const SalesScreen()));
+                      },
+                      child: Container(
+                        child: DashBoard(
+                          name: 'Sales',
+                          type: 'Credit',
+                          amount: '40000',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                child: Text(
+                  'Customers Recent Transactions',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.greenAccent,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              Container(
+                height: 220,
+                /*child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      BubbleStories(text: 'Telugu'),
+                      BubbleStories(text: 'English'),
+                      BubbleStories(text: 'Hindi'),
+                      BubbleStories(text: 'Kanada'),
+                      BubbleStories(text: 'Rajasthani'),
+                    ],
+                  ),*/
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: customers.length,
+                  itemBuilder: (context, index) {
+                    return BubbleStories(
+                      text: customers[index],
+                    );
+                  },
+                ),
+              ),
+              Container(
+                child: Text('Customers Trans'),
+              ),
+              Container(
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: customers.length,
+                  itemBuilder: (context, index) {
+                    return BubbleStories(
+                      text: customers[index],
+                    );
+                  },
+                ),
+              ),
+
+              /*Container(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPersistentHeader(
+                        pinned: true,
+                        delegate: TextWidgetHeader(title: "Search Suppliers")),
+                    StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("sellers")
+                          .doc(sharedPreferences!.getString("uid"))
+                          .collection("menus")
+                          .orderBy("publishedDate", descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        return !snapshot.hasData
+                            ? SliverToBoxAdapter(
+                                child: Center(
+                                  child: circularProgress(),
+                                ),
+                              )
+                            : SliverStaggeredGrid.countBuilder(
+                                crossAxisCount: 1,
+                                staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                                itemBuilder: (context, index) {
+                                  Menus model = Menus.fromJson(
+                                    snapshot.data!.docs[index].data()!
+                                        as Map<String, dynamic>,
+                                  );
+                                  return InfoDesignWidget(
+                                    model: model,
+                                    context: context,
+                                  );
+                                },
+                                itemCount: snapshot.data!.docs.length,
+                              );
+                      },
+                    ),
+                  ],
+                ),
+              ),*/
+            ],
+          ),
+        ),*/
+      ),
     );
   }
 }
