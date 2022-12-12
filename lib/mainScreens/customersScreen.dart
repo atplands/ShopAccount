@@ -10,8 +10,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class CustomersScreen extends StatelessWidget {
+class CustomersScreen extends StatefulWidget {
   const CustomersScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CustomersScreen> createState() => _CustomersScreenState();
+}
+
+class _CustomersScreenState extends State<CustomersScreen> {
+  List<int> cashTransAmount = [];
+
+  List<int> creditTransAmount = [];
+
+  int cashTotal = 0;
+
+  int creditTotal = 0;
+
+  int transTotal = 0;
+
+  updateDashBoardTotal() {
+    cashTransAmount.forEach((e) => cashTotal += e);
+    creditTransAmount.forEach((e) => creditTotal += e);
+    transTotal = cashTotal + creditTotal;
+
+    final ref = FirebaseFirestore.instance.collection("shops");
+
+    ref.doc(sharedPreferences!.getString("uid")).update(
+      {
+        "custCashTotal": (cashTotal),
+        "custCreditTotal": (creditTotal),
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +113,12 @@ class CustomersScreen extends StatelessWidget {
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
                         );
+                        cashTransAmount.add(model.cashTotal!);
+                        creditTransAmount.add(model.creditTotal!);
+
+                        if (index + 1 == snapshot.data!.docs.length) {
+                          updateDashBoardTotal();
+                        }
                         return CustInfoDesignWidget(
                           model: model,
                           context: context,

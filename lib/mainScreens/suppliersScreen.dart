@@ -1,19 +1,46 @@
 import 'package:account/global/global.dart';
-import 'package:account/model/menus.dart';
 import 'package:account/model/suppliers.dart';
-import 'package:account/uploadScreens/menus_upload_screen.dart';
 import 'package:account/uploadScreens/suppliers_upload_screen.dart';
-import 'package:account/widgets/info_design.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:account/widgets/supplier_info_design.dart';
-import 'package:account/widgets/text_widget_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class SuppliersScreen extends StatelessWidget {
-  const SuppliersScreen({Key? key}) : super(key: key);
+class SuppliersScreen extends StatefulWidget {
+  SuppliersScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SuppliersScreen> createState() => _SuppliersScreenState();
+}
+
+class _SuppliersScreenState extends State<SuppliersScreen> {
+  List<int> cashTransAmount = [];
+
+  List<int> creditTransAmount = [];
+
+  int cashTotal = 0;
+
+  int creditTotal = 0;
+
+  int transTotal = 0;
+
+  updateDashBoardTotal() {
+    cashTransAmount.forEach((e) => cashTotal += e);
+    creditTransAmount.forEach((e) => creditTotal += e);
+    transTotal = cashTotal + creditTotal;
+
+    final ref = FirebaseFirestore.instance.collection("shops");
+
+    ref.doc(sharedPreferences!.getString("uid")).update(
+      {
+        "suppCashTotal": (cashTotal),
+        "suppCreditTotal": (creditTotal),
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,6 +110,14 @@ class SuppliersScreen extends StatelessWidget {
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
                         );
+
+                        cashTransAmount.add(model.cashTotal!);
+                        creditTransAmount.add(model.creditTotal!);
+
+                        if (index + 1 == snapshot.data!.docs.length) {
+                          updateDashBoardTotal();
+                        }
+
                         return SuppliersInfoDesignWidget(
                           model: model,
                           context: context,

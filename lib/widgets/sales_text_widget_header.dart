@@ -5,16 +5,16 @@ import 'package:flutter/widgets.dart';
 
 class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
   String? title;
-  String? transType1 = '';
-  String? transType2 = '';
-  String? transamount1 = '';
-  String? transamount2 = '';
+  String? cashTransType = '';
+  String? creditTransType = '';
+  String? cashTransamount = '';
+  String? creditTransamount = '';
   SalesTextWidgetHeader(
       {this.title,
-      this.transType1,
-      this.transType2,
-      this.transamount1,
-      this.transamount2});
+      this.cashTransType,
+      this.creditTransType,
+      this.cashTransamount,
+      this.creditTransamount});
 
   @override
   Widget build(
@@ -60,8 +60,8 @@ class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
                     },
                     child: DashBoard(
                       name: title.toString(),
-                      type: transType1.toString(),
-                      amount: transamount1.toString(),
+                      type: cashTransType.toString(),
+                      amount: cashTransamount.toString(),
                     ),
                   ),
                   ElevatedButton(
@@ -73,8 +73,8 @@ class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
                     },
                     child: DashBoard(
                       name: title.toString(),
-                      type: transType2.toString(),
-                      amount: transamount2.toString(),
+                      type: creditTransType.toString(),
+                      amount: creditTransamount.toString(),
                     ),
                   ),
                 ],

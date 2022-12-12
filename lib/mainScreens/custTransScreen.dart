@@ -25,6 +25,37 @@ class CustTransScreen extends StatefulWidget {
 }
 
 class _CustTransScreenState extends State<CustTransScreen> {
+  List<int> cashTransAmount = [];
+  List<int> creditTransAmount = [];
+  int cashTotal = 0;
+  int creditTotal = 0;
+  int transTotal = 0;
+
+  updateFireStore(var custID) {
+    final ref = FirebaseFirestore.instance
+        .collection("shops")
+        .doc(sharedPreferences!.getString("uid"))
+        .collection("customers");
+    cashTransAmount.forEach((e) => cashTotal += e);
+    creditTransAmount.forEach((e) => creditTotal += e);
+    transTotal = cashTotal + creditTotal;
+
+    ref.doc(custID).update(
+      {
+        "transTotal": (transTotal),
+        "cashTotal": (cashTotal),
+        "creditTotal": (creditTotal),
+      },
+    ).then((value) {
+      final suppRef = FirebaseFirestore.instance.collection("customers");
+      suppRef.doc(custID).update({
+        "transTotal": (transTotal),
+        "cashTotal": (cashTotal),
+        "creditTotal": (creditTotal),
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +127,13 @@ class _CustTransScreenState extends State<CustTransScreen> {
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
                         );
+                        model.transType == "Cash"
+                            ? cashTransAmount.add(model.transAmount!)
+                            : creditTransAmount.add(model.transAmount!);
+
+                        if (index + 1 == snapshot.data!.docs.length) {
+                          updateFireStore(model.custID);
+                        }
                         return CustTransDesignWidget(
                           model: model,
                           context: context,

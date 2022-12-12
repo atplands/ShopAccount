@@ -1,24 +1,13 @@
-import 'package:account/model/custTrans.dart';
-import 'package:account/model/customers.dart';
 import 'package:account/model/supTrans.dart';
 import 'package:account/model/suppliers.dart';
-import 'package:account/uploadScreens/custTrans_upload_screen.dart';
 import 'package:account/uploadScreens/suppTrans_upload_screen.dart';
-import 'package:account/widgets/custTrans_design.dart';
 import 'package:account/widgets/suppTrans_design.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:account/global/global.dart';
-import 'package:account/model/items.dart';
-import 'package:account/model/menus.dart';
-import 'package:account/uploadScreens/items_upload_screen.dart';
-import 'package:account/uploadScreens/menus_upload_screen.dart';
-import 'package:account/widgets/info_design.dart';
-import 'package:account/widgets/items_design.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
-import 'package:account/widgets/text_widget_header.dart';
 
 class SuppTransScreen extends StatefulWidget {
   final Suppliers? model;
@@ -29,6 +18,37 @@ class SuppTransScreen extends StatefulWidget {
 }
 
 class _SuppTransScreenState extends State<SuppTransScreen> {
+  List<int> cashTransAmount = [];
+  List<int> creditTransAmount = [];
+  int cashTotal = 0;
+  int creditTotal = 0;
+  int transTotal = 0;
+
+  updateFireStore(var SupplierID) {
+    final ref = FirebaseFirestore.instance
+        .collection("shops")
+        .doc(sharedPreferences!.getString("uid"))
+        .collection("suppliers");
+    cashTransAmount.forEach((e) => cashTotal += e);
+    creditTransAmount.forEach((e) => creditTotal += e);
+    transTotal = cashTotal + creditTotal;
+
+    ref.doc(SupplierID).update(
+      {
+        "transTotal": (transTotal),
+        "cashTotal": (cashTotal),
+        "creditTotal": (creditTotal),
+      },
+    ).then((value) {
+      final suppRef = FirebaseFirestore.instance.collection("suppliers");
+      suppRef.doc(SupplierID).update({
+        "transTotal": (transTotal),
+        "cashTotal": (cashTotal),
+        "creditTotal": (creditTotal),
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +120,14 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
                         );
+                        model.transType == "Cash"
+                            ? cashTransAmount.add(model.transAmount!)
+                            : creditTransAmount.add(model.transAmount!);
+
+                        if (index + 1 == snapshot.data!.docs.length) {
+                          updateFireStore(model.supplierID);
+                        }
+
                         return SuppTransDesignWidget(
                           model: model,
                           context: context,
