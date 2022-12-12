@@ -1,3 +1,4 @@
+import 'package:account/mainScreens/purchasesScreen.dart';
 import 'package:account/mainScreens/salesScreen.dart';
 import 'package:account/views/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -5,16 +6,16 @@ import 'package:flutter/widgets.dart';
 
 class TextWidgetHeader extends SliverPersistentHeaderDelegate {
   String? title;
-  String? transType1 = '';
-  String? transType2 = '';
-  String? transamount1 = '';
-  String? transamount2 = '';
+  String? cashTransType1 = '';
+  String? creditTransType2 = '';
+  String? cashTransamount1 = '';
+  String? creditTransamount2 = '';
   TextWidgetHeader(
       {this.title,
-      this.transType1,
-      this.transType2,
-      this.transamount1,
-      this.transamount2});
+      this.cashTransType1,
+      this.creditTransType2,
+      this.cashTransamount1,
+      this.creditTransamount2});
 
   @override
   Widget build(
@@ -56,12 +57,16 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (c) => const SalesScreen()));
+                              builder: (c) => const PurchasesScreen()));
                     },
-                    child: DashBoard(
-                      name: title.toString(),
-                      type: transType1.toString(),
-                      amount: transamount1.toString(),
+                    child: Column(
+                      children: [
+                        DashBoard(
+                          name: title.toString(),
+                          type: cashTransType1.toString(),
+                          amount: cashTransamount1.toString(),
+                        ),
+                      ],
                     ),
                   ),
                   ElevatedButton(
@@ -69,12 +74,12 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (c) => const SalesScreen()));
+                              builder: (c) => const PurchasesScreen()));
                     },
                     child: DashBoard(
                       name: title.toString(),
-                      type: transType2.toString(),
-                      amount: transamount2.toString(),
+                      type: creditTransType2.toString(),
+                      amount: creditTransamount2.toString(),
                     ),
                   ),
                 ],

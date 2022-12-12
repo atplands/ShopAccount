@@ -61,12 +61,6 @@ class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
                 const SizedBox(
                   height: 1,
                 ),
-                IconButton(
-                  onPressed: () {
-                    getCustomerData();
-                  },
-                  icon: Icon(Icons.info),
-                ),
                 Text(
                   widget.model!.transName!,
                   style: const TextStyle(
@@ -100,12 +94,6 @@ class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
                   height: 4,
                   thickness: 3,
                   color: Colors.grey[300],
-                ),
-                IconButton(
-                  onPressed: () {
-                    getCustomerData();
-                  },
-                  icon: Icon(Icons.info),
                 ),
               ],
             ),

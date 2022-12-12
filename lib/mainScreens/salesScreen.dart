@@ -31,6 +31,30 @@ class _SalesScreenState extends State<SalesScreen> {
     "Customer_name_4",
     "Customer_name_5",
   ];
+  int custCashTotal = 0;
+  int custCreditTotal = 0;
+  int custTransTotal = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDashBoardTotals();
+    setState(() {});
+  }
+
+  void getDashBoardTotals() async {
+    final DocumentSnapshot suppRef = await FirebaseFirestore.instance
+        .collection("shops")
+        .doc(sharedPreferences!.getString("uid"))
+        .get();
+
+    setState(() {
+      custCashTotal = suppRef.get("custCashTotal");
+      custCreditTotal = suppRef.get("custCreditTotal");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -81,7 +105,13 @@ class _SalesScreenState extends State<SalesScreen> {
                 slivers: [
                   SliverPersistentHeader(
                     pinned: true,
-                    delegate: SalesTextWidgetHeader(title: "Sales"),
+                    delegate: SalesTextWidgetHeader(
+                      title: "Sales",
+                      cashTransType: "Cash",
+                      creditTransType: "Credit",
+                      cashTransamount: custCashTotal.toString(),
+                      creditTransamount: custCreditTotal.toString(),
+                    ),
                   ),
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -122,7 +152,13 @@ class _SalesScreenState extends State<SalesScreen> {
                 slivers: [
                   SliverPersistentHeader(
                     pinned: true,
-                    delegate: SalesTextWidgetHeader(title: "Sales"),
+                    delegate: SalesTextWidgetHeader(
+                      title: "Sales",
+                      cashTransType: "Cash",
+                      creditTransType: "Credit",
+                      cashTransamount: custCashTotal.toString(),
+                      creditTransamount: custCreditTotal.toString(),
+                    ),
                   ),
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance

@@ -10,6 +10,9 @@ class Customers {
   Timestamp? publishedDate;
   String? thumbnailUrl;
   String? status;
+  int? transTotal;
+  int? cashTotal;
+  int? creditTotal;
 
   Customers({
     this.custID,
@@ -21,6 +24,9 @@ class Customers {
     this.publishedDate,
     this.thumbnailUrl,
     this.status,
+    this.transTotal,
+    this.cashTotal,
+    this.creditTotal,
   });
 
   Customers.fromJson(Map<String, dynamic> json) {
@@ -33,6 +39,9 @@ class Customers {
     publishedDate = json['publishedDate'];
     thumbnailUrl = json['thumbnailUrl'];
     status = json['status'];
+    transTotal = json['transTotal'];
+    cashTotal = json['cashTotal'];
+    creditTotal = json['creditTotal'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,6 +55,9 @@ class Customers {
     data['publishedDate'] = publishedDate;
     data['thumbnailUrl'] = thumbnailUrl;
     data['status'] = status;
+    data['transTotal'] = transTotal;
+    data['cashTotal'] = cashTotal;
+    data['creditTotal'] = creditTotal;
 
     return data;
   }

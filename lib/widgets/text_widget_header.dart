@@ -1,3 +1,4 @@
+import 'package:account/global/global.dart';
 import 'package:account/mainScreens/salesScreen.dart';
 import 'package:account/views/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
                     child: DashBoard(
                       name: title.toString(),
                       type: transType1.toString(),
-                      amount: transamount1.toString(),
+                      amount: dashBoardSuppCashTotal.toString(),
                     ),
                   ),
                   ElevatedButton(

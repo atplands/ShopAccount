@@ -47,6 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
     "Customer_name_5",
   ];
 
+  int suppCashTotal = 0;
+  int suppCreditTotal = 0;
+  int custCashTotal = 0;
+  int custCreditTotal = 0;
+  int transCashTotal = 0;
+  int transCreditTotal = 0;
+
   String formatCurrentLiveTime(DateTime time) {
     return DateFormat("hh:mm:ss a").format(time);
   }
@@ -80,6 +87,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Timer.periodic(const Duration(seconds: 1), (timer) {
       getCurrentLiveTime();
+    });
+    getDashBoardsData();
+
+    setState(() {});
+  }
+
+  void getDashBoardsData() async {
+    final DocumentSnapshot shopRef = await FirebaseFirestore.instance
+        .collection("shops")
+        .doc(sharedPreferences!.getString("uid"))
+        .get();
+
+    setState(() {
+      suppCashTotal = shopRef.get("suppCashTotal");
+      suppCreditTotal = shopRef.get("suppCreditTotal");
+      custCashTotal = shopRef.get("custCashTotal");
+      custCreditTotal = shopRef.get("custCreditTotal");
+      transCashTotal = suppCashTotal + custCashTotal;
+      transCreditTotal = suppCreditTotal + custCreditTotal;
     });
   }
 
@@ -122,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: DashBoard(
                     name: 'purchase',
                     type: 'Cash',
-                    amount: '40000',
+                    amount: suppCashTotal.toString(),
                   ),
                 ),
                 ElevatedButton(
@@ -135,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: DashBoard(
                     name: 'purchase',
                     type: 'Credit',
-                    amount: '40000',
+                    amount: suppCreditTotal.toString(),
                   ),
                 ),
               ],
@@ -155,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: DashBoard(
                       name: 'Sales',
                       type: 'Cash',
-                      amount: '40000',
+                      amount: custCashTotal.toString(),
                     ),
                   ),
                 ),
@@ -168,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: DashBoard(
                       name: 'Sales',
                       type: 'Credit',
-                      amount: '40000',
+                      amount: custCreditTotal.toString(),
                     ),
                   ),
                 ),
@@ -185,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: DashBoard(
                       name: 'Total',
                       type: 'Cash',
-                      amount: '40000',
+                      amount: transCashTotal.toString(),
                     ),
                   ),
                 ),
@@ -195,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: DashBoard(
                       name: 'Total',
                       type: 'Credit',
-                      amount: '40000',
+                      amount: transCreditTotal.toString(),
                     ),
                   ),
                 )

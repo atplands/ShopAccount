@@ -7,7 +7,7 @@ import 'package:account/views/dashboard.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:account/widgets/purchase_Info_design.dart';
-import 'package:account/widgets/text_widget_header.dart';
+import 'package:account/widgets/pur_text_widget_header.dart';
 import 'package:account/widgets/transactions_info_design.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +28,30 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
     "Suppier_name_4",
     "Suppier_name_5",
   ];
+  int suppCashTotal = 0;
+  int suppCreditTotal = 0;
+  int suppTransTotal = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDashBoardTotals();
+    setState(() {});
+  }
+
+  void getDashBoardTotals() async {
+    final DocumentSnapshot suppRef = await FirebaseFirestore.instance
+        .collection("shops")
+        .doc(sharedPreferences!.getString("uid"))
+        .get();
+
+    setState(() {
+      suppCashTotal = suppRef.get("suppCashTotal");
+      suppCreditTotal = suppRef.get("suppCreditTotal");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -79,7 +103,13 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                   slivers: [
                     SliverPersistentHeader(
                       pinned: true,
-                      delegate: TextWidgetHeader(title: "Purchases"),
+                      delegate: TextWidgetHeader(
+                        title: "Purchases",
+                        cashTransType1: "Cash",
+                        creditTransType2: "Credit",
+                        cashTransamount1: suppCashTotal.toString(),
+                        creditTransamount2: suppCreditTotal.toString(),
+                      ),
                     ),
                     StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -105,6 +135,8 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                     snapshot.data!.docs[index].data()!
                                         as Map<String, dynamic>,
                                   );
+                                  if (index + 1 ==
+                                      snapshot.data!.docs.length) {}
                                   return PurInfoDesignWidget(
                                     model: model,
                                     context: context,
@@ -122,7 +154,13 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                   slivers: [
                     SliverPersistentHeader(
                       pinned: true,
-                      delegate: TextWidgetHeader(title: "Purchases"),
+                      delegate: TextWidgetHeader(
+                        title: "Purchases",
+                        cashTransType1: "Cash",
+                        creditTransType2: "Credit",
+                        cashTransamount1: suppCashTotal.toString(),
+                        creditTransamount2: suppCreditTotal.toString(),
+                      ),
                     ),
                     StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -148,6 +186,9 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                     snapshot.data!.docs[index].data()!
                                         as Map<String, dynamic>,
                                   );
+                                  if (index + 1 ==
+                                      snapshot.data!.docs.length) {}
+
                                   return PurInfoDesignWidget(
                                     model: model,
                                     context: context,

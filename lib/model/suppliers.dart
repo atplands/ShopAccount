@@ -10,18 +10,23 @@ class Suppliers {
   Timestamp? publishedDate;
   String? thumbnailUrl;
   String? status;
+  int? transTotal;
+  int? cashTotal;
+  int? creditTotal;
 
-  Suppliers({
-    this.supplierID,
-    this.shopUID,
-    this.supplierName,
-    this.supplierInfo,
-    this.supplierContact,
-    this.supplierAddress,
-    this.publishedDate,
-    this.thumbnailUrl,
-    this.status,
-  });
+  Suppliers(
+      {this.supplierID,
+      this.shopUID,
+      this.supplierName,
+      this.supplierInfo,
+      this.supplierContact,
+      this.supplierAddress,
+      this.publishedDate,
+      this.thumbnailUrl,
+      this.status,
+      this.transTotal,
+      this.cashTotal,
+      this.creditTotal});
 
   Suppliers.fromJson(Map<String, dynamic> json) {
     supplierID = json["supplierID"];
@@ -33,6 +38,9 @@ class Suppliers {
     publishedDate = json['publishedDate'];
     thumbnailUrl = json['thumbnailUrl'];
     status = json['status'];
+    transTotal = json['transTotal'];
+    cashTotal = json['cashTotal'];
+    creditTotal = json['creditTotal'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,6 +54,9 @@ class Suppliers {
     data['publishedDate'] = publishedDate;
     data['thumbnailUrl'] = thumbnailUrl;
     data['status'] = status;
+    data['transTotal'] = transTotal;
+    data['cashTotal'] = cashTotal;
+    data['creditTotal'] = creditTotal;
 
     return data;
   }
