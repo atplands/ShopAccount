@@ -10,6 +10,7 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
   String? transType2 = '';
   String? transamount1 = '';
   String? transamount2 = '';
+  String? query = '';
   TextWidgetHeader(
       {this.title,
       this.transType1,

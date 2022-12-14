@@ -17,14 +17,11 @@ class SuppliersScreen extends StatefulWidget {
 
 class _SuppliersScreenState extends State<SuppliersScreen> {
   List<int> cashTransAmount = [];
-
   List<int> creditTransAmount = [];
-
   int cashTotal = 0;
-
   int creditTotal = 0;
-
   int transTotal = 0;
+  String? query = "";
 
   updateDashBoardTotal() {
     cashTransAmount.forEach((e) => cashTotal += e);

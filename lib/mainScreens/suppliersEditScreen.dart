@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/home_screen.dart';
+import 'package:account/mainScreens/suppliersScreen.dart';
 import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
@@ -40,7 +41,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
   Position? position;
   List<Placemark>? placeMarks;
 
-  String sellerImageUrl = "";
+  String supplierImageUrl = "";
   String completeAddress = "";
 
   @override
@@ -51,11 +52,14 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
 
   getUser() async {
     setState(() {
-      imageController.text = sharedPreferences!.getString("photoUrl")!;
-      suppNameController.text = sharedPreferences!.getString("name")!;
-      suppInfoController.text = sharedPreferences!.getString("email")!;
-      suppContactController.text = sharedPreferences!.getString("pwd")!;
-      locationController.text = sharedPreferences!.getString("address")!;
+      imageController.text = widget.model!.thumbnailUrl!;
+      suppNameController.text = widget.model!.supplierName!;
+      ;
+      suppInfoController.text = widget.model!.supplierInfo!;
+      ;
+      suppContactController.text = widget.model!.supplierContact!;
+      ;
+      //locationController.text = widget.model!.!;!;
     });
   }
 
@@ -91,8 +95,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
   Future<void> formValidation() async {
     if (suppNameController.text.isNotEmpty &&
         suppInfoController.text.isNotEmpty &&
-        suppContactController.text.isNotEmpty &&
-        locationController.text.isNotEmpty) {
+        suppContactController.text.isNotEmpty) {
       //start uploading image
       showDialog(
           context: context,
@@ -108,23 +111,23 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
           .child("shops")
           .child(fileName);
       if (imageXFile == null) {
-        sellerImageUrl = sharedPreferences!.getString("photoUrl")!;
+        supplierImageUrl = sharedPreferences!.getString("photoUrl")!;
       } else {
         fStorage.UploadTask uploadTask =
             reference.putFile(File(imageXFile!.path));
         fStorage.TaskSnapshot taskSnapshot =
             await uploadTask.whenComplete(() {});
         await taskSnapshot.ref.getDownloadURL().then((url) {
-          sellerImageUrl = url;
+          supplierImageUrl = url;
         });
       }
       //save info to firestore
       saveDataToFirestore().then(
         (value) {
-          print('Profile Updated ');
+          //print('Supplier Updated ');
           Navigator.pop(context);
           //send user to homePage
-          Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+          Route newRoute = MaterialPageRoute(builder: (c) => SuppliersScreen());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -133,8 +136,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
           context: context,
           builder: (c) {
             return ErrorDialog(
-              message:
-                  "Please write the complete required info for Registration.",
+              message: "Please write the complete required info for Suppliers.",
             );
           });
     }
@@ -144,19 +146,27 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
     FirebaseFirestore.instance
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
+        .collection("suppliers")
+        .doc(widget.model!.supplierID)
         .update({
       //"sellerUID": currentUser.uid,
-      "shopName": suppNameController.text.trim(),
-      "shopAvatarUrl": sellerImageUrl,
-      "phone": suppContactController.text.trim(),
-      "aboutUs": suppInfoController.text.trim(),
-      "address": locationController.text.trim(),
-      //"status": "approved",
-      //"earnings": 0.0,
-      "lat": position!.latitude,
-      "lng": position!.longitude,
+      "supplierName": suppNameController.text.trim(),
+      "thumbnailUrl": supplierImageUrl,
+      "supplierContact": suppContactController.text.trim(),
+      "supplierInfo": suppInfoController.text.trim(),
+    }).then((value) {
+      final suppRef = FirebaseFirestore.instance
+          .collection("suppliers")
+          .doc(widget.model!.supplierID)
+          .update({
+        //"sellerUID": currentUser.uid,
+        "supplierName": suppNameController.text.trim(),
+        "thumbnailUrl": supplierImageUrl,
+        "supplierContact": suppContactController.text.trim(),
+        "supplierInfo": suppInfoController.text.trim(),
+      });
     });
-    print('Profile Data Updated into Firebase');
+    print('Supplier Data Updated into Firebase');
 
     //save data locally
     sharedPreferences = await SharedPreferences.getInstance();

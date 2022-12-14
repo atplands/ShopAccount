@@ -18,15 +18,16 @@ class CustomersScreen extends StatefulWidget {
 }
 
 class _CustomersScreenState extends State<CustomersScreen> {
+  String query = "";
   List<int> cashTransAmount = [];
-
   List<int> creditTransAmount = [];
 
   int cashTotal = 0;
-
   int creditTotal = 0;
-
   int transTotal = 0;
+  initState() {
+    setState(() {});
+  }
 
   updateDashBoardTotal() {
     cashTransAmount.forEach((e) => cashTotal += e);
@@ -41,6 +42,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
         "custCreditTotal": (creditTotal),
       },
     );
+    print("values of query ${query}");
   }
 
   @override
@@ -63,7 +65,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
         ),
         title: Text(
           //sharedPreferences!.getString("name")!,
-          'Customer Screen',
+          'Customers Screen',
           style: const TextStyle(fontSize: 30, fontFamily: "Lobster"),
         ),
         centerTitle: true,
@@ -82,22 +84,50 @@ class _CustomersScreenState extends State<CustomersScreen> {
             },
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              scrollPadding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+              ),
+              decoration: InputDecoration(
+                prefix: Icon(
+                  Icons.search,
+                ),
+                hintText: ("its an search bar"),
+              ),
+              onChanged: ((value) {
+                setState() {
+                  query = value;
+                  print("values of query ${query}");
+                  //print("quey display: ${query}");
+                }
+              }),
+            ),
+          ),
+        ),
       ),
       body: CustomScrollView(
         slivers: [
-          /*SliverPersistentHeader(
-              pinned: true,
-              delegate: 
-              TextWidgetHeader(title: "Search Customers"),
-              ),
-          */
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: TextWidgetHeader(title: "Search Customers"),
+          ),
           StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("shops")
-                .doc(sharedPreferences!.getString("uid"))
-                .collection("customers")
-                .orderBy("publishedDate", descending: true)
-                .snapshots(),
+            stream: query != ""
+                ? FirebaseFirestore.instance
+                    .collection("customers")
+                    .where("custName", isEqualTo: query)
+                    .orderBy("publishedDate", descending: true)
+                    .snapshots()
+                : FirebaseFirestore.instance
+                    .collection("shops")
+                    .doc(sharedPreferences!.getString("uid"))
+                    .collection("customers")
+                    .orderBy("publishedDate", descending: true)
+                    .snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData
                   ? SliverToBoxAdapter(

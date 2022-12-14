@@ -1,4 +1,4 @@
-import 'dart:html';
+// ignore_for_file: prefer_const_constructors
 
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/priceList_EditScreen.dart';
@@ -23,6 +23,12 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
       .collection("shops")
       .doc(sharedPreferences!.getString("uid"))
       .collection("priceList");
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +43,10 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
               hintText: ("Search Prices"),
             ),
             onChanged: ((value) {
-              name = value;
+              setState(() {
+                name = value;
+              });
+
               print("name : ${name}");
             }),
           ),
@@ -62,6 +71,66 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
           return (snapshots.connectionState == ConnectionState.waiting)
               ? circularProgress()
               : ListView.builder(
+                  itemCount: snapshots.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    PriceList model = PriceList.fromJson(
+                        snapshots.data!.docs[index].data()!
+                            as Map<String, dynamic>);
+                    return model.priceListName.toString().contains(name)
+                        ? SingleChildScrollView(
+                            child: ExpansionTile(
+                              leading: Image.network(
+                                model.thumbnailUrl.toString(),
+                                //width: 80.0,
+                              ),
+                              title: Text(model.priceListName.toString()),
+                              children: [
+                                ListTile(
+                                  leading: IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: (() {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (c) =>
+                                                  PriceListEditScreen(
+                                                    model: model,
+                                                    context: context,
+                                                  )));
+                                    }),
+                                  ),
+                                  title: Text(model.priceListInfo.toString()),
+                                  trailing: Text(model.salePrice.toString()),
+                                ),
+                                ListTile(
+                                  leading:
+                                      Text("₹" + model.salePrice.toString()),
+                                  title: Text(
+                                      "Stock" + model.inStockCount.toString()),
+                                  trailing:
+                                      Text("♢" + model.supplierName.toString()),
+                                ),
+                                /*ListTile(
+                            title: Text("Query String ${name}" +
+                                model.inStockCount.toString()),
+                            trailing: model.priceListName
+                                    .toString()
+                                    .startsWith(name)
+                                ? Text(
+                                    "query matched ${model.priceListName.toString().startsWith(name)}")
+                                : Text("query not matched."),
+                          ),*/
+                              ],
+                              onExpansionChanged: (isExpanded) {
+                                //print("Expanded: ${isExpanded}");
+                              },
+                            ),
+                          )
+                        : Center(child: Text("No PriceList displayed."));
+                  },
+                );
+        },
+        /*ListView.builder(
                   itemCount: snapshots.data!.docs.length,
                   itemBuilder: (context, index) {
                     PriceList model = PriceList.fromJson(
@@ -150,7 +219,7 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
                 );
         },
       ),
-      /*ListView(
+      ListView(
         children: [
           StreamBuilder(
             stream: ref.snapshots(),
@@ -203,7 +272,8 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
             },
           ),
         ],
-      ),*/
+      );*/
+      ),
     );
   }
 }

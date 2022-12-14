@@ -241,7 +241,7 @@ class _PriceListUploadScreenState extends State<PriceListUploadScreen> {
                     radius: MediaQuery.of(context).size.width * 0.20,
                     backgroundColor: Colors.white,
                     backgroundImage: imageXFile == null
-                        ? NetworkImage(imageController.text!) as ImageProvider
+                        ? NetworkImage(imageController.text) as ImageProvider
                         : FileImage(File(imageXFile!.path)) as ImageProvider,
                     child: imageXFile == null
                         ? Icon(

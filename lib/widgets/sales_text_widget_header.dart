@@ -47,7 +47,7 @@ class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
               //width: 10.0,
             ),
             SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+              scrollDirection: Axis.horizontal,
               child: Row(
                 //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
