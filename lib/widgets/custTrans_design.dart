@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/custTran_detail_screen.dart';
 import 'package:account/model/custTrans.dart';
@@ -29,7 +27,7 @@ class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
         .doc(widget.model!.custID)
         .get()
         .then((QuerySnapshot) => print(QuerySnapshot.metadata));
-    print(document.getElementsByName("priceListName"));
+    //print(document.getElementsByName("priceListName"));
 
     //return doc;
   }

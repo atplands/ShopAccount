@@ -95,7 +95,9 @@ class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (c) => SupplierEditScreen()));
+                              builder: (c) => SupplierEditScreen(
+                                    model: widget.model!,
+                                  )));
                       //deleteMenu(widget.model!.custID!);
                     },
                   ),

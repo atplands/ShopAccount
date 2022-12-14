@@ -92,7 +92,8 @@ class _CustInfoDesignWidgetState extends State<CustInfoDesignWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (c) => CustomerEditScreen()));
+                              builder: (c) =>
+                                  CustomerEditScreen(model: widget.model!)));
                       //deleteMenu(widget.model!.custID!);
                     },
                   ),

@@ -52,11 +52,11 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
 
   getUser() async {
     setState(() {
-      imageController.text = sharedPreferences!.getString("photoUrl")!;
-      custNameController.text = sharedPreferences!.getString("name")!;
-      custInfoController.text = sharedPreferences!.getString("email")!;
-      custContactController.text = sharedPreferences!.getString("pwd")!;
-      locationController.text = sharedPreferences!.getString("address")!;
+      imageController.text = widget.model!.thumbnailUrl!;
+      custNameController.text = widget.model!.custTransID!;
+      custInfoController.text = widget.model!.thumbnailUrl!;
+      custContactController.text = widget.model!.thumbnailUrl!;
+      //locationController.text = sharedPreferences!.getString("address")!;
     });
   }
 
@@ -86,14 +86,13 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
     String completeAddress =
         ' ${pMark.subThoroughfare} ${pMark.thoroughfare} , ${pMark.subLocality}  ${pMark.locality} , ${pMark.subAdministrativeArea} , ${pMark.administrativeArea}  ${pMark.postalCode} , ${pMark.country}';
 
-    locationController.text = completeAddress;
+    //locationController.text = completeAddress;
   }
 
   Future<void> formValidation() async {
     if (custNameController.text.isNotEmpty &&
         custInfoController.text.isNotEmpty &&
-        custContactController.text.isNotEmpty &&
-        locationController.text.isNotEmpty) {
+        custContactController.text.isNotEmpty) {
       //start uploading image
       showDialog(
           context: context,
@@ -134,8 +133,7 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
           context: context,
           builder: (c) {
             return ErrorDialog(
-              message:
-                  "Please write the complete required info for Registration.",
+              message: "Please write the complete required info for Customer.",
             );
           });
     }
@@ -151,7 +149,7 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
       "shopAvatarUrl": sellerImageUrl,
       "phone": custContactController.text.trim(),
       "aboutUs": custInfoController.text.trim(),
-      "address": locationController.text.trim(),
+      //"address": locationController.text.trim(),
       //"status": "approved",
       //"earnings": 0.0,
       "lat": position!.latitude,
@@ -225,8 +223,10 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width * 0.20,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      NetworkImage(sharedPreferences!.getString("photoUrl")!),
+                  backgroundImage: imageXFile == null
+                      ? NetworkImage(widget.model!.thumbnailUrl!.toString())
+                          as ImageProvider
+                      : FileImage(File(imageXFile!.path)) as ImageProvider,
                   child: imageXFile == null
                       ? Icon(
                           Icons.add_photo_alternate,

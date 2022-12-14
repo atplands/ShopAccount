@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:account/global/global.dart';
+import 'package:account/mainScreens/customersScreen.dart';
 import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
@@ -52,11 +53,11 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
 
   getUser() async {
     setState(() {
-      imageController.text = sharedPreferences!.getString("photoUrl")!;
-      custNameController.text = sharedPreferences!.getString("name")!;
-      custInfoController.text = sharedPreferences!.getString("email")!;
-      custContactController.text = sharedPreferences!.getString("pwd")!;
-      locationController.text = sharedPreferences!.getString("address")!;
+      imageController.text = widget.model!.thumbnailUrl!;
+      custNameController.text = widget.model!.custName!;
+      custInfoController.text = widget.model!.custInfo!;
+      custContactController.text = widget.model!.custContact!;
+      //locationController.text = sharedPreferences!.getString("address")!;
     });
   }
 
@@ -92,8 +93,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
   Future<void> formValidation() async {
     if (custNameController.text.isNotEmpty &&
         custInfoController.text.isNotEmpty &&
-        custContactController.text.isNotEmpty &&
-        locationController.text.isNotEmpty) {
+        custContactController.text.isNotEmpty) {
       //start uploading image
       showDialog(
           context: context,
@@ -106,10 +106,10 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       fStorage.Reference reference = fStorage.FirebaseStorage.instance
           .ref()
-          .child("shops")
+          .child("customers")
           .child(fileName);
       if (imageXFile == null) {
-        sellerImageUrl = sharedPreferences!.getString("photoUrl")!;
+        sellerImageUrl = widget.model!.thumbnailUrl!;
       } else {
         fStorage.UploadTask uploadTask =
             reference.putFile(File(imageXFile!.path));
@@ -122,10 +122,10 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
       //save info to firestore
       saveDataToFirestore().then(
         (value) {
-          print('Profile Updated ');
+          //print('customer Updated ');
           Navigator.pop(context);
           //send user to homePage
-          Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+          Route newRoute = MaterialPageRoute(builder: (c) => CustomersScreen());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -134,8 +134,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
           context: context,
           builder: (c) {
             return ErrorDialog(
-              message:
-                  "Please write the complete required info for Registration.",
+              message: "Please write the complete required info for customers.",
             );
           });
     }
@@ -225,8 +224,10 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width * 0.20,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      NetworkImage(sharedPreferences!.getString("photoUrl")!),
+                  backgroundImage: imageXFile == null
+                      ? NetworkImage(widget.model!.thumbnailUrl!.toString())
+                          as ImageProvider
+                      : FileImage(File(imageXFile!.path)) as ImageProvider,
                   child: imageXFile == null
                       ? Icon(
                           Icons.add_photo_alternate,
