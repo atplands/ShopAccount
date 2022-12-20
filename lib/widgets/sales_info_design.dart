@@ -93,6 +93,28 @@ class _SaleInfoDesignWidgetState extends State<SaleInfoDesignWidget> {
                   ),
                 ),
               ),
+              Container(
+                child: Text(
+                  widget.model!.dueDate!.toString(),
+                  //widget.model!.transDate!  DateTime.now(),
+
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: "Train",
+                  ),
+                ),
+              ),
+              Container(
+                child: Text(
+                  widget.model!.transAmount!.toString(),
+                  //widget.model!.transDate!  DateTime.now(),
+
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: "Train",
+                  ),
+                ),
+              ),
 
               // Text(
               //   widget.model!.menuInfo!,

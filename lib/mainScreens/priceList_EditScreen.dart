@@ -129,15 +129,27 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
     }
   }
 
+  clearMenusUploadForm() {
+    setState(() {
+      priceListNameController.clear();
+      priceListInfoController.clear();
+      salePriceController.clear();
+      purchasePriceController.clear();
+      supplierNameController.clear();
+      inStockCountController.clear();
+      imageController.clear();
+
+      imageXFile = null;
+    });
+  }
+
   saveDataToFirestore(String downloadUrl) {
     final ref = FirebaseFirestore.instance
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
         .collection("priceList");
 
-    ref.doc(uniqueIdName).set({
-      "priceListID": uniqueIdName,
-      "shopUID": sharedPreferences!.getString("uid"),
+    ref.doc(widget.model!.priceListID!).set({
       "priceListName": priceListNameController.text.toString(),
       "priceListInfo": priceListInfoController.text.toString(),
       "supplierName": supplierNameController.text.toString(),
@@ -151,7 +163,7 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
       (value) {
         final custRef = FirebaseFirestore.instance.collection("priceList");
 
-        custRef.doc(uniqueIdName).set(
+        custRef.doc(widget.model!.priceListID!).set(
           {
             "priceListID": uniqueIdName,
             "shopUID": sharedPreferences!.getString("uid"),
@@ -165,16 +177,16 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
-        );
+        ).then((value) {
+          clearMenusUploadForm();
+
+          setState(() {
+            uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+            uploading = false;
+          });
+        });
       },
     );
-
-    //clearMenusUploadForm();
-
-    setState(() {
-      uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-      uploading = false;
-    });
   }
 
   @override

@@ -10,6 +10,7 @@ import 'package:account/widgets/purchase_Info_design.dart';
 import 'package:account/widgets/pur_text_widget_header.dart';
 import 'package:account/widgets/transactions_info_design.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -21,23 +22,19 @@ class PurchasesScreen extends StatefulWidget {
 }
 
 class _PurchasesScreenState extends State<PurchasesScreen> {
-  final List suppliers = [
-    "Suppier_name_1",
-    "Suppier_name_2",
-    "Suppier_name_3",
-    "Suppier_name_4",
-    "Suppier_name_5",
-  ];
   int suppCashTotal = 0;
   int suppCreditTotal = 0;
   int suppTransTotal = 0;
+  DateTime? name;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getDashBoardTotals();
-    setState(() {});
+    setState(() {
+      //name = DateTime.now();
+    });
   }
 
   void getDashBoardTotals() async {
@@ -50,6 +47,21 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
       suppCashTotal = suppRef.get("suppCashTotal");
       suppCreditTotal = suppRef.get("suppCreditTotal");
     });
+  }
+
+  DateTimeRange dateRange = DateTimeRange(
+    start: DateTime.now(),
+    end: DateTime.now(),
+  );
+  Future pickRange() async {
+    DateTimeRange? newDateRange = await showDateRangePicker(
+      context: context,
+      initialDateRange: dateRange,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (newDateRange == null) return;
+    setState(() => dateRange = newDateRange);
   }
 
   @override
@@ -71,22 +83,17 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
               tileMode: TileMode.clamp,
             )),
           ),
-          actions: [],
+          actions: [
+            IconButton(
+                onPressed: pickRange, icon: const Icon(Icons.calendar_month))
+          ],
           title: Text('Purchases Screen'),
           bottom: const TabBar(
             tabs: [
               Tab(
-                icon: Icon(
-                  Icons.money,
-                  color: Colors.white,
-                ),
                 text: "Credit",
               ),
               Tab(
-                icon: Icon(
-                  Icons.money_off_csred_outlined,
-                  color: Colors.white,
-                ),
                 text: "Cash",
               ),
             ],
@@ -101,9 +108,29 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
               Container(
                 child: CustomScrollView(
                   slivers: [
+                    /*Container(
+                      child: Card(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 5.0),
+                        color: Colors.amber,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            hintText: ("Search Purchase Orders"),
+                          ),
+                          onChanged: ((value) {
+                            setState(() {
+                              name = value;
+                            });
+
+                            print("name : ${name}");
+                          }),
+                        ),
+                      ),
+                    ),*/
                     SliverPersistentHeader(
                       pinned: true,
-                      delegate: TextWidgetHeader(
+                      delegate: PurchaseTextWidgetHeader(
                         title: "Purchases",
                         cashTransType1: "Cash",
                         creditTransType2: "Credit",
@@ -112,13 +139,24 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                       ),
                     ),
                     StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          //.collection("shops")
-                          //.doc(sharedPreferences!.getString("uid"))
-                          .collection("suppTrans")
-                          .where("transType", isEqualTo: "Credit ")
-                          //.orderBy("publishedDate", descending: true)
-                          .snapshots(),
+                      stream: name != null
+                          ? FirebaseFirestore.instance
+                              //.collection("shops")
+                              //.doc(sharedPreferences!.getString("uid"))
+                              .collection("suppTrans")
+                              .where("transDate",
+                                  isGreaterThanOrEqualTo: dateRange.start)
+                              .where("transDate",
+                                  isLessThanOrEqualTo: dateRange.end)
+                              //.where("transType", isEqualTo: "Cash")
+                              .snapshots()
+                          : FirebaseFirestore.instance
+                              //.collection("shops")
+                              //.doc(sharedPreferences!.getString("uid"))
+                              .collection("suppTrans")
+                              //.where("transType", isEqualTo: "Credit ")
+                              .orderBy("transDueDate", descending: false)
+                              .snapshots(),
                       builder: (context, snapshot) {
                         return !snapshot.hasData
                             ? SliverToBoxAdapter(
@@ -137,10 +175,14 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                   );
                                   if (index + 1 ==
                                       snapshot.data!.docs.length) {}
-                                  return PurInfoDesignWidget(
-                                    model: model,
-                                    context: context,
-                                  );
+                                  return model.transType
+                                          .toString()
+                                          .contains("Credit")
+                                      ? PurInfoDesignWidget(
+                                          model: model,
+                                          context: context,
+                                        )
+                                      : Text("");
                                 },
                                 itemCount: snapshot.data!.docs.length,
                               );
@@ -152,9 +194,33 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
               Container(
                 child: CustomScrollView(
                   slivers: [
+                    /*Container(
+                      child: PreferredSize(
+                        preferredSize: Size.fromHeight(50),
+                        child: Card(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 5.0),
+                          color: Colors.amber,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.search),
+                              hintText: ("Search Prices"),
+                            ),
+                            onChanged: ((value) {
+                              setState(() {
+                                name = value;
+                              });
+
+                              print("name : ${name}");
+                            }),
+                          ),
+                        ),
+                      ),
+                    ),*/
+
                     SliverPersistentHeader(
                       pinned: true,
-                      delegate: TextWidgetHeader(
+                      delegate: PurchaseTextWidgetHeader(
                         title: "Purchases",
                         cashTransType1: "Cash",
                         creditTransType2: "Credit",
@@ -163,13 +229,24 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                       ),
                     ),
                     StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          //.collection("shops")
-                          //.doc(sharedPreferences!.getString("uid"))
-                          .collection("suppTrans")
-                          .where("transType", isEqualTo: "Cash")
-                          //.orderBy("publishedDate", descending: true)
-                          .snapshots(),
+                      stream: name != null
+                          ? FirebaseFirestore.instance
+                              //.collection("shops")
+                              //.doc(sharedPreferences!.getString("uid"))
+                              .collection("suppTrans")
+                              .where("transDate",
+                                  isGreaterThanOrEqualTo: dateRange.start)
+                              .where("transDate",
+                                  isLessThanOrEqualTo: dateRange.end)
+                              //.where("transType", isEqualTo: "Cash")
+                              .snapshots()
+                          : FirebaseFirestore.instance
+                              //.collection("shops")
+                              //.doc(sharedPreferences!.getString("uid"))
+                              .collection("suppTrans")
+                              //.where("transType", isEqualTo: "Cash")
+                              .orderBy("transDate", descending: true)
+                              .snapshots(),
                       builder: (context, snapshot) {
                         return !snapshot.hasData
                             ? SliverToBoxAdapter(
@@ -189,10 +266,14 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                   if (index + 1 ==
                                       snapshot.data!.docs.length) {}
 
-                                  return PurInfoDesignWidget(
-                                    model: model,
-                                    context: context,
-                                  );
+                                  return model.transType
+                                          .toString()
+                                          .contains("Cash")
+                                      ? PurInfoDesignWidget(
+                                          model: model,
+                                          context: context,
+                                        )
+                                      : Text("");
                                 },
                                 itemCount: snapshot.data!.docs.length,
                               );

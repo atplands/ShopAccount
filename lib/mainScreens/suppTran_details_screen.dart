@@ -13,7 +13,8 @@ import 'package:account/widgets/simple_app_bar.dart';
 
 class SuppTransDetailsScreen extends StatefulWidget {
   final SupTrans? model;
-  SuppTransDetailsScreen({this.model});
+  BuildContext? context;
+  SuppTransDetailsScreen({this.model, this.context});
 
   @override
   _SuppTransDetailsScreenState createState() => _SuppTransDetailsScreenState();
@@ -29,12 +30,12 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
         .collection("suppliers")
         .doc(widget.model!.supplierID!)
         .collection("suppTrans")
-        .doc(suppTransID)
+        .doc(widget.model!.supplierID!)
         .delete()
         .then((value) {
       FirebaseFirestore.instance
           .collection("suppTrans")
-          .doc(suppTransID)
+          .doc(widget.model!.supplierID!)
           .delete();
 
       Navigator.push(context, MaterialPageRoute(builder: (c) => HomeScreen()));
@@ -63,76 +64,106 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (c) =>
-                          SuppTransEditScreen(model: widget.model!)));
+                      builder: (c) => SuppTransEditScreen(
+                            model: widget.model!,
+                            context: context,
+                          )));
             },
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 380.0,
-            child: Image.network(widget.model!.thumbnailUrl.toString(),
-                height: 200.0, fit: BoxFit.cover),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.model!.transName.toString(),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 180.0,
+              child: Image.network(widget.model!.thumbnailUrl.toString(),
+                  height: 180.0, fit: BoxFit.cover),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.model!.transInfo.toString(),
-              textAlign: TextAlign.justify,
-              style:
-                  const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.model!.transName.toString(),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.model!.transAmount.toString() + " €",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.model!.transInfo.toString(),
+                textAlign: TextAlign.justify,
+                style: const TextStyle(
+                    fontWeight: FontWeight.normal, fontSize: 14),
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: InkWell(
-              onTap: () {
-                //delete item
-                deleteItem(widget.model!.supTransID!);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [
-                    Colors.cyan,
-                    Colors.amber,
-                  ],
-                  begin: FractionalOffset(0.0, 0.0),
-                  end: FractionalOffset(1.0, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp,
-                )),
-                width: MediaQuery.of(context).size.width - 13,
-                height: 50,
-                child: const Center(
-                  child: Text(
-                    "Delete this Transaction",
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.model!.transAmount.toString() + " €",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text(
+                    "Date: " + widget.model!.transDate!.toDate().toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.normal, fontSize: 14),
+                  ),
+                  Text(
+                    "Due: " + widget.model!.transDueDate!.toDate().toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.normal, fontSize: 14),
+                  ),
+                  Text(
+                    "Close: " +
+                        widget.model!.transClosedDate!.toDate().toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.normal, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: InkWell(
+                onTap: () {
+                  //delete item
+                  deleteItem(widget.model!.suppTransID!);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                    colors: [
+                      Colors.cyan,
+                      Colors.amber,
+                    ],
+                    begin: FractionalOffset(0.0, 0.0),
+                    end: FractionalOffset(1.0, 0.0),
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp,
+                  )),
+                  width: MediaQuery.of(context).size.width - 13,
+                  height: 50,
+                  child: const Center(
+                    child: Text(
+                      "Delete this Transaction",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

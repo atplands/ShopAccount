@@ -12,6 +12,7 @@ import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
+import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class _PurchaseOrderListUploadScreenState
       purchaseOrderInfoController.text = "Information";
       totalAmountController.text = "Total Amount";
       itemsCountController.text = "Items Count";
-      supplierNameController.text = "Customer Name";
+      supplierNameController.text = "Supplier Name";
     });
   }
 
@@ -84,13 +85,16 @@ class _PurchaseOrderListUploadScreenState
         purchaseOrderInfoController.text.isNotEmpty &&
         totalAmountController.text.isNotEmpty) {
       //start uploading image
-      showDialog(
+      /*showDialog(
           context: context,
           builder: (c) {
             return LoadingDialog(
               message: "Uploading PO",
             );
-          });
+          });*/
+      setState(() {
+        uploading = true;
+      });
 
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       fStorage.Reference reference = fStorage.FirebaseStorage.instance
@@ -116,7 +120,7 @@ class _PurchaseOrderListUploadScreenState
           Navigator.pop(context);
           //send user to homePage
           Route newRoute =
-              MaterialPageRoute(builder: (c) => PurchaseOrdersPending());
+              MaterialPageRoute(builder: (c) => PurchaseOrdersPendingList());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -125,10 +129,19 @@ class _PurchaseOrderListUploadScreenState
           context: context,
           builder: (c) {
             return ErrorDialog(
-              message: "Please write the complete required info for SO.",
+              message: "Please write the complete required info for PO.",
             );
           });
     }
+  }
+
+  clearMenusUploadForm() {
+    imageController.clear();
+    purchaseOrderNameController.clear();
+    purchaseOrderInfoController.clear();
+    totalAmountController.clear();
+    itemsCountController.clear();
+    supplierNameController.clear();
   }
 
   saveDataToFirestore(String downloadUrl) {
@@ -167,13 +180,13 @@ class _PurchaseOrderListUploadScreenState
           },
         );
       },
-    );
+    ).then((value) {
+      clearMenusUploadForm();
 
-    //clearMenusUploadForm();
-
-    setState(() {
-      uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-      uploading = false;
+      setState(() {
+        uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+        uploading = false;
+      });
     });
   }
 
@@ -219,6 +232,7 @@ class _PurchaseOrderListUploadScreenState
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+              uploading == true ? linearProgress() : const Text(""),
               const SizedBox(
                 height: 10,
               ),
@@ -229,8 +243,9 @@ class _PurchaseOrderListUploadScreenState
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width * 0.20,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      NetworkImage(sharedPreferences!.getString("photoUrl")!),
+                  backgroundImage: imageXFile == null
+                      ? NetworkImage(imageController.text) as ImageProvider
+                      : FileImage(File(imageXFile!.path)) as ImageProvider,
                   child: imageXFile == null
                       ? Icon(
                           Icons.add_photo_alternate,

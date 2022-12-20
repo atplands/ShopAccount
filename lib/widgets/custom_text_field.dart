@@ -4,6 +4,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final IconData? data;
   final String? hintText;
+  final String? inputTupe = "name";
   bool? isObsecre = true;
   bool? enabled = true;
 
@@ -25,6 +26,7 @@ class CustomTextField extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.all(10),
       child: TextFormField(
+        //keyboardType: TextInputType.inputType,
         enabled: enabled,
         controller: controller,
         obscureText: isObsecre!,

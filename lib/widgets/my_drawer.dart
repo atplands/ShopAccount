@@ -237,7 +237,7 @@ class MyDrawer extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (c) => PurchaseOrdersPending()));
+                            builder: (c) => PurchaseOrdersPendingList()));
                   },
                 ),
                 const Divider(

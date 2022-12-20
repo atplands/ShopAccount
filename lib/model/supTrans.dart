@@ -3,7 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SupTrans {
   String? supplierID;
   String? shopUID;
-  String? supTransID;
+  String? shopName;
+  String? supplierName;
+  String? supplierContact;
+  String? supplierAddress;
+  String? suppTransID;
   String? transName;
   String? transInfo;
   String? transType;
@@ -12,14 +16,18 @@ class SupTrans {
   Timestamp? transDueDate;
   Timestamp? transClosedDate;
   String? thumbnailUrl;
-  String? paymentDetails;
+  String? transPaymentDetails;
   String? status;
-  int? transAmount;
+  double? transAmount;
 
   SupTrans({
     this.supplierID,
     this.shopUID,
-    this.supTransID,
+    this.shopName,
+    this.supplierName,
+    this.supplierContact,
+    this.supplierAddress,
+    this.suppTransID,
     this.transName,
     this.transInfo,
     this.transType,
@@ -28,14 +36,18 @@ class SupTrans {
     this.transDueDate,
     this.transClosedDate,
     this.thumbnailUrl,
-    this.paymentDetails,
+    this.transPaymentDetails,
     this.transAmount,
   });
 
   SupTrans.fromJson(Map<String, dynamic> json) {
     supplierID = json['supplierID'];
     shopUID = json['shopUID'];
-    supTransID = json['supTransID'];
+    shopName = json['shopName'];
+    supplierName = json['supplierName'];
+    supplierContact = json['supplierContact'];
+    supplierAddress = json['supplierAddress'];
+    suppTransID = json['suppTransID'];
     transName = json['transName'];
     transInfo = json['transInfo'];
     transType = json['transType'];
@@ -44,7 +56,7 @@ class SupTrans {
     transDueDate = json['transDueDate'];
     transClosedDate = json['transClosedDate'];
     thumbnailUrl = json['thumbnailUrl'];
-    paymentDetails = json['paymentDetails'];
+    transPaymentDetails = json['transPaymentDetails'];
     status = json['status'];
     transAmount = json['transAmount'];
   }
@@ -53,7 +65,11 @@ class SupTrans {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['supplierID'] = supplierID;
     data['shopUID'] = shopUID;
-    data['supTransID'] = supTransID;
+    data['shopName'] = shopName;
+    data['supplierName'] = supplierName;
+    data['supplierContact'] = supplierContact;
+    data['supplierAddress'] = supplierAddress;
+    data['suppTransID'] = suppTransID;
     data['transName'] = transName;
     data['transInfo'] = transInfo;
     data['transAmount'] = transAmount;
@@ -62,7 +78,7 @@ class SupTrans {
     data['transDueDate'] = transDueDate;
     data['transClosedDate'] = transClosedDate;
     data['thumbnailUrl'] = thumbnailUrl;
-    data['paymentDetails'] = paymentDetails;
+    data['transPaymentDetails'] = transPaymentDetails;
     data['status'] = status;
 
     return data;

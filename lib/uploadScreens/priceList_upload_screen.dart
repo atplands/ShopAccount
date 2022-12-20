@@ -175,16 +175,16 @@ class _PriceListUploadScreenState extends State<PriceListUploadScreen> {
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
-        );
+        ).then((value) {
+          clearMenusUploadForm();
+
+          setState(() {
+            uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+            uploading = false;
+          });
+        });
       },
     );
-
-    clearMenusUploadForm();
-
-    setState(() {
-      uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-      uploading = false;
-    });
   }
 
   @override
