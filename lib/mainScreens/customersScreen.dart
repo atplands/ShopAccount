@@ -85,7 +85,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(40),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:account/main.dart';
 import 'package:account/mainScreens/custTransScreen.dart';
 import 'package:account/mainScreens/customersScreen.dart';
+import 'package:account/mainScreens/suppliersScreen.dart';
 import 'package:account/model/customers.dart';
+import 'package:account/model/suppliers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -406,7 +408,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: transInfoController,
                 decoration: const InputDecoration(
-                  hintText: "Transacgtion Info",
+                  hintText: "Transaction Info",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -605,6 +607,9 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
     ref.doc(uniqueIdName).set({
       "custTransID": uniqueIdName,
       "custID": widget.model!.custID,
+      "custName": widget.model!.custName,
+      "custContact": widget.model!.custContact,
+      "custAddress": widget.model!.custAddress,
       "shopUID": sharedPreferences!.getString("uid"),
       "shopName": sharedPreferences!.getString("name"),
       "transName": transNameController.text.toString(),

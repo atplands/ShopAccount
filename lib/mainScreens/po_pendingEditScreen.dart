@@ -6,7 +6,9 @@ import 'package:account/mainScreens/purchaseOrderPendingScreen.dart';
 import 'package:account/mainScreens/salesPriceListScreen.dart';
 import 'package:account/model/customers.dart';
 import 'package:account/model/priceList.dart';
+import 'package:account/model/purchaseOrders.dart';
 import 'package:account/model/suppliers.dart';
+import 'package:account/uploadScreens/purchaseOrder_upload_screen.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
@@ -22,7 +24,7 @@ import 'package:firebase_storage/firebase_storage.dart' as fStorage;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PoPendingEditScreen extends StatefulWidget {
-  PriceList? model;
+  PurchaseOrder? model;
   BuildContext? context;
   PoPendingEditScreen({this.model, this.context});
   PoPendingEditScreenState createState() => PoPendingEditScreenState();
@@ -31,12 +33,11 @@ class PoPendingEditScreen extends StatefulWidget {
 class PoPendingEditScreenState extends State<PoPendingEditScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController imageController = TextEditingController();
-  TextEditingController priceListNameController = TextEditingController();
-  TextEditingController priceListInfoController = TextEditingController();
+  TextEditingController purchaseOrderNameController = TextEditingController();
+  TextEditingController purchaseOrderInfoController = TextEditingController();
   TextEditingController supplierNameController = TextEditingController();
-  TextEditingController salePriceController = TextEditingController();
-  TextEditingController purchasePriceController = TextEditingController();
-  TextEditingController inStockCountController = TextEditingController();
+  TextEditingController totalAmountController = TextEditingController();
+  TextEditingController itemsCountController = TextEditingController();
 
   XFile? imageXFile;
   //nameController = sharedPreferences!.getString("name")!;
@@ -49,7 +50,7 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
   Position? position;
   List<Placemark>? placeMarks;
 
-  String priceListImageUrl = "";
+  String purchaseOrderImageUrl = "";
   //String completeAddress = "";
 
   @override
@@ -61,11 +62,10 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
   getUser() async {
     setState(() {
       imageController.text = sharedPreferences!.getString("photoUrl")!;
-      priceListNameController.text = "Name";
-      priceListInfoController.text = "Information";
-      salePriceController.text = "Sale Prie";
-      purchasePriceController.text = "Purchase Price";
-      inStockCountController.text = "inStock count";
+      purchaseOrderNameController.text = "Name";
+      purchaseOrderInfoController.text = "Information";
+      totalAmountController.text = "Sale Prie";
+      itemsCountController.text = "Purchase Price";
       supplierNameController.text = "Supplier Name";
     });
   }
@@ -78,43 +78,43 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
   }
 
   Future<void> formValidation() async {
-    if (priceListNameController.text.isNotEmpty &&
-        priceListInfoController.text.isNotEmpty &&
-        salePriceController.text.isNotEmpty) {
+    if (purchaseOrderNameController.text.isNotEmpty &&
+        purchaseOrderInfoController.text.isNotEmpty &&
+        totalAmountController.text.isNotEmpty) {
       //start uploading image
       showDialog(
           context: context,
           builder: (c) {
             return LoadingDialog(
-              message: "Updating PriceList",
+              message: "Updating Purchase Order",
             );
           });
 
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       fStorage.Reference reference = fStorage.FirebaseStorage.instance
           .ref()
-          .child("shops")
+          .child("purchaseOrders")
           .child(fileName);
       if (imageXFile == null) {
-        priceListImageUrl = sharedPreferences!.getString("photoUrl")!;
+        purchaseOrderImageUrl = widget.model!.thumbnailUrl!.toString();
       } else {
         fStorage.UploadTask uploadTask =
             reference.putFile(File(imageXFile!.path));
         fStorage.TaskSnapshot taskSnapshot =
             await uploadTask.whenComplete(() {});
         await taskSnapshot.ref.getDownloadURL().then((url) {
-          priceListImageUrl = url;
+          purchaseOrderImageUrl = url;
         });
       }
 
       //save info to firestore
-      saveDataToFirestore(priceListImageUrl).then(
+      saveDataToFirestore(purchaseOrderImageUrl).then(
         (value) {
           //print('PriceList Updated ');
           Navigator.pop(context);
           //send user to homePage
           Route newRoute =
-              MaterialPageRoute(builder: (c) => PurchaseOrdersPending());
+              MaterialPageRoute(builder: (c) => PurchaseOrdersPendingList());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -123,58 +123,65 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
           context: context,
           builder: (c) {
             return ErrorDialog(
-              message: "Please write the complete required info for PriceList.",
+              message: "Please write the complete required info for PO.",
             );
           });
     }
+  }
+
+  clearMenusUploadForm() {
+    setState(() {
+      imageController.clear();
+      purchaseOrderNameController.clear();
+      purchaseOrderInfoController.clear();
+      totalAmountController.clear();
+      itemsCountController.clear();
+      supplierNameController.clear();
+      imageXFile = null;
+    });
   }
 
   saveDataToFirestore(String downloadUrl) {
     final ref = FirebaseFirestore.instance
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("priceList");
+        .collection("purchaseOrders");
 
-    ref.doc(uniqueIdName).set({
-      "priceListID": uniqueIdName,
-      "shopUID": sharedPreferences!.getString("uid"),
-      "priceListName": priceListNameController.text.toString(),
-      "priceListInfo": priceListInfoController.text.toString(),
+    ref.doc(widget.model!.purchaseOrderID!).update({
+      "purchaseOrderName": purchaseOrderNameController.text.toString(),
+      "purchaseOrderInfo": purchaseOrderInfoController.text.toString(),
       "supplierName": supplierNameController.text.toString(),
-      "salePrice": int.parse(salePriceController.text.toString()),
-      "purchasePrice": int.parse(purchasePriceController.text.toString()),
-      "inStockCount": int.parse(inStockCountController.text.toString()),
+      "totalAmountPrice": int.parse(totalAmountController.text.toString()),
+      "itemsCountCount": int.parse(itemsCountController.text.toString()),
       "publishedDate": DateTime.now(),
       "status": "available",
       "thumbnailUrl": downloadUrl,
     }).then(
       (value) {
-        final custRef = FirebaseFirestore.instance.collection("priceList");
+        final custRef = FirebaseFirestore.instance.collection("purchaseOrders");
 
-        custRef.doc(uniqueIdName).set(
+        custRef.doc(widget.model!.purchaseOrderID!).update(
           {
-            "priceListID": uniqueIdName,
-            "shopUID": sharedPreferences!.getString("uid"),
-            "priceListName": priceListNameController.text.toString(),
-            "priceListInfo": priceListInfoController.text.toString(),
+            "purchaseOrderName": purchaseOrderNameController.text.toString(),
+            "purchaseOrderInfo": purchaseOrderInfoController.text.toString(),
             "supplierName": supplierNameController.text.toString(),
-            "salePrice": int.parse(salePriceController.text.toString()),
-            "purchasePrice": int.parse(purchasePriceController.text.toString()),
-            "inStockCount": int.parse(inStockCountController.text.toString()),
+            "totalAmountPrice":
+                int.parse(totalAmountController.text.toString()),
+            "itemsCountCount": int.parse(itemsCountController.text.toString()),
             "publishedDate": DateTime.now(),
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
-        );
+        ).then((value) {
+          clearMenusUploadForm();
+
+          setState(() {
+            uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+            uploading = false;
+          });
+        });
       },
     );
-
-    //clearMenusUploadForm();
-
-    setState(() {
-      uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-      uploading = false;
-    });
   }
 
   @override
@@ -183,16 +190,17 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Colors.cyan,
-              Colors.amber,
-            ],
-            begin: FractionalOffset(0.0, 0.0),
-            end: FractionalOffset(1.0, 0.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp,
-          )),
+            gradient: LinearGradient(
+              colors: [
+                Colors.cyan,
+                Colors.amber,
+              ],
+              begin: FractionalOffset(0.0, 0.0),
+              end: FractionalOffset(1.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp,
+            ),
+          ),
         ),
         automaticallyImplyLeading: true,
         title: Text(
@@ -229,8 +237,10 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width * 0.20,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      NetworkImage(sharedPreferences!.getString("photoUrl")!),
+                  backgroundImage: imageXFile == null
+                      ? NetworkImage(widget.model!.thumbnailUrl!.toString())
+                          as ImageProvider
+                      : FileImage(File(imageXFile!.path)) as ImageProvider,
                   child: imageXFile == null
                       ? Icon(
                           Icons.add_photo_alternate,
@@ -251,33 +261,29 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: CustomTextField(
                         data: Icons.person,
-                        controller: priceListNameController,
-                        hintText: "Name",
+                        controller: purchaseOrderNameController,
+                        hintText: "Purchase Order Name",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.book,
-                      controller: priceListInfoController,
+                      controller: purchaseOrderInfoController,
                       hintText: "Per Kgs, Numbers, Dozens",
                       isObsecre: false,
                     ),
                     CustomTextField(
-                      data: Icons.price_check,
-                      controller: salePriceController,
-                      hintText: "Sale Price",
-                      isObsecre: false,
-                    ),
-                    CustomTextField(
+                      //keyboardType: TextInputType.number,
+                      //style: const TextStyle(color: Colors.black),
                       data: Icons.price_change,
-                      controller: purchasePriceController,
-                      hintText: "purchasePrice",
+                      controller: totalAmountController,
+                      hintText: "purchase Order Amount",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.stacked_line_chart,
-                      controller: inStockCountController,
-                      hintText: "InStock",
+                      controller: itemsCountController,
+                      hintText: "Number Of Items",
                       isObsecre: false,
                     ),
                     CustomTextField(
@@ -294,7 +300,7 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
               ),
               ElevatedButton(
                 child: const Text(
-                  "Update PriceList",
+                  "Update PurchaseOrder",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

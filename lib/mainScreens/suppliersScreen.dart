@@ -77,6 +77,30 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
             },
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(40),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              scrollPadding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+              ),
+              decoration: InputDecoration(
+                prefix: Icon(
+                  Icons.search,
+                ),
+                hintText: ("search Suppliers"),
+              ),
+              onChanged: ((value) {
+                setState() {
+                  query = value;
+                  //print("values of query ${query}");
+                  //print("quey display: ${query}");
+                }
+              }),
+            ),
+          ),
+        ),
       ),
       body: CustomScrollView(
         slivers: [

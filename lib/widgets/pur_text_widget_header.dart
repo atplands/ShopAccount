@@ -4,13 +4,13 @@ import 'package:account/views/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class TextWidgetHeader extends SliverPersistentHeaderDelegate {
+class PurchaseTextWidgetHeader extends SliverPersistentHeaderDelegate {
   String? title;
   String? cashTransType1 = '';
   String? creditTransType2 = '';
   String? cashTransamount1 = '';
   String? creditTransamount2 = '';
-  TextWidgetHeader(
+  PurchaseTextWidgetHeader(
       {this.title,
       this.cashTransType1,
       this.creditTransType2,

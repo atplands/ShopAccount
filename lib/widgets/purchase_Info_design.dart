@@ -44,6 +44,7 @@ class _PurInfoDesignWidgetState extends State<PurInfoDesignWidget> {
             MaterialPageRoute(
                 builder: (c) => SuppTransDetailsScreen(
                       model: widget.model,
+                      context: context,
                     )));
       },
       splashColor: Colors.amber,
@@ -79,7 +80,7 @@ class _PurInfoDesignWidgetState extends State<PurInfoDesignWidget> {
                 Container(
                   width: 240.0,
                   child: Text(
-                    widget.model!.transInfo!,
+                    widget.model!.transName!,
                     style: const TextStyle(
                       color: Colors.cyan,
                       fontSize: 20,
@@ -98,12 +99,12 @@ class _PurInfoDesignWidgetState extends State<PurInfoDesignWidget> {
                   },
                 ),*/
                 Container(
-                  width: 80.0,
                   child: Text(
                     widget.model!.transAmount!.toString(),
+                    //widget.model!.transDate!  DateTime.now(),
+
                     style: TextStyle(
                       color: Colors.red,
-                      fontSize: 20,
                       fontFamily: "Train",
                     ),
                   ),

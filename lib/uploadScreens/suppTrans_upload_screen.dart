@@ -193,7 +193,7 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
     });
   }
 
-  custTransUploadFormScreen() {
+  suppTransUploadFormScreen() {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -678,6 +678,6 @@ class _SuppTransUploadScreenState extends State<SuppTransUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return imageXFile == null ? defaultScreen() : custTransUploadFormScreen();
+    return imageXFile == null ? defaultScreen() : suppTransUploadFormScreen();
   }
 }

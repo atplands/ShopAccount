@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/home_screen.dart';
+import 'package:account/mainScreens/salesOrderPendingScreen.dart';
 import 'package:account/mainScreens/salesPriceListScreen.dart';
 import 'package:account/model/customers.dart';
 import 'package:account/model/priceList.dart';
@@ -10,6 +11,7 @@ import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
+import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -80,13 +82,17 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
         salesOrderInfoController.text.isNotEmpty &&
         totalAmountController.text.isNotEmpty) {
       //start uploading image
-      showDialog(
+      /*showDialog(
           context: context,
           builder: (c) {
             return LoadingDialog(
-              message: "Uploading PO",
+              message: "Uploading SO",
             );
-          });
+          });*/
+
+      setState(() {
+        uploading = true;
+      });
 
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       fStorage.Reference reference = fStorage.FirebaseStorage.instance
@@ -112,7 +118,7 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
           Navigator.pop(context);
           //send user to homePage
           Route newRoute =
-              MaterialPageRoute(builder: (c) => SalesPriceListScreen());
+              MaterialPageRoute(builder: (c) => SalesOrderPendingList());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -125,6 +131,15 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
             );
           });
     }
+  }
+
+  clearMenusUploadForm() {
+    imageController.clear();
+    salesOrderNameController.clear();
+    salesOrderInfoController.clear();
+    totalAmountController.clear();
+    itemsCountController.clear();
+    customerNameController.clear();
   }
 
   saveDataToFirestore(String downloadUrl) {
@@ -161,16 +176,16 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
-        );
+        ).then((value) {
+          clearMenusUploadForm();
+
+          setState(() {
+            uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+            uploading = false;
+          });
+        });
       },
     );
-
-    //clearMenusUploadForm();
-
-    setState(() {
-      uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-      uploading = false;
-    });
   }
 
   @override
@@ -179,16 +194,17 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Colors.cyan,
-              Colors.amber,
-            ],
-            begin: FractionalOffset(0.0, 0.0),
-            end: FractionalOffset(1.0, 0.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp,
-          )),
+            gradient: LinearGradient(
+              colors: [
+                Colors.cyan,
+                Colors.amber,
+              ],
+              begin: FractionalOffset(0.0, 0.0),
+              end: FractionalOffset(1.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp,
+            ),
+          ),
         ),
         automaticallyImplyLeading: true,
         title: Text(
@@ -215,6 +231,7 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+              uploading == true ? linearProgress() : const Text(""),
               const SizedBox(
                 height: 10,
               ),
@@ -225,8 +242,9 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width * 0.20,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      NetworkImage(sharedPreferences!.getString("photoUrl")!),
+                  backgroundImage: imageXFile == null
+                      ? NetworkImage(imageController.text) as ImageProvider
+                      : FileImage(File(imageXFile!.path)) as ImageProvider,
                   child: imageXFile == null
                       ? Icon(
                           Icons.add_photo_alternate,
@@ -248,7 +266,7 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: salesOrderNameController,
-                        hintText: "Name",
+                        hintText: "SalesOrder Name",
                         isObsecre: false,
                       ),
                     ),

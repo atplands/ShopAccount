@@ -20,8 +20,8 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
   bool isExpand = false;
   String name = "";
   CollectionReference ref = FirebaseFirestore.instance
-      .collection("shops")
-      .doc(sharedPreferences!.getString("uid"))
+      //.collection("shops")
+      //.doc(sharedPreferences!.getString("uid"))
       .collection("priceList");
   @override
   void initState() {
@@ -34,23 +34,20 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Card(
-          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-          color: Colors.amber,
-          child: TextField(
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              hintText: ("Search Prices"),
-            ),
-            onChanged: ((value) {
-              setState(() {
-                name = value;
-              });
-
-              print("name : ${name}");
-            }),
-          ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Colors.cyan,
+              Colors.amber,
+            ],
+            begin: FractionalOffset(0.0, 0.0),
+            end: FractionalOffset(1.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          )),
         ),
+        title: Text("Price List"),
         actions: [
           IconButton(
             icon: const Icon(
@@ -63,6 +60,26 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
             },
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Card(
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            color: Colors.amber,
+            child: TextField(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: ("Search Prices"),
+              ),
+              onChanged: ((value) {
+                setState(() {
+                  name = value;
+                });
+
+                print("name : ${name}");
+              }),
+            ),
+          ),
+        ),
       ),
       drawer: MyDrawer(),
       body: StreamBuilder<QuerySnapshot>(
