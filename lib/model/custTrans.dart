@@ -3,49 +3,60 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CustTrans {
   String? custID;
   String? shopUID;
+  String? shopName;
+  String? customerName;
+  String? customerContact;
+  String? customerAddress;
   String? custTransID;
   String? transName;
-  String? transType;
   String? transInfo;
+  String? transType;
   Timestamp? transDate;
   Timestamp? publishedDate;
-  Timestamp? dueDate;
-  Timestamp? closedDate;
+  Timestamp? transDueDate;
+  Timestamp? transClosedDate;
   String? thumbnailUrl;
-  String? paymentDetails;
+  String? transPaymentDetails;
   String? status;
-  int? transAmount;
+  double? transAmount;
 
   CustTrans({
     this.custID,
     this.shopUID,
+    this.shopName,
+    this.customerName,
+    this.customerContact,
+    this.customerAddress,
     this.custTransID,
     this.transName,
-    this.transType,
     this.transInfo,
+    this.transType,
     this.transDate,
     this.publishedDate,
-    this.dueDate,
-    this.closedDate,
+    this.transDueDate,
+    this.transClosedDate,
     this.thumbnailUrl,
-    this.paymentDetails,
-    this.status,
+    this.transPaymentDetails,
     this.transAmount,
   });
 
   CustTrans.fromJson(Map<String, dynamic> json) {
     custID = json['custID'];
     shopUID = json['shopUID'];
+    shopName = json['shopName'];
+    customerName = json['customerName'];
+    customerContact = json['customerContact'];
+    customerAddress = json['customerAddress'];
     custTransID = json['custTransID'];
     transName = json['transName'];
-    transType = json['transType'];
     transInfo = json['transInfo'];
+    transType = json['transType'];
     transDate = json['transDate'];
     publishedDate = json['publishedDate'];
-    dueDate = json['dueDate'];
-    closedDate = json['closedDate'];
+    transDueDate = json['transDueDate'];
+    transClosedDate = json['transClosedDate'];
     thumbnailUrl = json['thumbnailUrl'];
-    paymentDetails = json['paymentDetails'];
+    transPaymentDetails = json['transPaymentDetails'];
     status = json['status'];
     transAmount = json['transAmount'];
   }
@@ -54,17 +65,20 @@ class CustTrans {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['custID'] = custID;
     data['shopUID'] = shopUID;
+    data['shopName'] = shopName;
+    data['customerName'] = customerName;
+    data['customerContact'] = customerContact;
+    data['customerAddress'] = customerAddress;
     data['custTransID'] = custTransID;
     data['transName'] = transName;
-    data['transType'] = transType;
     data['transInfo'] = transInfo;
     data['transAmount'] = transAmount;
-    data['closedDate'] = closedDate;
     data['transDate'] = transDate;
     data['publishedDate'] = publishedDate;
-    data['dueDate'] = dueDate;
+    data['transDueDate'] = transDueDate;
+    data['transClosedDate'] = transClosedDate;
     data['thumbnailUrl'] = thumbnailUrl;
-    data['paymentDetails'] = paymentDetails;
+    data['transPaymentDetails'] = transPaymentDetails;
     data['status'] = status;
 
     return data;

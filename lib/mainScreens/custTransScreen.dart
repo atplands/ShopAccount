@@ -25,11 +25,11 @@ class CustTransScreen extends StatefulWidget {
 }
 
 class _CustTransScreenState extends State<CustTransScreen> {
-  List<int> cashTransAmount = [];
-  List<int> creditTransAmount = [];
-  int cashTotal = 0;
-  int creditTotal = 0;
-  int transTotal = 0;
+  List<double> cashTransAmount = [];
+  List<double> creditTransAmount = [];
+  double cashTotal = 0;
+  double creditTotal = 0;
+  double transTotal = 0;
 
   updateFireStore(var custID) {
     final ref = FirebaseFirestore.instance

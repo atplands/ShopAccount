@@ -139,10 +139,12 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                           updateDashBoardTotal();
                         }
 
-                        return SuppliersInfoDesignWidget(
-                          model: model,
-                          context: context,
-                        );
+                        return model.supplierName!.contains(query!.toString())
+                            ? SuppliersInfoDesignWidget(
+                                model: model,
+                                context: context,
+                              )
+                            : Text("");
                       },
                       itemCount: snapshot.data!.docs.length,
                     );

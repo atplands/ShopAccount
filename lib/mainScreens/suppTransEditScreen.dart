@@ -142,15 +142,13 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
         });
       }
       //save info to firestore
-      saveDataToFirestore(custTransImageUrl).then(
-        (value) {
-          print('Purchase Trans Updated ');
-          Navigator.pop(context);
-          //send user to homePage
-          Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
-          Navigator.pushReplacement(context, newRoute);
-        },
-      );
+      saveDataToFirestore(custTransImageUrl);
+
+      print('Purchase Trans Updated ');
+      Navigator.pop(context);
+      //send user to homePage
+      Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+      Navigator.pushReplacement(context, newRoute);
     } else {
       showDialog(
           context: context,
@@ -177,9 +175,9 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
       "transInfo": transInfoController.text.toString(),
       "transPaymentDetails": transPaymentDetailsController.text.toString(),
       "transAmount": double.parse(transAmountController.text.trim()),
-      "transDate": DateTime.parse(transDateController.text),
-      "transDueDate": DateTime.parse(transDueDateController.text),
-      "transClosedDate": DateTime.parse(transClosedDateController.text),
+      "transDate": DateTime.parse(transDateController.text.trim()),
+      "transDueDate": DateTime.parse(transDueDateController.text.trim()),
+      "transClosedDate": DateTime.parse(transClosedDateController.text.trim()),
       "thumbnailUrl": downloadUrl,
     }).then((value) {
       print("First Firestore data is updated");
@@ -190,11 +188,12 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
         "transType": transTypeController.text.trim(),
         "transInfo": transInfoController.text.trim(),
         "transPaymentDetails": transPaymentDetailsController.text.trim(),
-        //"transAmount": double.parse(transAmountController.text),
-        //"transDate": DateTime.parse(transDateController.text),
-        //"transDueDate": DateTime.parse(transDueDateController.text),
-        //"transClosedDate": DateTime.parse(transClosedDateController.text),
-        //"thumbnailUrl": downloadUrl,
+        "transAmount": double.parse(transAmountController.text.trim()),
+        "transDate": DateTime.parse(transDateController.text.trim()),
+        "transDueDate": DateTime.parse(transDueDateController.text.trim()),
+        "transClosedDate":
+            DateTime.parse(transClosedDateController.text.trim()),
+        "thumbnailUrl": downloadUrl,
       });
       print("Second FireStore Data is Updated");
       print("Payment details::" + transAmountController.text.trim());
