@@ -116,18 +116,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
             delegate: TextWidgetHeader(title: "Search Customers"),
           ),
           StreamBuilder<QuerySnapshot>(
-            stream: query != ""
-                ? FirebaseFirestore.instance
-                    .collection("customers")
-                    .where("custName", isEqualTo: query)
-                    .orderBy("publishedDate", descending: true)
-                    .snapshots()
-                : FirebaseFirestore.instance
-                    .collection("shops")
-                    .doc(sharedPreferences!.getString("uid"))
-                    .collection("customers")
-                    .orderBy("publishedDate", descending: true)
-                    .snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection("shops")
+                .doc(sharedPreferences!.getString("uid"))
+                .collection("customers")
+                .orderBy("publishedDate", descending: true)
+                .snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData
                   ? SliverToBoxAdapter(
@@ -149,10 +143,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         if (index + 1 == snapshot.data!.docs.length) {
                           updateDashBoardTotal();
                         }
-                        return CustInfoDesignWidget(
-                          model: model,
-                          context: context,
-                        );
+                        return model.custName!.contains(query.toString())
+                            ? CustInfoDesignWidget(
+                                model: model,
+                                context: context,
+                              )
+                            : Text("");
                       },
                       itemCount: snapshot.data!.docs.length,
                     );

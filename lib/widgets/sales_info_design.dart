@@ -95,7 +95,7 @@ class _SaleInfoDesignWidgetState extends State<SaleInfoDesignWidget> {
               ),
               Container(
                 child: Text(
-                  widget.model!.dueDate!.toString(),
+                  widget.model!.transDueDate!.toString(),
                   //widget.model!.transDate!  DateTime.now(),
 
                   style: TextStyle(

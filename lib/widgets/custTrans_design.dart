@@ -47,7 +47,7 @@ class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
-            height: 280,
+            height: 120,
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
@@ -59,31 +59,36 @@ class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
                 const SizedBox(
                   height: 1,
                 ),
-                Text(
-                  widget.model!.transName!,
-                  style: const TextStyle(
-                    color: Colors.cyan,
-                    fontSize: 18,
-                    fontFamily: "Train",
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.network(
+                      widget.model!.thumbnailUrl!,
+                      height: 120.0,
+                      fit: BoxFit.cover,
+                    ),
+                    Text(
+                      widget.model!.transName!,
+                      style: const TextStyle(
+                        color: Colors.cyan,
+                        fontSize: 18,
+                        fontFamily: "Train",
+                      ),
+                    ),
+                    Text(
+                      widget.model!.transInfo!,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 2,
                 ),
-                Image.network(
-                  widget.model!.thumbnailUrl!,
-                  height: 220.0,
-                  fit: BoxFit.cover,
-                ),
                 const SizedBox(
                   height: 2.0,
-                ),
-                Text(
-                  widget.model!.transInfo!,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
                 ),
                 const SizedBox(
                   height: 1,
