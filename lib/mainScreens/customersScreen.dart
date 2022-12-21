@@ -143,7 +143,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         if (index + 1 == snapshot.data!.docs.length) {
                           updateDashBoardTotal();
                         }
-                        return model.custName!.contains(query.toString())
+                        return model.customerName!.contains(query.toString())
                             ? CustInfoDesignWidget(
                                 model: model,
                                 context: context,

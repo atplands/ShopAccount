@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:account/global/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -35,6 +38,11 @@ class BubbleStories extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: Colors.grey[400],
+                image: DecorationImage(
+                  image:
+                      NetworkImage(sharedPreferences!.getString("photoUrl")!),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox(

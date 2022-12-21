@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:account/global/global.dart';
+import 'package:account/mainScreens/customersScreen.dart';
 import 'package:account/mainScreens/home_screen.dart';
-import 'package:account/mainScreens/suppliersScreen.dart';
+import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
@@ -30,7 +31,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
   TextEditingController suppNameController = TextEditingController();
   TextEditingController suppInfoController = TextEditingController();
   TextEditingController suppContactController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+  TextEditingController suppAddressController = TextEditingController();
 
   XFile? imageXFile;
   //nameController = sharedPreferences!.getString("name")!;
@@ -54,12 +55,9 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
     setState(() {
       imageController.text = widget.model!.thumbnailUrl!;
       suppNameController.text = widget.model!.supplierName!;
-      ;
       suppInfoController.text = widget.model!.supplierInfo!;
-      ;
       suppContactController.text = widget.model!.supplierContact!;
-      ;
-      //locationController.text = widget.model!.!;!;
+      suppContactController.text = widget.model!.supplierAddress!;
     });
   }
 
@@ -89,29 +87,28 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
     String completeAddress =
         ' ${pMark.subThoroughfare} ${pMark.thoroughfare} , ${pMark.subLocality}  ${pMark.locality} , ${pMark.subAdministrativeArea} , ${pMark.administrativeArea}  ${pMark.postalCode} , ${pMark.country}';
 
-    locationController.text = completeAddress;
+    suppAddressController.text = completeAddress;
   }
 
   Future<void> formValidation() async {
     if (suppNameController.text.isNotEmpty &&
-        suppInfoController.text.isNotEmpty &&
         suppContactController.text.isNotEmpty) {
       //start uploading image
       showDialog(
           context: context,
           builder: (c) {
             return LoadingDialog(
-              message: "Registering Account",
+              message: "Updating supplier",
             );
           });
 
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       fStorage.Reference reference = fStorage.FirebaseStorage.instance
           .ref()
-          .child("shops")
+          .child("suppliers")
           .child(fileName);
       if (imageXFile == null) {
-        supplierImageUrl = sharedPreferences!.getString("photoUrl")!;
+        supplierImageUrl = widget.model!.thumbnailUrl!;
       } else {
         fStorage.UploadTask uploadTask =
             reference.putFile(File(imageXFile!.path));
@@ -124,10 +121,10 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
       //save info to firestore
       saveDataToFirestore().then(
         (value) {
-          //print('Supplier Updated ');
+          //print('customer Updated ');
           Navigator.pop(context);
           //send user to homePage
-          Route newRoute = MaterialPageRoute(builder: (c) => SuppliersScreen());
+          Route newRoute = MaterialPageRoute(builder: (c) => CustomersScreen());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -136,7 +133,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
           context: context,
           builder: (c) {
             return ErrorDialog(
-              message: "Please write the complete required info for Suppliers.",
+              message: "Please write the complete required info for supplier.",
             );
           });
     }
@@ -147,39 +144,33 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
         .collection("suppliers")
-        .doc(widget.model!.supplierID)
+        .doc(widget.model!.supplierID!)
         .update({
       //"sellerUID": currentUser.uid,
       "supplierName": suppNameController.text.trim(),
       "thumbnailUrl": supplierImageUrl,
       "supplierContact": suppContactController.text.trim(),
       "supplierInfo": suppInfoController.text.trim(),
+      "supplierAddress": suppAddressController.text.trim(),
+      //"status": "approved",
+      //"earnings": 0.0,
     }).then((value) {
-      final suppRef = FirebaseFirestore.instance
-          .collection("suppliers")
-          .doc(widget.model!.supplierID)
-          .update({
-        //"sellerUID": currentUser.uid,
-        "supplierName": suppNameController.text.trim(),
-        "thumbnailUrl": supplierImageUrl,
-        "supplierContact": suppContactController.text.trim(),
-        "supplierInfo": suppInfoController.text.trim(),
-      });
+      final custRef = FirebaseFirestore.instance.collection("suppliers");
+
+      custRef.doc(widget.model!.supplierID!).update(
+        {
+          "supplierName": suppNameController.text.toString(),
+          "supplierInfo": suppInfoController.text.toString(),
+          "supplierContact": suppContactController.text.toString(),
+          "supplierAddress": suppAddressController.text.toString(),
+          "thumbnailUrl": supplierImageUrl,
+        },
+      );
     });
     print('Supplier Data Updated into Firebase');
 
     //save data locally
     sharedPreferences = await SharedPreferences.getInstance();
-    //await sharedPreferences!.setString("uid", currentUser.uid);]
-    /*await sharedPreferences!.setString("email", nameController.text.trim());
-    await sharedPreferences!.setString("name", nameController.text.trim());
-    await sharedPreferences!.setString("pwd", passwordController.text.trim());
-    await sharedPreferences!.setString("phone", phoneController.text.trim());
-    await sharedPreferences!
-        .setString("aboutUs", aboutUsController.text.trim());
-    await sharedPreferences!
-        .setString("address", locationController.text.trim());
-    await sharedPreferences!.setString("photoUrl", sellerImageUrl);*/
   }
 
   @override
@@ -201,7 +192,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
         ),
         automaticallyImplyLeading: true,
         title: Text(
-          'Edit Profile',
+          'Edit Supplier',
           style: TextStyle(
             fontSize: 24,
             color: Colors.white,
@@ -234,8 +225,10 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width * 0.20,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      NetworkImage(sharedPreferences!.getString("photoUrl")!),
+                  backgroundImage: imageXFile == null
+                      ? NetworkImage(widget.model!.thumbnailUrl!.toString())
+                          as ImageProvider
+                      : FileImage(File(imageXFile!.path)) as ImageProvider,
                   child: imageXFile == null
                       ? Icon(
                           Icons.add_photo_alternate,
@@ -270,39 +263,15 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
                     CustomTextField(
                       data: Icons.book_rounded,
                       controller: suppInfoController,
-                      hintText: "AboutShop",
+                      hintText: "About Supplier",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.my_location,
-                      controller: locationController,
-                      hintText: "Shop Address",
+                      controller: suppAddressController,
+                      hintText: "Address",
                       isObsecre: false,
                       enabled: true,
-                    ),
-                    Container(
-                      width: 400,
-                      height: 40,
-                      alignment: Alignment.center,
-                      child: ElevatedButton.icon(
-                        label: const Text(
-                          "Get my Current Location",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        icon: const Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          getCurrentLocation();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -312,7 +281,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
               ),
               ElevatedButton(
                 child: const Text(
-                  "Update Suppplier",
+                  "Update Supplier",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
