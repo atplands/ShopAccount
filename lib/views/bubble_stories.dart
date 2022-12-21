@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:account/global/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

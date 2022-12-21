@@ -56,7 +56,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
       imageController.text = widget.model!.thumbnailUrl!;
       custNameController.text = widget.model!.customerName!;
       custInfoController.text = widget.model!.customerInfo!;
-      custContactController.text = widget.model!.customerContact!;
+      custContactController.text = widget.model!.customerContact!.toString();
       custContactController.text = widget.model!.customerAddress!;
     });
   }
