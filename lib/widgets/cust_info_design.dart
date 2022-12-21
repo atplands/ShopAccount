@@ -75,7 +75,7 @@ class _CustInfoDesignWidgetState extends State<CustInfoDesignWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.model!.custName!,
+                    widget.model!.customerName!,
                     style: const TextStyle(
                       color: Colors.cyan,
                       fontSize: 20,

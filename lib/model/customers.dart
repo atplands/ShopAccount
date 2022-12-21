@@ -3,24 +3,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Customers {
   String? custID;
   String? shopUID;
-  String? custName;
-  String? custInfo;
-  String? custContact;
-  String? custAddress;
+  String? customerName;
+  String? customerInfo;
+  int? customerContact;
+  String? customerAddress;
   Timestamp? publishedDate;
   String? thumbnailUrl;
   String? status;
-  int? transTotal;
-  int? cashTotal;
-  int? creditTotal;
+  double? transTotal;
+  double? cashTotal;
+  double? creditTotal;
 
   Customers({
     this.custID,
     this.shopUID,
-    this.custName,
-    this.custInfo,
-    this.custContact,
-    this.custAddress,
+    this.customerName,
+    this.customerInfo,
+    this.customerContact,
+    this.customerAddress,
     this.publishedDate,
     this.thumbnailUrl,
     this.status,
@@ -32,10 +32,10 @@ class Customers {
   Customers.fromJson(Map<String, dynamic> json) {
     custID = json["custID"];
     shopUID = json['shopUID'];
-    custName = json['custName'];
-    custInfo = json['custInfo'];
-    custContact = json['custContact'];
-    custAddress = json["custAddress"];
+    customerName = json['customerName'];
+    customerInfo = json['customerInfo'];
+    customerContact = json['customerContact'];
+    customerAddress = json["customerAddress"];
     publishedDate = json['publishedDate'];
     thumbnailUrl = json['thumbnailUrl'];
     status = json['status'];
@@ -47,11 +47,11 @@ class Customers {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data["custID"] = custID;
-    data['sellerUID'] = shopUID;
-    data['custName'] = custName;
-    data['custName'] = custInfo;
-    data['custContact'] = custContact;
-    data['custAddress'] = custAddress;
+    data['shopUID'] = shopUID;
+    data['customerName'] = customerName;
+    data['customerInfo'] = customerInfo;
+    data['customerContact'] = customerContact;
+    data['customerAddress'] = customerAddress;
     data['publishedDate'] = publishedDate;
     data['thumbnailUrl'] = thumbnailUrl;
     data['status'] = status;

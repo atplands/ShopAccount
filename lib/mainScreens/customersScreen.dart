@@ -19,12 +19,12 @@ class CustomersScreen extends StatefulWidget {
 
 class _CustomersScreenState extends State<CustomersScreen> {
   String query = "";
-  List<int> cashTransAmount = [];
-  List<int> creditTransAmount = [];
+  List<double> cashTransAmount = [];
+  List<double> creditTransAmount = [];
 
-  int cashTotal = 0;
-  int creditTotal = 0;
-  int transTotal = 0;
+  double cashTotal = 0;
+  double creditTotal = 0;
+  double transTotal = 0;
   initState() {
     setState(() {});
   }
@@ -38,8 +38,8 @@ class _CustomersScreenState extends State<CustomersScreen> {
 
     ref.doc(sharedPreferences!.getString("uid")).update(
       {
-        "custCashTotal": (cashTotal),
-        "custCreditTotal": (creditTotal),
+        //"custCashTotal": (cashTotal),
+        //"custCreditTotal": (creditTotal),
       },
     );
     print("values of query ${query}");
@@ -127,12 +127,14 @@ class _CustomersScreenState extends State<CustomersScreen> {
                   ? SliverToBoxAdapter(
                       child: Center(
                         child: circularProgress(),
+                        //child: Text("its working upto streaming"),
                       ),
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
                       staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
+                        print("printed at ItemBuilder");
                         Customers model = Customers.fromJson(
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
@@ -143,7 +145,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         if (index + 1 == snapshot.data!.docs.length) {
                           updateDashBoardTotal();
                         }
-                        return model.custName!.contains(query.toString())
+                        return model.customerName!.contains(query.toString())
                             ? CustInfoDesignWidget(
                                 model: model,
                                 context: context,

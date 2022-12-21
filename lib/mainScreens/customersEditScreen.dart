@@ -31,7 +31,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
   TextEditingController custNameController = TextEditingController();
   TextEditingController custInfoController = TextEditingController();
   TextEditingController custContactController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+  TextEditingController custAddressController = TextEditingController();
 
   XFile? imageXFile;
   //nameController = sharedPreferences!.getString("name")!;
@@ -42,7 +42,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
   Position? position;
   List<Placemark>? placeMarks;
 
-  String sellerImageUrl = "";
+  String customerImageUrl = "";
   String completeAddress = "";
 
   @override
@@ -54,10 +54,10 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
   getUser() async {
     setState(() {
       imageController.text = widget.model!.thumbnailUrl!;
-      custNameController.text = widget.model!.custName!;
-      custInfoController.text = widget.model!.custInfo!;
-      custContactController.text = widget.model!.custContact!;
-      //locationController.text = sharedPreferences!.getString("address")!;
+      custNameController.text = widget.model!.customerName!;
+      custInfoController.text = widget.model!.customerInfo!;
+      custContactController.text = widget.model!.customerContact!.toString();
+      custContactController.text = widget.model!.customerAddress!;
     });
   }
 
@@ -87,19 +87,18 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     String completeAddress =
         ' ${pMark.subThoroughfare} ${pMark.thoroughfare} , ${pMark.subLocality}  ${pMark.locality} , ${pMark.subAdministrativeArea} , ${pMark.administrativeArea}  ${pMark.postalCode} , ${pMark.country}';
 
-    locationController.text = completeAddress;
+    custAddressController.text = completeAddress;
   }
 
   Future<void> formValidation() async {
     if (custNameController.text.isNotEmpty &&
-        custInfoController.text.isNotEmpty &&
         custContactController.text.isNotEmpty) {
       //start uploading image
       showDialog(
           context: context,
           builder: (c) {
             return LoadingDialog(
-              message: "Registering Account",
+              message: "Updating Customer",
             );
           });
 
@@ -109,14 +108,14 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
           .child("customers")
           .child(fileName);
       if (imageXFile == null) {
-        sellerImageUrl = widget.model!.thumbnailUrl!;
+        customerImageUrl = widget.model!.thumbnailUrl!;
       } else {
         fStorage.UploadTask uploadTask =
             reference.putFile(File(imageXFile!.path));
         fStorage.TaskSnapshot taskSnapshot =
             await uploadTask.whenComplete(() {});
         await taskSnapshot.ref.getDownloadURL().then((url) {
-          sellerImageUrl = url;
+          customerImageUrl = url;
         });
       }
       //save info to firestore
@@ -144,32 +143,34 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     FirebaseFirestore.instance
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
+        .collection("customers")
+        .doc(widget.model!.custID!)
         .update({
       //"sellerUID": currentUser.uid,
-      "shopName": custNameController.text.trim(),
-      "shopAvatarUrl": sellerImageUrl,
-      "phone": custContactController.text.trim(),
-      "aboutUs": custInfoController.text.trim(),
-      "address": locationController.text.trim(),
+      "customerName": custNameController.text.trim(),
+      "thumbnailUrl": customerImageUrl,
+      "customerContact": custContactController.text.trim(),
+      "customerInfo": custInfoController.text.trim(),
+      "customerAddress": custAddressController.text.trim(),
       //"status": "approved",
       //"earnings": 0.0,
-      "lat": position!.latitude,
-      "lng": position!.longitude,
+    }).then((value) {
+      final custRef = FirebaseFirestore.instance.collection("customers");
+
+      custRef.doc(widget.model!.custID!).update(
+        {
+          "customerName": custNameController.text.toString(),
+          "customerInfo": custInfoController.text.toString(),
+          "customerContact": custContactController.text.toString(),
+          "customerAddress": custAddressController.text.toString(),
+          "thumbnailUrl": customerImageUrl,
+        },
+      );
     });
-    print('Profile Data Updated into Firebase');
+    print('Customer Data Updated into Firebase');
 
     //save data locally
     sharedPreferences = await SharedPreferences.getInstance();
-    //await sharedPreferences!.setString("uid", currentUser.uid);]
-    /*await sharedPreferences!.setString("email", nameController.text.trim());
-    await sharedPreferences!.setString("name", nameController.text.trim());
-    await sharedPreferences!.setString("pwd", passwordController.text.trim());
-    await sharedPreferences!.setString("phone", phoneController.text.trim());
-    await sharedPreferences!
-        .setString("aboutUs", aboutUsController.text.trim());
-    await sharedPreferences!
-        .setString("address", locationController.text.trim());
-    await sharedPreferences!.setString("photoUrl", sellerImageUrl);*/
   }
 
   @override
@@ -191,7 +192,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
         ),
         automaticallyImplyLeading: true,
         title: Text(
-          'Edit Profile',
+          'Edit Customer',
           style: TextStyle(
             fontSize: 24,
             color: Colors.white,
@@ -262,39 +263,15 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                     CustomTextField(
                       data: Icons.book_rounded,
                       controller: custInfoController,
-                      hintText: "AboutShop",
+                      hintText: "About Customer",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.my_location,
-                      controller: locationController,
-                      hintText: "Shop Address",
+                      controller: custAddressController,
+                      hintText: "Address",
                       isObsecre: false,
                       enabled: true,
-                    ),
-                    Container(
-                      width: 400,
-                      height: 40,
-                      alignment: Alignment.center,
-                      child: ElevatedButton.icon(
-                        label: const Text(
-                          "Get my Current Location",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        icon: const Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          getCurrentLocation();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
