@@ -38,8 +38,8 @@ class _CustomersScreenState extends State<CustomersScreen> {
 
     ref.doc(sharedPreferences!.getString("uid")).update(
       {
-        //"custCashTotal": (cashTotal),
-        //"custCreditTotal": (creditTotal),
+        "custCashTotal": (cashTotal),
+        "custCreditTotal": (creditTotal),
       },
     );
     print("values of query ${query}");
@@ -65,7 +65,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
         ),
         title: Text(
           //sharedPreferences!.getString("name")!,
-          'Customers Screen',
+          'Customers',
           style: const TextStyle(fontSize: 30, fontFamily: "Lobster"),
         ),
         centerTitle: true,
@@ -85,25 +85,21 @@ class _CustomersScreenState extends State<CustomersScreen> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          preferredSize: Size.fromHeight(50),
+          child: Card(
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            color: Colors.cyan,
             child: TextField(
-              scrollPadding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-              ),
               decoration: InputDecoration(
-                prefix: Icon(
-                  Icons.search,
-                ),
-                hintText: ("its an search bar"),
+                prefixIcon: Icon(Icons.search),
+                hintText: ("Search Customers"),
               ),
               onChanged: ((value) {
-                setState() {
+                setState(() {
                   query = value;
-                  print("values of query ${query}");
-                  //print("quey display: ${query}");
-                }
+                });
+
+                //print("name : ${query}");
               }),
             ),
           ),
@@ -113,7 +109,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
         slivers: [
           SliverPersistentHeader(
             pinned: true,
-            delegate: TextWidgetHeader(title: "Search Customers"),
+            delegate: TextWidgetHeader(title: query),
           ),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
@@ -145,12 +141,14 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         if (index + 1 == snapshot.data!.docs.length) {
                           updateDashBoardTotal();
                         }
-                        return model.customerName!.contains(query.toString())
+                        return model.customerName!
+                                .toString()
+                                .contains(query.toString())
                             ? CustInfoDesignWidget(
                                 model: model,
                                 context: context,
                               )
-                            : Text("");
+                            : const Text("");
                       },
                       itemCount: snapshot.data!.docs.length,
                     );
