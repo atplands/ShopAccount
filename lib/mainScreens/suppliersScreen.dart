@@ -1,27 +1,36 @@
 import 'package:account/global/global.dart';
+import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
+import 'package:account/uploadScreens/customers_upload_screen.dart';
+import 'package:account/uploadScreens/menus_upload_screen.dart';
 import 'package:account/uploadScreens/suppliers_upload_screen.dart';
+import 'package:account/widgets/cust_info_design.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:account/widgets/supplier_info_design.dart';
+import 'package:account/widgets/text_widget_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class SuppliersScreen extends StatefulWidget {
-  SuppliersScreen({Key? key}) : super(key: key);
+  const SuppliersScreen({Key? key}) : super(key: key);
 
   @override
   State<SuppliersScreen> createState() => _SuppliersScreenState();
 }
 
 class _SuppliersScreenState extends State<SuppliersScreen> {
-  List<int> cashTransAmount = [];
-  List<int> creditTransAmount = [];
-  int cashTotal = 0;
-  int creditTotal = 0;
-  int transTotal = 0;
-  String? query = "";
+  String query = "";
+  List<double> cashTransAmount = [];
+  List<double> creditTransAmount = [];
+
+  double cashTotal = 0;
+  double creditTotal = 0;
+  double transTotal = 0;
+  initState() {
+    setState(() {});
+  }
 
   updateDashBoardTotal() {
     cashTransAmount.forEach((e) => cashTotal += e);
@@ -36,6 +45,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
         "suppCreditTotal": (creditTotal),
       },
     );
+    print("values of query ${query}");
   }
 
   @override
@@ -58,7 +68,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
         ),
         title: Text(
           //sharedPreferences!.getString("name")!,
-          'Suppliers Screen',
+          'Suppliers',
           style: const TextStyle(fontSize: 30, fontFamily: "Lobster"),
         ),
         centerTitle: true,
@@ -78,25 +88,21 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          preferredSize: Size.fromHeight(50),
+          child: Card(
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            color: Colors.cyan,
             child: TextField(
-              scrollPadding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-              ),
               decoration: InputDecoration(
-                prefix: Icon(
-                  Icons.search,
-                ),
-                hintText: ("search Suppliers"),
+                prefixIcon: Icon(Icons.search),
+                hintText: ("Search Supplier"),
               ),
               onChanged: ((value) {
-                setState() {
+                setState(() {
                   query = value;
-                  //print("values of query ${query}");
-                  //print("quey display: ${query}");
-                }
+                });
+
+                //print("name : ${query}");
               }),
             ),
           ),
@@ -104,11 +110,10 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
       ),
       body: CustomScrollView(
         slivers: [
-          /*SliverPersistentHeader(
-              pinned: true,
-              delegate: 
-              TextWidgetHeader(title: "Search Suppliers"),
-              ),*/
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: TextWidgetHeader(title: "Suppliers"),
+          ),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("shops")
@@ -121,30 +126,32 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                   ? SliverToBoxAdapter(
                       child: Center(
                         child: circularProgress(),
+                        //child: Text("its working upto streaming"),
                       ),
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
                       staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
+                        //print("printed at ItemBuilder");
                         Suppliers model = Suppliers.fromJson(
                           snapshot.data!.docs[index].data()!
                               as Map<String, dynamic>,
                         );
-
                         cashTransAmount.add(model.cashTotal!);
                         creditTransAmount.add(model.creditTotal!);
 
                         if (index + 1 == snapshot.data!.docs.length) {
                           updateDashBoardTotal();
                         }
-
-                        return model.supplierName!.contains(query!.toString())
+                        return model.supplierName!
+                                .toString()
+                                .contains(query.toString())
                             ? SuppliersInfoDesignWidget(
                                 model: model,
                                 context: context,
                               )
-                            : Text("");
+                            : const Text("");
                       },
                       itemCount: snapshot.data!.docs.length,
                     );
