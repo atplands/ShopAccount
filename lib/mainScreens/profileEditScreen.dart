@@ -6,7 +6,7 @@ import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -104,7 +104,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             context: context,
             builder: (c) {
               return LoadingDialog(
-                message: "Registering Account",
+                message: "Updating Account",
               );
             });
 
@@ -127,10 +127,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         //save info to firestore
         saveDataToFirestore().then(
           (value) {
-            print('Profile Updated ');
+            debugPrint('Profile Updated ');
             Navigator.pop(context);
             //send user to homePage
-            Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+            Route newRoute =
+                MaterialPageRoute(builder: (c) => const HomeScreen());
             Navigator.pushReplacement(context, newRoute);
           },
         );
@@ -171,8 +172,24 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       //"earnings": 0.0,
       "lat": position!.latitude,
       "lng": position!.longitude,
+      "suppliersCount": 0,
+      "customersCount": 0,
+      "suppCashTotal": 0.0,
+      "suppCredittotal": 0.0,
+      "suppTransTotal": 0.0,
+      "custCashTotal": 0.0,
+      "custCredittotal": 0.0,
+      "custTransTotal": 0.0,
+      "transCashTotal": 0.0,
+      "transCreditTotal": 0.0,
+      "transSuppTotal": 0.0,
+      "transCustTotal": 0.0,
+      "suppCreditTransCount": 0.0,
+      "custCashTransCount": 0.0,
+      "suppCashTransCount": 0.0,
+      "custCreditTransCount": 0.0,
     });
-    print('Profile Data Updated into Firebase');
+    debugPrint('Profile Data Updated into Firebase');
 
     //save data locally
     sharedPreferences = await SharedPreferences.getInstance();
@@ -206,7 +223,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           )),
         ),
         automaticallyImplyLeading: true,
-        title: Text(
+        title: const Text(
           'Edit Profile',
           style: TextStyle(
             fontSize: 24,
@@ -344,7 +361,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.cyan,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
                   formValidation();

@@ -52,81 +52,57 @@ class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
       splashColor: Colors.amber,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
-        child: Container(
-          height: 300,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
+        child: Card(
+          elevation: 5,
+          child: ExpansionTile(
+            leading: Image.network(
+              widget.model!.thumbnailUrl!.toString(),
+              //width: 80.0,
+            ),
+            title: Text(widget.model!.supplierName!.toString()),
             children: [
-              const SizedBox(
-                height: 4.0,
+              ListTile(
+                leading: Text("Credit₹" + widget.model!.creditTotal.toString()),
+                /*IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: (() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => SupplierEditScreen(
+                                  model: widget.model!,
+                                  context: context,
+                                )));
+                  }),
+                ),*/
+                title: Text("Cash₹" + widget.model!.cashTotal.toString()),
+                trailing: Text("Total₹" + widget.model!.transTotal.toString()),
               ),
-              Divider(
-                height: 4,
-                thickness: 3,
-                color: Colors.grey[300],
+              ListTile(
+                leading: IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: (() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => SupplierEditScreen(
+                                  model: widget.model!,
+                                  context: context,
+                                )));
+                  }),
+                ), //Text("₹" + widget.model!.supplierName!.toString()),
+                title: Text("Stock" + widget.model!.status.toString()),
+                trailing: Text("♢" + widget.model!.supplierContact.toString()),
               ),
-              Image.network(
-                widget.model!.thumbnailUrl!,
-                height: 220.0,
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(
-                height: 1.0,
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.model!.supplierName!,
-                    style: const TextStyle(
-                      color: Colors.cyan,
-                      fontSize: 20,
-                      fontFamily: "Train",
-                    ),
+              ListTile(
+                  title: Text(
+                      "address :" + widget.model!.supplierAddress!.toString())
+                  //: Text("query not matched."),
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Colors.lightGreenAccent,
-                    ),
-                    onPressed: () {
-                      //delete menu
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) => SupplierEditScreen(
-                                    model: widget.model!,
-                                  )));
-                      //deleteMenu(widget.model!.custID!);
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.delete_sweep,
-                      color: Colors.pinkAccent,
-                    ),
-                    onPressed: () {
-                      //delete menu
-                      deleteMenu(widget.model!.supplierID!);
-                    },
-                  ),
-                ],
-              ),
-
-              // Text(
-              //   widget.model!.menuInfo!,
-              //   style: const TextStyle(
-              //     color: Colors.grey,
-              //     fontSize: 12,
-              //   ),
-              // ),
-              Divider(
-                height: 4,
-                thickness: 3,
-                color: Colors.grey[300],
-              ),
             ],
+            onExpansionChanged: (isExpanded) {
+              //print("Expanded: ${isExpanded}");
+            },
           ),
         ),
       ),

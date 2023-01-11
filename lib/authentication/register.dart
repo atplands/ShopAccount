@@ -177,6 +177,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
       "earnings": 0.0,
       "lat": position!.latitude,
       "lng": position!.longitude,
+      "suppliersCount": 0,
+      "customersCount": 0,
+      "suppCashTotal": 0.0,
+      "suppCredittotal": 0.0,
+      "suppTransTotal": 0.0,
+      "custCashTotal": 0.0,
+      "custCredittotal": 0.0,
+      "custTransTotal": 0.0,
+      "transCashTotal": 0.0,
+      "transCreditTotal": 0.0,
+      "transSuppTotal": 0.0,
+      "transCustTotal": 0.0,
+      "suppCreditTransCount": 0.0,
+      "custCashTransCount": 0.0,
+      "suppCashTransCount": 0.0,
+      "custCreditTransCount": 0.0,
     });
 
     //save data locally

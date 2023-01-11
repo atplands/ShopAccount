@@ -267,20 +267,20 @@ class _PurchaseOrderListUploadScreenState
                       child: CustomTextField(
                         data: Icons.person,
                         controller: purchaseOrderNameController,
-                        hintText: "Name",
+                        hintText: "Name*",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.book,
                       controller: purchaseOrderInfoController,
-                      hintText: "Per Kgs, Numbers, Dozens",
+                      hintText: "Per Kgs, Numbers, Dozens*",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.price_check,
                       controller: totalAmountController,
-                      hintText: "Total Amount",
+                      hintText: "Total Amount*",
                       isObsecre: false,
                     ),
                     CustomTextField(

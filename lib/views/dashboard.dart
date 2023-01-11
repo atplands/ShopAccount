@@ -16,8 +16,20 @@ class DashBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-        color: secondaryColor,
+      width: 250,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          //begin: Alignment.topRight,
+          //end: Alignment.bottomLeft,
+          colors: [
+            Color(0xb4073117),
+            Colors.brown,
+          ],
+          begin: FractionalOffset(0.0, 0.0),
+          end: FractionalOffset(1.0, 0.0),
+          stops: [0.0, 1.0],
+          tileMode: TileMode.clamp,
+        ),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -27,7 +39,7 @@ class DashBoard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              /*Container(
                 padding: EdgeInsets.all(defaultPadding * 0.75),
                 height: 40,
                 width: 40,
@@ -40,7 +52,7 @@ class DashBoard extends StatelessWidget {
                   '',
                   color: Colors.blueAccent,
                 ),
-              ),
+              ),*/
               Column(
                 children: [
                   Text(

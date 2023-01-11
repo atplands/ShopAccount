@@ -14,21 +14,18 @@ class Slide {
 
 final slideList = [
   Slide(
-    imageUrl: 'assets/images/ATP_MOSAMBI_LANDS.jpg',
-    title: 'A Cool Way to Get Start',
-    description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dapibus tincidunt bibendum. Maecenas eu viverra orci. Duis diam leo, porta at justo vitae, euismod aliquam nulla.',
-  ),
+      imageUrl: 'assets/images/DashBoard_Pic2.jpg',
+      title: 'A Cool Way to Manage Bills',
+      description:
+          'Business Transction Receipts, Supplier Invoices, Customer Bills, Credit and Cash details could be stored in his Google Accounts. DashBoard shows entire business data. Purchases and Sales transaction details can be displayed by the filter based on daily or date range. Sales Price List, Purchase Orders List and Sales Orders List.'),
   Slide(
-    imageUrl: 'assets/images/Atp_PLOTS.jpg',
-    title: 'Design Interactive App UI',
-    description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dapibus tincidunt bibendum. Maecenas eu viverra orci. Duis diam leo, porta at justo vitae, euismod aliquam nulla.',
-  ),
+      imageUrl: 'assets/images/DashBoard_Pic3.jpg',
+      title: 'Customers Dashboard',
+      description:
+          'Customers Transction Bills could be Managed. Suppliers Credit and Cash GUI Dashboard. Suppliers Photos, Contacts and Its Transaction Invoices could be Manged. Display the details with Filter based on the Name, Type and Daterange.'),
   Slide(
-    imageUrl: 'assets/images/Atp_towerclock.jpg',
-    title: 'It\'s Just the Beginning',
-    description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dapibus tincidunt bibendum. Maecenas eu viverra orci. Duis diam leo, porta at justo vitae, euismod aliquam nulla.',
-  ),
+      imageUrl: 'assets/images/DashBoard_Pic1.jpg',
+      title: 'Suppliers Dashboard',
+      description:
+          'Suppliers Transction Bills could be Managed. Suppliers Credit and Cash GUI Dashboard. Suppliers Photos, Contacts and Its Transaction Invoices could be Manged. Display the details with Filter based on the Name, Type and Daterange.'),
 ];

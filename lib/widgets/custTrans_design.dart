@@ -1,12 +1,12 @@
-import 'package:account/global/global.dart';
+//import 'package:account/global/global.dart';
 import 'package:account/mainScreens/custTran_detail_screen.dart';
 import 'package:account/model/custTrans.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:account/mainScreens/item_detail_screen.dart';
-import 'package:account/mainScreens/itemsScreen.dart';
-import 'package:account/model/items.dart';
-import 'package:account/model/menus.dart';
+//import 'package:account/mainScreens/item_detail_screen.dart';
+//import 'package:account/mainScreens/itemsScreen.dart';
+//import 'package:account/model/items.dart';
+//import 'package:account/model/menus.dart';
 
 class CustTransDesignWidget extends StatefulWidget {
   CustTrans? model;
@@ -19,19 +19,6 @@ class CustTransDesignWidget extends StatefulWidget {
 }
 
 class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
-  getCustomerData() {
-    var doc = FirebaseFirestore.instance
-        .collection("shops")
-        .doc(sharedPreferences!.getString("uid"))
-        .collection("priceList")
-        .doc(widget.model!.custID)
-        .get()
-        .then((QuerySnapshot) => print(QuerySnapshot.metadata));
-    //print(document.getElementsByName("priceListName"));
-
-    //return doc;
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -42,32 +29,51 @@ class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
                 builder: (c) => CustTransDetailsScreen(model: widget.model)));
       },
       splashColor: Colors.amber,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          elevation: 5,
+          color: Colors.grey.shade200,
           child: Container(
-            height: 120,
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            height: 80,
             width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Divider(
-                  height: 4,
-                  thickness: 3,
-                  color: Colors.grey[300],
-                ),
-                const SizedBox(
-                  height: 1,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.network(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Divider(
+                    height: 4,
+                    thickness: 3,
+                    color: Colors.grey[300],
+                  ),
+                  Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                              widget.model!.thumbnailUrl!,
+                            ),
+                            fit: BoxFit.cover)),
+                    /* child: Image.network(
                       widget.model!.thumbnailUrl!,
-                      height: 120.0,
+                      height: 50.0,
                       fit: BoxFit.cover,
-                    ),
-                    Text(
+                    ),*/
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+
+                  Container(
+                    width: 220.0,
+                    child: Text(
                       widget.model!.transName!,
                       style: const TextStyle(
                         color: Colors.cyan,
@@ -75,30 +81,34 @@ class _CustTransDesignWidgetState extends State<CustTransDesignWidget> {
                         fontFamily: "Train",
                       ),
                     ),
-                    Text(
-                      widget.model!.transInfo!,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
+                  ),
+                  /**/
+                  Container(
+                    child: Text(
+                      widget.model!.transAmount!.toString(),
+                      //widget.model!.transDate!  DateTime.now(),
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontFamily: "Train",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                const SizedBox(
-                  height: 2.0,
-                ),
-                const SizedBox(
-                  height: 1,
-                ),
-                Divider(
-                  height: 4,
-                  thickness: 3,
-                  color: Colors.grey[300],
-                ),
-              ],
+                  ),
+
+                  // Text(
+                  //   widget.model!.menuInfo!,
+                  //   style: const TextStyle(
+                  //     color: Colors.grey,
+                  //     fontSize: 12,
+                  //   ),
+                  // ),
+                  Divider(
+                    height: 4,
+                    thickness: 3,
+                    color: Colors.grey[300],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

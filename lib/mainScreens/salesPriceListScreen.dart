@@ -10,6 +10,8 @@ import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class SalesPriceListScreen extends StatefulWidget {
   const SalesPriceListScreen({Key? key}) : super(key: key);
@@ -27,7 +29,9 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {});
+    setState(() {
+      tz.initializeTimeZones();
+    });
   }
 
   @override
@@ -95,52 +99,55 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
                             as Map<String, dynamic>);
                     return model.priceListName.toString().contains(name)
                         ? SingleChildScrollView(
-                            child: ExpansionTile(
-                              leading: Image.network(
-                                model.thumbnailUrl.toString(),
-                                //width: 80.0,
-                              ),
-                              title: Text(model.priceListName.toString()),
-                              children: [
-                                ListTile(
-                                  leading: IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: (() {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (c) =>
-                                                  PriceListEditScreen(
-                                                    model: model,
-                                                    context: context,
-                                                  )));
-                                    }),
+                            child: Card(
+                              elevation: 5,
+                              child: ExpansionTile(
+                                leading: Image.network(
+                                  model.thumbnailUrl.toString(),
+                                  //width: 80.0,
+                                ),
+                                title: Text(model.priceListName.toString()),
+                                children: [
+                                  ListTile(
+                                    leading: IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: (() {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (c) =>
+                                                    PriceListEditScreen(
+                                                      model: model,
+                                                      context: context,
+                                                    )));
+                                      }),
+                                    ),
+                                    title: Text(model.priceListInfo.toString()),
+                                    trailing: Text(model.salePrice.toString()),
                                   ),
-                                  title: Text(model.priceListInfo.toString()),
-                                  trailing: Text(model.salePrice.toString()),
-                                ),
-                                ListTile(
-                                  leading:
-                                      Text("₹" + model.salePrice.toString()),
-                                  title: Text(
-                                      "Stock" + model.inStockCount.toString()),
-                                  trailing:
-                                      Text("♢" + model.supplierName.toString()),
-                                ),
-                                /*ListTile(
-                            title: Text("Query String ${name}" +
-                                model.inStockCount.toString()),
-                            trailing: model.priceListName
-                                    .toString()
-                                    .startsWith(name)
-                                ? Text(
-                                    "query matched ${model.priceListName.toString().startsWith(name)}")
-                                : Text("query not matched."),
+                                  ListTile(
+                                    leading:
+                                        Text("₹" + model.salePrice.toString()),
+                                    title: Text("Stock" +
+                                        model.inStockCount.toString()),
+                                    trailing: Text(
+                                        "♢" + model.supplierName.toString()),
+                                  ),
+                                  /*ListTile(
+                              title: Text("Query String ${name}" +
+                                  model.inStockCount.toString()),
+                              trailing: model.priceListName
+                                      .toString()
+                                      .startsWith(name)
+                                  ? Text(
+                                      "query matched ${model.priceListName.toString().startsWith(name)}")
+                                  : Text("query not matched."),
                           ),*/
-                              ],
-                              onExpansionChanged: (isExpanded) {
-                                //print("Expanded: ${isExpanded}");
-                              },
+                                ],
+                                onExpansionChanged: (isExpanded) {
+                                  //print("Expanded: ${isExpanded}");
+                                },
+                              ),
                             ),
                           )
                         : Center(child: Text("No PriceList displayed."));

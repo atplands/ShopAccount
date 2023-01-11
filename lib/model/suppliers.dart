@@ -10,9 +10,9 @@ class Suppliers {
   Timestamp? publishedDate;
   String? thumbnailUrl;
   String? status;
-  double? transTotal;
-  double? cashTotal;
-  double? creditTotal;
+  num? transTotal;
+  num? cashTotal;
+  num? creditTotal;
 
   Suppliers(
       {this.supplierID,

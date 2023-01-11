@@ -257,7 +257,8 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: custNameController,
                 decoration: const InputDecoration(
-                  hintText: "Customer Name",
+                  label: Text("Customer Name *"),
+                  hintText: "Customer Name *",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -279,6 +280,7 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: custInfoController,
                 decoration: const InputDecoration(
+                  label: Text("Customer Info"),
                   hintText: "Customer Info",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
@@ -301,7 +303,8 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: custContactController,
                 decoration: const InputDecoration(
-                  hintText: "Customer Contact",
+                  label: Text("Customer Contact *"),
+                  hintText: "Customer Contact *",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -323,6 +326,7 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: custAddressController,
                 decoration: const InputDecoration(
+                  label: Text("Customer Address"),
                   hintText: "Customer Address",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
@@ -352,9 +356,7 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
   validateUploadForm() async {
     if (imageXFile != null) {
       if (custNameController.text.isNotEmpty &&
-          custInfoController.text.isNotEmpty &&
-          custContactController.text.isNotEmpty &&
-          custAddressController.text.isNotEmpty) {
+          custContactController.text.isNotEmpty) {
         setState(() {
           uploading = true;
         });
@@ -398,6 +400,9 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
       "customerContact": custContactController.text.toString(),
       "customerAddress": custAddressController.text.toString(),
       "publishedDate": DateTime.now(),
+      "cashTotal": 0,
+      "credittotal": 0,
+      "transTotal": 0,
       "status": "available",
       "thumbnailUrl": downloadUrl,
     }).then(
@@ -414,6 +419,9 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
             "customerAddress": custAddressController.text.toString(),
             "publishedDate": DateTime.now(),
             "status": "available",
+            "cashTotal": 0,
+            "credittotal": 0,
+            "transTotal": 0,
             "thumbnailUrl": downloadUrl,
           },
         );

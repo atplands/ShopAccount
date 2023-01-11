@@ -125,30 +125,6 @@ class _MySplashScreenState extends State<MySplashScreen> {
                       }
                     },
                   ),
-                  /*Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Have an account?',
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'Login',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (c) => const AuthScreen()));
-                          //Navigator.of(context).pushNamed(LoginScreen.routeName);
-                        },
-                      ),
-                    ],
-                  ),*/
                 ],
               )
             ],

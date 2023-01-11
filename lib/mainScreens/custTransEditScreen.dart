@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/home_screen.dart';
+import 'package:account/mainScreens/salesScreen.dart';
 import 'package:account/model/custTrans.dart';
 import 'package:account/model/supTrans.dart';
 import 'package:account/model/suppliers.dart';
@@ -118,17 +119,16 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
 
   Future<void> validateUploadForm() async {
     if (transNameController.text.isNotEmpty &&
-        transInfoController.text.isNotEmpty &&
         transAmountController.text.isNotEmpty &&
         transTypeController.text.isNotEmpty) {
-      print("Transaction Details are passed now");
-      print("Transaction ID::" + widget.model!.custTransID.toString());
+      debugPrint("Transaction Details are passed now");
+      debugPrint("Transaction ID::" + widget.model!.custID.toString());
       //start uploading image
 
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       fStorage.Reference reference = fStorage.FirebaseStorage.instance
           .ref()
-          .child("suppTrans")
+          .child("custTrans")
           .child(fileName);
       if (imageXFile == null) {
         custTransImageUrl = widget.model!.thumbnailUrl!.toString();
@@ -145,10 +145,10 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
       //save info to firestore
       saveDataToFirestore(custTransImageUrl);
 
-      print('Purchase Trans Updated ');
+      print('Sales Trans Updated ');
       Navigator.pop(context);
       //send user to homePage
-      Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+      Route newRoute = MaterialPageRoute(builder: (c) => const SalesScreen());
       Navigator.pushReplacement(context, newRoute);
     } else {
       showDialog(
@@ -165,7 +165,7 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
     final ref = FirebaseFirestore.instance
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
-        .collection("customer")
+        .collection("customers")
         .doc(widget.model!.custID)
         .collection("custTrans");
     print("data Firestore reference is created.");
@@ -182,9 +182,9 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
       "thumbnailUrl": downloadUrl,
     }).then((value) {
       print("First Firestore data is updated");
-      final itemsRef = FirebaseFirestore.instance.collection("suppTrans");
+      final itemsRef = FirebaseFirestore.instance.collection("custTrans");
 
-      itemsRef.doc(widget.model!.custTransID.toString()).update({
+      itemsRef.doc(widget.model!.custTransID!.toString()).update({
         "transName": transNameController.text.trim(),
         "transType": transTypeController.text.trim(),
         "transInfo": transInfoController.text.trim(),
@@ -229,7 +229,7 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
           "Updating Transaction",
           style: TextStyle(fontSize: 20, fontFamily: "Lobster"),
         ),
-        centerTitle: true,
+        centerTitle: false,
         automaticallyImplyLeading: true,
         actions: [
           TextButton(
@@ -238,19 +238,38 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
               style: TextStyle(
                 color: Colors.cyan,
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 16,
                 fontFamily: "Varela",
-                letterSpacing: 3,
+                letterSpacing: 1,
               ),
             ),
             onPressed: uploading ? null : () => validateUploadForm(),
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          uploading == true ? linearProgress() : const Text(""),
-          Container(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              uploading == true ? linearProgress() : const Text(""),
+              Center(
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(360),
+                      border: Border.all(color: Colors.grey, width: 1),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            widget.model!.thumbnailUrl!.toString()),
+                        fit: BoxFit.cover,
+                      )),
+                ),
+              ),
+
+              /* Container(
             height: 230,
             width: MediaQuery.of(context).size.width * 0.8,
             child: Center(
@@ -267,97 +286,164 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
                 ),
               ),
             ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.title,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              child: TextField(
-                style: const TextStyle(color: Colors.black),
-                controller: transNameController,
-                decoration: const InputDecoration(
-                  hintText: "Transaction Name",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
+           ),*/
+              /*const Divider(
+                  color: Colors.amber,
+                  thickness: 1,
+                ),*/
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                color: Colors.grey.shade200,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: TextField(
+                    style: const TextStyle(color: Colors.black),
+                    controller: transNameController,
+                    decoration: const InputDecoration(
+                      label: Text("Transaction Name *"),
+                      prefixIcon: Icon(Icons.title),
+                      hintText: "Transaction Name *",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.menu,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              /*decoration: InputDecoration(
+              /*  ListTile(
+                leading: const Icon(
+                  Icons.title,
+                  color: Colors.cyan,
+                ),
+                title: Container(
+                  width: 250,
+                  child: TextField(
+                    style: const TextStyle(color: Colors.black),
+                    controller: transNameController,
+                    decoration: const InputDecoration(
+                      hintText: "Transaction Name *",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+                const Divider(
+                  color: Colors.amber,
+                  thickness: 1,
+                ),*/
+              SizedBox(
+                height: 10,
+              ),
+              Card(
+                elevation: 4,
+                color: Colors.grey.shade200,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.menu),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: DropdownButton<String>(
+                          value: billType1,
+                          //icon: Icon(Icons.menu),
+                          style: const TextStyle(color: Colors.black),
+                          //itemHeight: 2,
+
+                          underline: Container(color: Colors.white),
+                          isExpanded: true,
+
+                          onChanged: (String? newValue) {
+                            setState(
+                              () {
+                                transTypeController.text = newValue.toString();
+                                billType1 = newValue.toString();
+                              },
+                            );
+                          },
+                          items: const [
+                            DropdownMenuItem<String>(
+                              value: "Cash",
+                              child: Text('Cash'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'Credit',
+                              child: Text('Credit'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      //Text(":Type")
+                    ],
+                  ),
+                ),
+              ),
+              /*ListTile(
+                  leading: const Icon(
+                    Icons.menu,
+                    color: Colors.cyan,
+                  ),
+                  title: Container(
+                    width: 250,
+                    /*decoration: InputDecoration(
                 border: InputBorder.none,
               ),*/
-              child: DropdownButton<String>(
-                value: billType1,
-                //icon: Icon(Icons.menu),
-                style: const TextStyle(color: Colors.black),
-                //itemHeight: 2,
-                underline: Container(color: Colors.white),
-                onChanged: (String? newValue) {
-                  setState(
-                    () {
-                      transTypeController.text = newValue.toString();
-                      billType1 = newValue.toString();
-                    },
-                  );
-                },
-                items: const [
-                  DropdownMenuItem<String>(
-                    value: "Cash",
-                    child: Text('Cash'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'Credit',
-                    child: Text('Credit'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.calendar_today,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-              margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-              child: CupertinoButton(
-                padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                child: transDateTime == null
-                    ? Text(
-                        'Transaction Date',
-                        style: const TextStyle(color: Colors.grey),
-                      )
-                    : Text(
-                        '${transDateTime}',
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                //style: const TextStyle(color: Colors.grey),
+                    child: DropdownButton<String>(
 
-                onPressed: () {
+                      value: billType1,
+                      //icon: Icon(Icons.menu),
+                      style: const TextStyle(color: Colors.black),
+
+                      //itemHeight: 2,
+                      underline: Container(color: Colors.white),
+                      onChanged: (String? newValue) {
+                        setState(
+                          () {
+                            transTypeController.text = newValue.toString();
+                            billType1 = newValue.toString();
+                          },
+                        );
+                      },
+                      padding : EdgeInsets.only(left:10)
+                      items: const [
+                        DropdownMenuItem<String>(
+                          value: "Cash",
+                          child: Text('Cash'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'Credit',
+                          child: Text('Credit'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),*/
+              /*const Divider(
+                  color: Colors.amber,
+                  thickness: 1,
+                ),*/
+              /*ListTile(
+                  leading: const Icon(
+                    Icons.calendar_today,
+                    color: Colors.cyan,
+                  ),
+                  title:*/
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: () {
                   showCupertinoModalPopup(
                     context: context,
                     builder: (BuildContext context) => SizedBox(
@@ -375,81 +461,128 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
                     ),
                   );
                 },
-              ),
-            ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.currency_exchange,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              child: TextField(
-                keyboardType: TextInputType.number,
-                style: const TextStyle(color: Colors.black),
-                controller: transAmountController,
-                decoration: const InputDecoration(
-                  hintText: "Transaction Amount",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.perm_device_information,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              child: TextField(
-                style: const TextStyle(color: Colors.black),
-                controller: transInfoController,
-                decoration: const InputDecoration(
-                  hintText: "Transaction Info",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.calendar_month_sharp,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-              margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-              child: CupertinoButton(
-                padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                child: transDueDateTime == null
-                    ? Text(
-                        'Bill Due Date',
-                        style: const TextStyle(color: Colors.grey),
-                      )
-                    : Text(
-                        '${transDueDateTime}',
-                        style: const TextStyle(color: Colors.black),
+                child: Card(
+                  elevation: 4,
+                  color: Colors.grey.shade200,
+                  child: Container(
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
-                //style: const TextStyle(color: Colors.grey),
+                      padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                      //margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
 
-                onPressed: () {
+                      // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                      child: transDateTime == null
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.calendar_today),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Transaction Date',
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                  Text(" :Date"),
+                                ],
+                              ))
+                          : Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    '$transDateTime',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  const Text(" :Date"),
+                                ],
+                              ))
+
+                      //style: const TextStyle(color: Colors.grey),
+                      ),
+                ),
+              ),
+
+              /*ListTile(
+                  leading: const Icon(
+                    Icons.currency_exchange,
+                    color: Colors.cyan,
+                  ),
+                  title: */
+              SizedBox(
+                height: 20,
+              ),
+              Card(
+                elevation: 4,
+                color: Colors.grey.shade200,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(color: Colors.black),
+                    controller: transAmountController,
+                    decoration: const InputDecoration(
+                      label: Text("Transaction Amount *"),
+                      hintText: "Transaction Amount *",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                      prefixIcon: Icon(
+                        Icons.currency_exchange,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              /* ListTile(
+                  leading: const Icon(
+                    Icons.perm_device_information,
+                    color: Colors.cyan,
+                  ),
+                  title: */
+              SizedBox(
+                height: 20,
+              ),
+              Card(
+                elevation: 4,
+                color: Colors.grey.shade200,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: TextField(
+                    style: const TextStyle(color: Colors.black),
+                    controller: transInfoController,
+                    decoration: const InputDecoration(
+                      label: Text("Transaction Info"),
+                      hintText: "Transaction Info",
+                      prefixIcon: Icon(Icons.perm_device_information),
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
                   showCupertinoModalPopup(
                     context: context,
                     builder: (BuildContext context) => SizedBox(
@@ -467,36 +600,61 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
                     ),
                   );
                 },
-              ),
-            ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.calendar_view_day_outlined,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-              margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-              child: CupertinoButton(
-                padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                child: transClosedDateTime == null
-                    ? Text(
-                        'Bill Closed Date',
-                        style: const TextStyle(color: Colors.grey),
-                      )
-                    : Text(
-                        '${transClosedDateTime}',
-                        style: const TextStyle(color: Colors.black),
+                child: Card(
+                  elevation: 4,
+                  color: Colors.grey.shade200,
+                  child: Container(
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
-                //style: const TextStyle(color: Colors.grey),
+                      padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                      //margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
 
-                onPressed: () {
+                      // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                      child: transDueDateTime == null
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Bill Due Date',
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                  const Text(" :DueDate"),
+                                ],
+                              ))
+                          : Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    '${transDueDateTime}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  const Text(" :DueDate"),
+                                ],
+                              ))
+
+                      //style: const TextStyle(color: Colors.grey),
+                      ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
                   showCupertinoModalPopup(
                     context: context,
                     builder: (BuildContext context) => SizedBox(
@@ -514,37 +672,86 @@ class _CustTransEditScreenState extends State<CustTransEditScreen> {
                     ),
                   );
                 },
-              ),
-            ),
-          ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.camera,
-              color: Colors.cyan,
-            ),
-            title: Container(
-              width: 250,
-              child: TextField(
-                //keyboardType: TextInputType.number,
-                style: const TextStyle(color: Colors.black),
-                controller: transPaymentDetailsController,
-                decoration: const InputDecoration(
-                  hintText: "Partial Payment Details",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: InputBorder.none,
+                child: Card(
+                  elevation: 4,
+                  color: Colors.grey.shade200,
+                  child: Container(
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                      //margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+
+                      // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                      child: transClosedDateTime == null
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Bill Closed Date',
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                  const Text(" :ClosedDate"),
+                                ],
+                              ))
+                          : Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    '${transClosedDateTime}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  const Text(" :ClosedDate"),
+                                ],
+                              ))
+
+                      //style: const TextStyle(color: Colors.grey),
+                      ),
                 ),
               ),
-            ),
+              SizedBox(
+                height: 20,
+              ),
+              Card(
+                elevation: 4,
+                color: Colors.grey.shade200,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    style: const TextStyle(color: Colors.black),
+                    controller: transPaymentDetailsController,
+                    decoration: const InputDecoration(
+                      label: Text("Partial Payment Details"),
+                      prefixIcon: Icon(Icons.currency_exchange),
+                      hintText: "Partial Payment Details",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10)
+            ],
           ),
-          const Divider(
-            color: Colors.amber,
-            thickness: 1,
-          ),
-        ],
+        ),
       ),
     );
   }

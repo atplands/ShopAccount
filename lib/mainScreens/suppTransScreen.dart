@@ -1,5 +1,6 @@
 import 'package:account/model/supTrans.dart';
 import 'package:account/model/suppliers.dart';
+//import 'package:account/providers/supp_details_provider.dart';
 import 'package:account/uploadScreens/suppTrans_upload_screen.dart';
 import 'package:account/widgets/suppTrans_design.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:account/global/global.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
+//import 'package:provider/provider.dart';
 
 class SuppTransScreen extends StatefulWidget {
   final Suppliers? model;
@@ -23,8 +25,9 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
   double cashTotal = 0;
   double creditTotal = 0;
   double transTotal = 0;
+  String query = "";
 
-  updateFireStore(var SupplierID) {
+  updateFireStore(var supplierID) {
     final ref = FirebaseFirestore.instance
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
@@ -33,18 +36,18 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
     creditTransAmount.forEach((e) => creditTotal += e);
     transTotal = cashTotal + creditTotal;
 
-    ref.doc(SupplierID).update(
+    ref.doc(supplierID!.toString()).update(
       {
-        "transTotal": (transTotal),
-        "cashTotal": (cashTotal),
-        "creditTotal": (creditTotal),
+        "transTotal": transTotal.toDouble(),
+        "cashTotal": cashTotal.toDouble(),
+        "creditTotal": creditTotal.toDouble(),
       },
     ).then((value) {
       final suppRef = FirebaseFirestore.instance.collection("suppliers");
-      suppRef.doc(SupplierID).update({
-        "transTotal": (transTotal),
-        "cashTotal": (cashTotal),
-        "creditTotal": (creditTotal),
+      suppRef.doc(supplierID!.toString()).update({
+        "transTotal": transTotal.toDouble(),
+        "cashTotal": cashTotal.toDouble(),
+        "creditTotal": creditTotal.toDouble(),
       });
     });
   }
@@ -67,8 +70,8 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
           )),
         ),
         title: Text(
-          sharedPreferences!.getString("name")!,
-          style: const TextStyle(fontSize: 30, fontFamily: "Lobster"),
+          widget.model!.supplierName!.toString(),
+          style: const TextStyle(fontSize: 14, fontFamily: "Lobster"),
         ),
         centerTitle: true,
         automaticallyImplyLeading: true,
@@ -87,6 +90,26 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
             },
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Card(
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            color: Colors.cyan,
+            child: TextField(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: ("Search TransName"),
+              ),
+              onChanged: ((value) {
+                setState(() {
+                  query = value;
+                });
+
+                //print("name : ${query}");
+              }),
+            ),
+          ),
+        ),
       ),
       drawer: MyDrawer(),
       body: CustomScrollView(
@@ -104,6 +127,7 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
                 .collection("suppliers")
                 .doc(widget.model!.supplierID)
                 .collection("suppTrans")
+                .orderBy("transDate", descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData
@@ -121,17 +145,20 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
                               as Map<String, dynamic>,
                         );
                         model.transType == "Cash"
-                            ? cashTransAmount.add(model.transAmount!)
-                            : creditTransAmount.add(model.transAmount!);
+                            ? cashTransAmount.add(model.transAmount!.toDouble())
+                            : creditTransAmount
+                                .add(model.transAmount!.toDouble());
 
                         if (index + 1 == snapshot.data!.docs.length) {
                           updateFireStore(model.supplierID);
                         }
 
-                        return SuppTransDesignWidget(
-                          model: model,
-                          context: context,
-                        );
+                        return model.transName!.toString().contains(query)
+                            ? SuppTransDesignWidget(
+                                model: model,
+                                context: context,
+                              )
+                            : Container();
                       },
                       itemCount: snapshot.data!.docs.length,
                     );

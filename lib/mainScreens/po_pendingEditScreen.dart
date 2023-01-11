@@ -62,11 +62,13 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
   getUser() async {
     setState(() {
       imageController.text = sharedPreferences!.getString("photoUrl")!;
-      purchaseOrderNameController.text = "Name";
-      purchaseOrderInfoController.text = "Information";
-      totalAmountController.text = "Sale Prie";
-      itemsCountController.text = "Purchase Price";
-      supplierNameController.text = "Supplier Name";
+      purchaseOrderNameController.text =
+          widget.model!.purchaseOrderName!.toString();
+      purchaseOrderInfoController.text =
+          widget.model!.purchaseOrderInfo!.toString();
+      totalAmountController.text = widget.model!.totalAmount!.toString();
+      itemsCountController.text = widget.model!.itemsCount!.toString();
+      supplierNameController.text = widget.model!.supplierName!.toString();
     });
   }
 
@@ -110,7 +112,7 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
       //save info to firestore
       saveDataToFirestore(purchaseOrderImageUrl).then(
         (value) {
-          //print('PriceList Updated ');
+          debugPrint('PriceList Updated ');
           Navigator.pop(context);
           //send user to homePage
           Route newRoute =
@@ -147,20 +149,19 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
         .doc(sharedPreferences!.getString("uid"))
         .collection("purchaseOrders");
 
-    ref.doc(widget.model!.purchaseOrderID!).update({
+    ref.doc(widget.model!.purchaseOrderID!.toString()).update({
       "purchaseOrderName": purchaseOrderNameController.text.toString(),
       "purchaseOrderInfo": purchaseOrderInfoController.text.toString(),
       "supplierName": supplierNameController.text.toString(),
       "totalAmountPrice": int.parse(totalAmountController.text.toString()),
       "itemsCountCount": int.parse(itemsCountController.text.toString()),
-      "publishedDate": DateTime.now(),
       "status": "available",
       "thumbnailUrl": downloadUrl,
     }).then(
       (value) {
         final custRef = FirebaseFirestore.instance.collection("purchaseOrders");
 
-        custRef.doc(widget.model!.purchaseOrderID!).update(
+        custRef.doc(widget.model!.purchaseOrderID!.toString()).update(
           {
             "purchaseOrderName": purchaseOrderNameController.text.toString(),
             "purchaseOrderInfo": purchaseOrderInfoController.text.toString(),
@@ -168,7 +169,6 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
             "totalAmountPrice":
                 int.parse(totalAmountController.text.toString()),
             "itemsCountCount": int.parse(itemsCountController.text.toString()),
-            "publishedDate": DateTime.now(),
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
@@ -262,14 +262,14 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: purchaseOrderNameController,
-                        hintText: "Purchase Order Name",
+                        hintText: "Purchase Order Name *",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.book,
                       controller: purchaseOrderInfoController,
-                      hintText: "Per Kgs, Numbers, Dozens",
+                      hintText: "Per Kgs, Numbers, Dozens *",
                       isObsecre: false,
                     ),
                     CustomTextField(
@@ -277,7 +277,7 @@ class PoPendingEditScreenState extends State<PoPendingEditScreen> {
                       //style: const TextStyle(color: Colors.black),
                       data: Icons.price_change,
                       controller: totalAmountController,
-                      hintText: "purchase Order Amount",
+                      hintText: "purchase Order Amount *",
                       isObsecre: false,
                     ),
                     CustomTextField(

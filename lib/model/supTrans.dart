@@ -18,7 +18,7 @@ class SupTrans {
   String? thumbnailUrl;
   String? transPaymentDetails;
   String? status;
-  double? transAmount;
+  num? transAmount;
 
   SupTrans({
     this.supplierID,

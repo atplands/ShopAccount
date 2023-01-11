@@ -1,3 +1,4 @@
+import 'package:account/mainScreens/cashBookScreen.dart';
 import 'package:account/mainScreens/customersScreen.dart';
 import 'package:account/mainScreens/profileEditScreen.dart';
 import 'package:account/mainScreens/purchaseOrderPendingScreen.dart';
@@ -6,13 +7,11 @@ import 'package:account/mainScreens/salesOrderPendingScreen.dart';
 import 'package:account/mainScreens/salesPriceListScreen.dart';
 import 'package:account/mainScreens/salesScreen.dart';
 import 'package:account/mainScreens/suppliersScreen.dart';
+//import 'package:account/notifications/notificationservice.dart';//
 import 'package:flutter/material.dart';
 import 'package:account/authentication/auth_screen.dart';
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/earnings_screen.dart';
-import 'package:account/mainScreens/history_screen.dart';
 import 'package:account/mainScreens/home_screen.dart';
-import 'package:account/mainScreens/new_orders_screen.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -23,6 +22,17 @@ class MyDrawer extends StatelessWidget {
           //header drawer
           Container(
             padding: const EdgeInsets.only(top: 25, bottom: 10),
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                Colors.cyan,
+                Colors.amber,
+              ],
+              begin: FractionalOffset(0.0, 0.0),
+              end: FractionalOffset(1.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp,
+            )),
             child: Column(
               children: [
                 Material(
@@ -114,10 +124,8 @@ class MyDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (c) => const PurchasesScreen()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => PurchasesScreen()));
                   },
                 ),
                 const Divider(
@@ -184,7 +192,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(
-                    Icons.local_shipping,
+                    Icons.sell,
                     color: Colors.black,
                   ),
                   title: const Text(
@@ -205,7 +213,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(
-                    Icons.local_shipping,
+                    Icons.point_of_sale,
                     color: Colors.black,
                   ),
                   title: const Text(
@@ -226,7 +234,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(
-                    Icons.local_shipping,
+                    Icons.shopping_cart,
                     color: Colors.black,
                   ),
                   title: const Text(
@@ -238,6 +246,25 @@ class MyDrawer extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (c) => PurchaseOrdersPendingList()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.money_off_outlined,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Cash In Hand",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => CashBookScreen()));
                   },
                 ),
                 const Divider(

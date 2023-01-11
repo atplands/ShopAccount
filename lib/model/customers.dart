@@ -5,14 +5,14 @@ class Customers {
   String? shopUID;
   String? customerName;
   String? customerInfo;
-  int? customerContact;
+  String? customerContact;
   String? customerAddress;
   Timestamp? publishedDate;
   String? thumbnailUrl;
   String? status;
-  double? transTotal;
-  double? cashTotal;
-  double? creditTotal;
+  num? transTotal;
+  num? cashTotal;
+  num? creditTotal;
 
   Customers({
     this.custID,

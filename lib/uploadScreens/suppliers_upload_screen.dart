@@ -255,7 +255,8 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: suppNameController,
                 decoration: const InputDecoration(
-                  hintText: "Supplier Name",
+                  label: Text("Supplier Name *"),
+                  hintText: "Supplier Name *",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -277,7 +278,8 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: suppInfoController,
                 decoration: const InputDecoration(
-                  hintText: "Supplier Info",
+                  label: Text("Supplier Info "),
+                  hintText: "Supplier Info ",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -299,7 +301,8 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: suppContactController,
                 decoration: const InputDecoration(
-                  hintText: "Supplier Contact",
+                  label: Text("Supplier Contact *"),
+                  hintText: "Supplier Contact *",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
@@ -321,6 +324,7 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: suppAddressController,
                 decoration: const InputDecoration(
+                  label: Text("Supplier Address"),
                   hintText: "Supplier Address",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
@@ -350,9 +354,7 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
   validateUploadForm() async {
     if (imageXFile != null) {
       if (suppNameController.text.isNotEmpty &&
-          suppInfoController.text.isNotEmpty &&
-          suppContactController.text.isNotEmpty &&
-          suppAddressController.text.isNotEmpty) {
+          suppContactController.text.isNotEmpty) {
         setState(() {
           uploading = true;
         });
@@ -397,6 +399,9 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
         "supplierContact": suppContactController.text.toString(),
         "supplierAddress": suppAddressController.text.toString(),
         "publishedDate": DateTime.now(),
+        "cashTotal": 0,
+        "credittotal": 0,
+        "transTotal": 0,
         "status": "available",
         "thumbnailUrl": downloadUrl,
       },
@@ -410,6 +415,9 @@ class _SuppliersUploadScreenState extends State<SuppliersUploadScreen> {
         "supplierContact": suppContactController.text.toString(),
         "supplierAddress": suppAddressController.text.toString(),
         "publishedDate": DateTime.now(),
+        "cashTotal": 0,
+        "credittotal": 0,
+        "transTotal": 0,
         "status": "available",
         "thumbnailUrl": downloadUrl,
       });

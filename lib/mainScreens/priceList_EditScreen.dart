@@ -96,7 +96,7 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
           .child("priceList")
           .child(fileName);
       if (imageXFile == null) {
-        priceListImageUrl = widget.model!.thumbnailUrl.toString();
+        priceListImageUrl = widget.model!.thumbnailUrl!.toString();
       } else {
         fStorage.UploadTask uploadTask =
             reference.putFile(File(imageXFile!.path));
@@ -149,31 +149,31 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
         .doc(sharedPreferences!.getString("uid"))
         .collection("priceList");
 
-    ref.doc(widget.model!.priceListID!).set({
+    ref.doc(widget.model!.priceListID!.toString()).update({
       "priceListName": priceListNameController.text.toString(),
       "priceListInfo": priceListInfoController.text.toString(),
       "supplierName": supplierNameController.text.toString(),
-      "salePrice": int.parse(salePriceController.text.toString()),
-      "purchasePrice": int.parse(purchasePriceController.text.toString()),
-      "inStockCount": int.parse(inStockCountController.text.toString()),
-      "publishedDate": DateTime.now(),
+      "salePrice": int.parse(salePriceController.text.toString()) ?? 0,
+      "purchasePrice": int.parse(purchasePriceController.text.toString()) ?? 0,
+      "inStockCount": int.parse(inStockCountController.text.toString()) ?? 0,
       "status": "available",
       "thumbnailUrl": downloadUrl,
     }).then(
       (value) {
         final custRef = FirebaseFirestore.instance.collection("priceList");
 
-        custRef.doc(widget.model!.priceListID!).set(
+        custRef.doc(widget.model!.priceListID!.toString()).update(
           {
             "priceListID": uniqueIdName,
             "shopUID": sharedPreferences!.getString("uid"),
             "priceListName": priceListNameController.text.toString(),
             "priceListInfo": priceListInfoController.text.toString(),
             "supplierName": supplierNameController.text.toString(),
-            "salePrice": int.parse(salePriceController.text.toString()),
-            "purchasePrice": int.parse(purchasePriceController.text.toString()),
-            "inStockCount": int.parse(inStockCountController.text.toString()),
-            "publishedDate": DateTime.now(),
+            "salePrice": int.parse(salePriceController.text.toString()) ?? 0,
+            "purchasePrice":
+                int.parse(purchasePriceController.text.toString()) ?? 0,
+            "inStockCount":
+                int.parse(inStockCountController.text.toString()) ?? 0,
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
@@ -266,20 +266,20 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: priceListNameController,
-                        hintText: "Name",
+                        hintText: "Name*",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.book,
                       controller: priceListInfoController,
-                      hintText: "Per Kgs, Numbers, Dozens",
+                      hintText: "Per Kgs, Numbers, Dozens*",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.price_check,
                       controller: salePriceController,
-                      hintText: "Sale Price",
+                      hintText: "Sale Price*",
                       isObsecre: false,
                     ),
                     CustomTextField(
