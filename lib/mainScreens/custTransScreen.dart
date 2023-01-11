@@ -30,6 +30,7 @@ class _CustTransScreenState extends State<CustTransScreen> {
   double cashTotal = 0;
   double creditTotal = 0;
   double transTotal = 0;
+  String query = "";
 
   updateFireStore(var custID) {
     final ref = FirebaseFirestore.instance
@@ -42,16 +43,16 @@ class _CustTransScreenState extends State<CustTransScreen> {
 
     ref.doc(custID).update(
       {
-        "transTotal": (transTotal),
-        "cashTotal": (cashTotal),
-        "creditTotal": (creditTotal),
+        "transTotal": transTotal.toDouble(),
+        "cashTotal": cashTotal.toDouble(),
+        "creditTotal": creditTotal.toDouble(),
       },
     ).then((value) {
       final suppRef = FirebaseFirestore.instance.collection("customers");
       suppRef.doc(custID).update({
-        "transTotal": (transTotal),
-        "cashTotal": (cashTotal),
-        "creditTotal": (creditTotal),
+        "transTotal": transTotal.toDouble(),
+        "cashTotal": cashTotal.toDouble(),
+        "creditTotal": creditTotal.toDouble(),
       });
     });
   }
@@ -74,8 +75,8 @@ class _CustTransScreenState extends State<CustTransScreen> {
           )),
         ),
         title: Text(
-          sharedPreferences!.getString("name")!,
-          style: const TextStyle(fontSize: 30, fontFamily: "Lobster"),
+          widget.model!.customerName!.toString(),
+          style: const TextStyle(fontSize: 14, fontFamily: "Lobster"),
         ),
         centerTitle: true,
         automaticallyImplyLeading: true,
@@ -94,6 +95,26 @@ class _CustTransScreenState extends State<CustTransScreen> {
             },
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Card(
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            color: Colors.cyan,
+            child: TextField(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: ("Search TransName"),
+              ),
+              onChanged: ((value) {
+                setState(() {
+                  query = value;
+                });
+
+                //print("name : ${query}");
+              }),
+            ),
+          ),
+        ),
       ),
       drawer: MyDrawer(),
       body: CustomScrollView(
@@ -111,6 +132,10 @@ class _CustTransScreenState extends State<CustTransScreen> {
                 .collection("customers")
                 .doc(widget.model!.custID)
                 .collection("custTrans")
+                .orderBy(
+                  "transDate",
+                  descending: true,
+                )
                 .snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData
@@ -128,16 +153,19 @@ class _CustTransScreenState extends State<CustTransScreen> {
                               as Map<String, dynamic>,
                         );
                         model.transType == "Cash"
-                            ? cashTransAmount.add(model.transAmount!)
-                            : creditTransAmount.add(model.transAmount!);
+                            ? cashTransAmount.add(model.transAmount!.toDouble())
+                            : creditTransAmount
+                                .add(model.transAmount!.toDouble());
 
                         if (index + 1 == snapshot.data!.docs.length) {
                           updateFireStore(model.custID);
                         }
-                        return CustTransDesignWidget(
-                          model: model,
-                          context: context,
-                        );
+                        return model.transName!.toString().contains(query)
+                            ? CustTransDesignWidget(
+                                model: model,
+                                context: context,
+                              )
+                            : Container();
                       },
                       itemCount: snapshot.data!.docs.length,
                     );

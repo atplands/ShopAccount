@@ -18,7 +18,7 @@ class CustTrans {
   String? thumbnailUrl;
   String? transPaymentDetails;
   String? status;
-  double? transAmount;
+  num? transAmount;
 
   CustTrans({
     this.custID,

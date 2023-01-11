@@ -263,20 +263,20 @@ class _PriceListUploadScreenState extends State<PriceListUploadScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: priceListNameController,
-                        hintText: "Name",
+                        hintText: "Name*",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.book,
                       controller: priceListInfoController,
-                      hintText: "Per Kgs, Numbers, Dozens",
+                      hintText: "Per Kgs, Numbers, Dozens*",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.price_check,
                       controller: salePriceController,
-                      hintText: "Sale Price",
+                      hintText: "Sale Price*",
                       isObsecre: false,
                     ),
                     CustomTextField(

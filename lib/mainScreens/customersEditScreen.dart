@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/customersScreen.dart';
-import 'package:account/mainScreens/home_screen.dart';
+//import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/model/customers.dart';
-import 'package:account/model/suppliers.dart';
+//import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -53,11 +53,11 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
 
   getUser() async {
     setState(() {
-      imageController.text = widget.model!.thumbnailUrl!;
+      imageController.text = widget.model!.thumbnailUrl!.toString();
       custNameController.text = widget.model!.customerName!;
       custInfoController.text = widget.model!.customerInfo!;
       custContactController.text = widget.model!.customerContact!.toString();
-      custContactController.text = widget.model!.customerAddress!;
+      custAddressController.text = widget.model!.customerAddress!;
     });
   }
 
@@ -124,7 +124,8 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
           //print('customer Updated ');
           Navigator.pop(context);
           //send user to homePage
-          Route newRoute = MaterialPageRoute(builder: (c) => CustomersScreen());
+          Route newRoute =
+              MaterialPageRoute(builder: (c) => const CustomersScreen());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -144,7 +145,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
         .collection("shops")
         .doc(sharedPreferences!.getString("uid"))
         .collection("customers")
-        .doc(widget.model!.custID!)
+        .doc(widget.model!.custID!.toString())
         .update({
       //"sellerUID": currentUser.uid,
       "customerName": custNameController.text.trim(),
@@ -157,17 +158,17 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     }).then((value) {
       final custRef = FirebaseFirestore.instance.collection("customers");
 
-      custRef.doc(widget.model!.custID!).update(
+      custRef.doc(widget.model!.custID!.toString()).update(
         {
           "customerName": custNameController.text.toString(),
           "customerInfo": custInfoController.text.toString(),
-          "customerContact": custContactController.text.toString(),
+          "customerContact": int.parse(custContactController.text.toString()),
           "customerAddress": custAddressController.text.toString(),
           "thumbnailUrl": customerImageUrl,
         },
       );
     });
-    print('Customer Data Updated into Firebase');
+    debugPrint('Customer Data Updated into Firebase');
 
     //save data locally
     sharedPreferences = await SharedPreferences.getInstance();
@@ -191,7 +192,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
           )),
         ),
         automaticallyImplyLeading: true,
-        title: Text(
+        title: const Text(
           'Edit Customer',
           style: TextStyle(
             fontSize: 24,
@@ -250,14 +251,14 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: custNameController,
-                        hintText: "Name",
+                        hintText: "Name*",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.phone,
                       controller: custContactController,
-                      hintText: "Phone",
+                      hintText: "Phone*",
                       isObsecre: false,
                     ),
                     CustomTextField(
@@ -289,7 +290,8 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.cyan,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
                   formValidation();

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/customersScreen.dart';
 import 'package:account/mainScreens/home_screen.dart';
+import 'package:account/mainScreens/suppliersScreen.dart';
 import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
@@ -53,11 +54,11 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
 
   getUser() async {
     setState(() {
-      imageController.text = widget.model!.thumbnailUrl!;
-      suppNameController.text = widget.model!.supplierName!;
-      suppInfoController.text = widget.model!.supplierInfo!;
+      imageController.text = widget.model!.thumbnailUrl!.toString();
+      suppNameController.text = widget.model!.supplierName!.toString();
+      suppInfoController.text = widget.model!.supplierInfo!.toString();
       suppContactController.text = widget.model!.supplierContact!;
-      suppContactController.text = widget.model!.supplierAddress!;
+      suppAddressController.text = widget.model!.supplierAddress!;
     });
   }
 
@@ -124,7 +125,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
           //print('customer Updated ');
           Navigator.pop(context);
           //send user to homePage
-          Route newRoute = MaterialPageRoute(builder: (c) => CustomersScreen());
+          Route newRoute = MaterialPageRoute(builder: (c) => SuppliersScreen());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -167,7 +168,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
         },
       );
     });
-    print('Supplier Data Updated into Firebase');
+    debugPrint('Supplier Data Updated into Firebase');
 
     //save data locally
     sharedPreferences = await SharedPreferences.getInstance();
@@ -250,14 +251,14 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: suppNameController,
-                        hintText: "Name",
+                        hintText: "Name*",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.phone,
                       controller: suppContactController,
-                      hintText: "Phone",
+                      hintText: "Phone*",
                       isObsecre: false,
                     ),
                     CustomTextField(
