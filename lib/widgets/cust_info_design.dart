@@ -1,6 +1,5 @@
 import 'package:account/mainScreens/custTransScreen.dart';
 import 'package:account/mainScreens/customersEditScreen.dart';
-import 'package:account/mainScreens/itemsScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
@@ -77,7 +76,7 @@ class _CustInfoDesignWidgetState extends State<CustInfoDesignWidget> {
               ),
               ListTile(
                 leading: IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: (() {
                     Navigator.push(
                         context,

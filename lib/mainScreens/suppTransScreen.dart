@@ -91,12 +91,12 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Card(
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
             color: Colors.cyan,
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search),
                 hintText: ("Search TransName"),
               ),
@@ -138,7 +138,7 @@ class _SuppTransScreenState extends State<SuppTransScreen> {
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      staggeredTileBuilder: (c) => const StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
                         SupTrans model = SupTrans.fromJson(
                           snapshot.data!.docs[index].data()!

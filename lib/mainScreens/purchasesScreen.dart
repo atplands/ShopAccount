@@ -222,7 +222,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                           ),*/
                                             Center(
                                               child: Container(
-                                                padding: EdgeInsets.all(
+                                                padding: const EdgeInsets.all(
                                                     defaultPadding),
                                                 decoration: const BoxDecoration(
                                                   gradient: LinearGradient(
@@ -240,7 +240,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                     tileMode: TileMode.clamp,
                                                   ),
                                                   borderRadius:
-                                                      const BorderRadius.all(
+                                                      BorderRadius.all(
                                                           Radius.circular(10)),
                                                 ),
                                                 child: Column(
@@ -257,7 +257,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                       children: [
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Credit",
                                                               maxLines: 1,
                                                               overflow:
@@ -285,7 +285,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -308,7 +308,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                                 0xffb49e5c))),
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Cash",
                                                               maxLines: 1,
                                                               overflow:
@@ -336,7 +336,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -366,7 +366,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                       children: [
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Total",
                                                               maxLines: 1,
                                                               overflow:
@@ -394,7 +394,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -579,7 +579,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                           ),*/
                                             Container(
                                               alignment: Alignment.topCenter,
-                                              padding: EdgeInsets.all(
+                                              padding: const EdgeInsets.all(
                                                   defaultPadding),
                                               decoration: const BoxDecoration(
                                                 gradient: LinearGradient(
@@ -596,9 +596,8 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                   stops: [0.0, 1.0],
                                                   tileMode: TileMode.clamp,
                                                 ),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
                                               ),
                                               child: Column(
                                                 crossAxisAlignment:
@@ -614,7 +613,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                     children: [
                                                       Column(
                                                         children: [
-                                                          Text(
+                                                          const Text(
                                                             "Credit",
                                                             maxLines: 1,
                                                             overflow:
@@ -642,7 +641,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                             MainAxisAlignment
                                                                 .spaceEvenly,
                                                         children: [
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 10,
                                                           ),
                                                           Text(
@@ -665,7 +664,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                               0xffb49e5c))),
                                                       Column(
                                                         children: [
-                                                          Text(
+                                                          const Text(
                                                             "Cash",
                                                             maxLines: 1,
                                                             overflow:
@@ -693,7 +692,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                             MainAxisAlignment
                                                                 .spaceEvenly,
                                                         children: [
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 10,
                                                           ),
                                                           Text(
@@ -723,7 +722,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                     children: [
                                                       Column(
                                                         children: [
-                                                          Text(
+                                                          const Text(
                                                             "Total",
                                                             maxLines: 1,
                                                             overflow:
@@ -751,7 +750,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                             MainAxisAlignment
                                                                 .spaceEvenly,
                                                         children: [
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 10,
                                                           ),
                                                           Text(

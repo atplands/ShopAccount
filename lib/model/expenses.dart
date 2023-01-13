@@ -1,55 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CashBook {
-  String? cashBookID;
+class Expenses {
+  String? expenseID;
   String? shopUID;
-  String? cashBookInfo;
-  num? cashInAmount;
+  String? expenseInfo;
+  String? expenseType;
   num? cashOutAmount;
-  num? onlineInAmount;
   num? onlineOutAmount;
-  Timestamp? publishedDate;
   Timestamp? transDate;
+  String? thumbnailUrl;
   String? status;
 
-  CashBook({
-    this.cashBookID,
+  Expenses({
+    this.expenseID,
     this.shopUID,
-    this.cashBookInfo,
-    this.cashInAmount,
+    this.expenseInfo,
+    this.expenseType,
     this.cashOutAmount,
-    this.onlineInAmount,
     this.onlineOutAmount,
-    this.publishedDate,
     this.transDate,
+    this.thumbnailUrl,
     this.status,
   });
 
-  CashBook.fromJson(Map<String, dynamic> json) {
-    cashBookID = json["cashBookID"];
+  Expenses.fromJson(Map<String, dynamic> json) {
+    expenseID = json["expenseID"];
     shopUID = json['shopUID'];
-    cashBookInfo = json['cashBookInfo'];
-    cashInAmount = json["cashInAmount"];
+    expenseInfo = json['expenseInfo'];
+    expenseType = json['expenseType'];
     cashOutAmount = json["cashOutAmount"];
-    onlineInAmount = json["onlineInAmount"];
     onlineOutAmount = json["onlineOutAmount"];
-    publishedDate = json['publishedDate'];
     transDate = json['transDate'];
+    thumbnailUrl = json['thumbnailUrl'];
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data["cashBookID"] = cashBookID;
+    data["expenseID"] = expenseID;
     data['sellerUID'] = shopUID;
-    data['cashBookInfo'] = cashBookInfo;
-    data['cashInAmount'] = cashInAmount;
+    data['expenseInfo'] = expenseInfo;
+    data['expenseType'] = expenseType;
     data['cashOutAmount'] = cashOutAmount;
-    data['onlineInAmount'] = onlineInAmount;
     data['onlineOutAmount'] = onlineOutAmount;
-    data['publishedDate'] = publishedDate;
     data['transDate'] = transDate;
+    data['thumbnailUrl'] = thumbnailUrl;
     data['status'] = status;
+
     return data;
   }
 }

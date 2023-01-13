@@ -1,6 +1,5 @@
 //import 'package:account/notifications/notificationservice.dart';
 import 'package:flutter/material.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class HistoryScreen extends StatefulWidget {
@@ -21,7 +20,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("History Screen"), actions: []),
+      appBar: AppBar(
+        title: const Text("History Screen"),
+      ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,7 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 height: 40,
                 width: 200,
                 color: Colors.red,
-                child: Center(
+                child: const Center(
                   child: Text(
                     "Cancel All Notifications",
                   ),
@@ -50,7 +51,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 height: 40,
                 width: 200,
                 color: Colors.green,
-                child: Center(
+                child: const Center(
                   child: Text("Show Notification"),
                 ),
               ),

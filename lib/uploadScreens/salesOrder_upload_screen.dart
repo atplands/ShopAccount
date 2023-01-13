@@ -1,24 +1,13 @@
 import 'dart:io';
 
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/mainScreens/salesOrderPendingScreen.dart';
-import 'package:account/mainScreens/salesPriceListScreen.dart';
-import 'package:account/model/customers.dart';
-import 'package:account/model/priceList.dart';
 import 'package:account/model/salesOrder.dart';
-import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
-import 'package:account/widgets/loading_dialog.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fStorage;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,9 +35,6 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
   //nameController = sharedPreferences!.getString("name")!;
   bool uploading = false;
   String uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-
-  Position? position;
-  List<Placemark>? placeMarks;
 
   String imageUrl = "";
   //String completeAddress = "";
@@ -207,7 +193,7 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
           ),
         ),
         automaticallyImplyLeading: true,
-        title: Text(
+        title: const Text(
           'SalesOrder Upload',
           style: TextStyle(
             fontSize: 18,
@@ -310,7 +296,8 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.cyan,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
                   formValidation();

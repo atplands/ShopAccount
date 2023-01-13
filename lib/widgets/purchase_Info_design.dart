@@ -1,15 +1,10 @@
-import 'package:account/mainScreens/itemsScreen.dart';
-import 'package:account/mainScreens/purchase_transScreen.dart';
+//
 import 'package:account/mainScreens/suppTran_details_screen.dart';
 import 'package:account/model/supTrans.dart';
-import 'package:account/views/bubble_stories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:account/global/global.dart';
-//import 'package:foodpanda_sellers_app/mainScreens/itemsScreen.dart';
-import 'package:account/model/menus.dart';
-import 'package:flutter/rendering.dart';
 
 //import 'purchase_transScreen.dart';
 
@@ -54,7 +49,7 @@ class _PurInfoDesignWidgetState extends State<PurInfoDesignWidget> {
           elevation: 5,
           color: Colors.grey.shade200,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             height: 80,
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
@@ -62,7 +57,7 @@ class _PurInfoDesignWidgetState extends State<PurInfoDesignWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 8.0,
                   ),
                   Divider(
@@ -116,7 +111,7 @@ class _PurInfoDesignWidgetState extends State<PurInfoDesignWidget> {
                       widget.model!.transAmount!.toString(),
                       //widget.model!.transDate!  DateTime.now(),
 
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.red,
                           fontFamily: "Train",
                           fontSize: 16,

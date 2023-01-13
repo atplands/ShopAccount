@@ -1,28 +1,16 @@
 import 'dart:io';
 
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/mainScreens/purchaseOrderPendingScreen.dart';
-import 'package:account/mainScreens/salesPriceListScreen.dart';
-import 'package:account/model/customers.dart';
-import 'package:account/model/priceList.dart';
 import 'package:account/model/purchaseOrders.dart';
-import 'package:account/model/salesOrder.dart';
-import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
-import 'package:account/widgets/loading_dialog.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fStorage;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PurchaseOrderListUploadScreen extends StatefulWidget {
   PurchaseOrder? model;
@@ -49,9 +37,6 @@ class _PurchaseOrderListUploadScreenState
   //nameController = sharedPreferences!.getString("name")!;
   bool uploading = false;
   String uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-
-  Position? position;
-  List<Placemark>? placeMarks;
 
   String imageUrl = "";
   //String completeAddress = "";
@@ -84,14 +69,6 @@ class _PurchaseOrderListUploadScreenState
     if (purchaseOrderNameController.text.isNotEmpty &&
         purchaseOrderInfoController.text.isNotEmpty &&
         totalAmountController.text.isNotEmpty) {
-      //start uploading image
-      /*showDialog(
-          context: context,
-          builder: (c) {
-            return LoadingDialog(
-              message: "Uploading PO",
-            );
-          });*/
       setState(() {
         uploading = true;
       });
@@ -119,8 +96,8 @@ class _PurchaseOrderListUploadScreenState
           //print('PriceList Updated ');
           Navigator.pop(context);
           //send user to homePage
-          Route newRoute =
-              MaterialPageRoute(builder: (c) => PurchaseOrdersPendingList());
+          Route newRoute = MaterialPageRoute(
+              builder: (c) => const PurchaseOrdersPendingList());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -208,7 +185,7 @@ class _PurchaseOrderListUploadScreenState
           )),
         ),
         automaticallyImplyLeading: true,
-        title: Text(
+        title: const Text(
           'Purchase Order Upload',
           style: TextStyle(
             fontSize: 18,
@@ -311,7 +288,8 @@ class _PurchaseOrderListUploadScreenState
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.cyan,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
                   formValidation();

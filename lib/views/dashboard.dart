@@ -1,6 +1,5 @@
 import 'package:account/constants/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DashBoard extends StatelessWidget {
   //const DashBoard({Key? key}) : super(key: key);
@@ -15,7 +14,7 @@ class DashBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       width: 250,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -30,7 +29,7 @@ class DashBoard extends StatelessWidget {
           stops: [0.0, 1.0],
           tileMode: TileMode.clamp,
         ),
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,12 +58,12 @@ class DashBoard extends StatelessWidget {
                     name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    "${type} Transactions",
+                    "$type Transactions",
                     style: Theme.of(context)
                         .textTheme
                         .caption!
@@ -75,7 +74,7 @@ class DashBoard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(

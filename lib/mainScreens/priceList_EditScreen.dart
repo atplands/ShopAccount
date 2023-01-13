@@ -1,24 +1,18 @@
 import 'dart:io';
 
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/mainScreens/salesPriceListScreen.dart';
-import 'package:account/model/customers.dart';
 import 'package:account/model/priceList.dart';
-import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fStorage;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PriceListEditScreen extends StatefulWidget {
   PriceList? model;
@@ -114,7 +108,7 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
           Navigator.pop(context);
           //send user to homePage
           Route newRoute =
-              MaterialPageRoute(builder: (c) => SalesPriceListScreen());
+              MaterialPageRoute(builder: (c) => const SalesPriceListScreen());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -150,12 +144,12 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
         .collection("priceList");
 
     ref.doc(widget.model!.priceListID!.toString()).update({
-      "priceListName": priceListNameController.text.toString(),
-      "priceListInfo": priceListInfoController.text.toString(),
-      "supplierName": supplierNameController.text.toString(),
-      "salePrice": int.parse(salePriceController.text.toString()) ?? 0,
-      "purchasePrice": int.parse(purchasePriceController.text.toString()) ?? 0,
-      "inStockCount": int.parse(inStockCountController.text.toString()) ?? 0,
+      "priceListName": priceListNameController.text.trim(),
+      "priceListInfo": priceListInfoController.text.trim(),
+      "supplierName": supplierNameController.text.trim(),
+      "salePrice": num.parse(salePriceController.text.trim()),
+      "purchasePrice": num.parse(purchasePriceController.text.trim()),
+      "inStockCount": num.parse(inStockCountController.text.trim()),
       "status": "available",
       "thumbnailUrl": downloadUrl,
     }).then(
@@ -169,11 +163,9 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
             "priceListName": priceListNameController.text.toString(),
             "priceListInfo": priceListInfoController.text.toString(),
             "supplierName": supplierNameController.text.toString(),
-            "salePrice": int.parse(salePriceController.text.toString()) ?? 0,
-            "purchasePrice":
-                int.parse(purchasePriceController.text.toString()) ?? 0,
-            "inStockCount":
-                int.parse(inStockCountController.text.toString()) ?? 0,
+            "salePrice": num.parse(salePriceController.text.toString()),
+            "purchasePrice": num.parse(purchasePriceController.text.toString()),
+            "inStockCount": num.parse(inStockCountController.text.toString()),
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
@@ -207,7 +199,7 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
           )),
         ),
         automaticallyImplyLeading: true,
-        title: Text(
+        title: const Text(
           'PriceList Edit',
           style: TextStyle(
             fontSize: 24,
@@ -316,7 +308,8 @@ class _PriceListEditScreenState extends State<PriceListEditScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.cyan,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
                   formValidation();

@@ -1,15 +1,10 @@
 import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/mainScreens/suppTransEditScreen.dart';
-import 'package:account/mainScreens/suppTransScreen.dart';
-import 'package:account/model/custTrans.dart';
 import 'package:account/model/supTrans.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:account/global/global.dart';
-import 'package:account/model/items.dart';
-import 'package:account/splashScreen/splash_screen.dart';
-import 'package:account/widgets/simple_app_bar.dart';
 
 class SuppTransDetailsScreen extends StatefulWidget {
   final SupTrans? model;
@@ -38,7 +33,8 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
           .doc(widget.model!.supplierID!)
           .delete();
 
-      Navigator.push(context, MaterialPageRoute(builder: (c) => HomeScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (c) => const HomeScreen()));
       Fluttertoast.showToast(msg: "Transaction Deleted Successfully.");
     });
   }
@@ -94,7 +90,7 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
               height: 250.0,
               width: double.infinity,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30)),
                   image: DecorationImage(
@@ -119,7 +115,7 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 26),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -135,7 +131,7 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
@@ -160,12 +156,12 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
                   child: Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.calendar_month,
                         color: Colors.cyan,
                         size: 30,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text(
@@ -188,12 +184,12 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
                   child: Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.calendar_month,
                         color: Colors.cyan,
                         size: 30,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text(
@@ -217,12 +213,12 @@ class _SuppTransDetailsScreenState extends State<SuppTransDetailsScreen> {
                   child: Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.calendar_month,
                         color: Colors.cyan,
                         size: 30,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text(

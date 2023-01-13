@@ -1,16 +1,12 @@
 import 'dart:io';
 
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/customersScreen.dart';
-import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/mainScreens/suppliersScreen.dart';
-import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -125,7 +121,8 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
           //print('customer Updated ');
           Navigator.pop(context);
           //send user to homePage
-          Route newRoute = MaterialPageRoute(builder: (c) => SuppliersScreen());
+          Route newRoute =
+              MaterialPageRoute(builder: (c) => const SuppliersScreen());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -192,7 +189,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
           )),
         ),
         automaticallyImplyLeading: true,
-        title: Text(
+        title: const Text(
           'Edit Supplier',
           style: TextStyle(
             fontSize: 24,
@@ -290,7 +287,8 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.cyan,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
                   formValidation();

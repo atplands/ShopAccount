@@ -23,7 +23,7 @@ class SlideItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 40,
         ),
         Text(
@@ -33,7 +33,7 @@ class SlideItem extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Text(

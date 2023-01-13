@@ -1,22 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/po_pendingEditScreen.dart';
-import 'package:account/mainScreens/priceList_EditScreen.dart';
-import 'package:account/mainScreens/salesOrder_editScreen.dart';
+import 'package:account/mainScreens/cashBookEditScreen.dart';
 import 'package:account/model/cashBook.dart';
-import 'package:account/model/priceList.dart';
-import 'package:account/model/purchaseOrders.dart';
-import 'package:account/model/salesOrder.dart';
-import 'package:account/uploadScreens/customers_upload_screen.dart';
-import 'package:account/uploadScreens/priceList_upload_screen.dart';
-import 'package:account/uploadScreens/purchaseOrder_upload_screen.dart';
-import 'package:account/uploadScreens/salesOrder_upload_screen.dart';
+import 'package:account/uploadScreens/cashBook_upload_screen.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CashBookScreen extends StatefulWidget {
   const CashBookScreen({Key? key}) : super(key: key);
@@ -32,7 +23,6 @@ class _CashBookScreenState extends State<CashBookScreen> {
       .collection("cashBook");
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {});
   }
@@ -62,10 +52,8 @@ class _CashBookScreenState extends State<CashBookScreen> {
               color: Colors.cyan,
             ),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (c) => PurchaseOrderListUploadScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (c) => CashBookUploadScreen()));
             },
           ),
         ],
@@ -84,7 +72,7 @@ class _CashBookScreenState extends State<CashBookScreen> {
                   name = value;
                 });
 
-                print("name : ${name}");
+                debugPrint("name : $name");
               }),
             ),
           ),
@@ -120,7 +108,8 @@ class _CashBookScreenState extends State<CashBookScreen> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (c) => Ca(
+                                                builder: (c) =>
+                                                    CashBookEditScreen(
                                                       model: model,
                                                       context: context,
                                                     )));

@@ -5,12 +5,9 @@ import 'package:account/global/global.dart';
 import 'package:account/model/items.dart';
 import 'package:account/model/menus.dart';
 import 'package:account/uploadScreens/items_upload_screen.dart';
-import 'package:account/uploadScreens/menus_upload_screen.dart';
-import 'package:account/widgets/info_design.dart';
 import 'package:account/widgets/items_design.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
-import 'package:account/widgets/text_widget_header.dart';
 
 class ItemsScreen extends StatefulWidget {
   final Menus? model;
@@ -85,7 +82,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      staggeredTileBuilder: (c) => const StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
                         Items model = Items.fromJson(
                           snapshot.data!.docs[index].data()!

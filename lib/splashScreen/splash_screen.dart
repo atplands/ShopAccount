@@ -21,7 +21,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 5), (Timer timer) {
+    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (_currentPage < 2) {
         _currentPage++;
       } else {
@@ -30,7 +30,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
       _pageController.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
     });
@@ -90,14 +90,14 @@ class _MySplashScreenState extends State<MySplashScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   FlatButton(
-                    child: Text(
+                    child: const Text(
                       'Getting Started',
                       style: TextStyle(
                         fontSize: 18,

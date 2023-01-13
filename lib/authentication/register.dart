@@ -158,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       saveDataToFirestore(currentUser!).then((value) {
         Navigator.pop(context);
         //send user to homePage
-        Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+        Route newRoute = MaterialPageRoute(builder: (c) => const HomeScreen());
         Navigator.pushReplacement(context, newRoute);
       });
     }
@@ -328,7 +328,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               style: ElevatedButton.styleFrom(
                 primary: Colors.cyan,
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
               ),
               onPressed: () {
                 formValidation();

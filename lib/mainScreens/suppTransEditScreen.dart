@@ -3,13 +3,9 @@ import 'dart:io';
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/model/supTrans.dart';
-import 'package:account/model/suppliers.dart';
-import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
-import 'package:account/widgets/loading_dialog.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -17,7 +13,6 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fStorage;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SuppTransEditScreen extends StatefulWidget {
   SupTrans? model;
@@ -119,8 +114,8 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
     if (transNameController.text.isNotEmpty &&
         transAmountController.text.isNotEmpty &&
         transTypeController.text.isNotEmpty) {
-      print("Transaction Details are passed now");
-      print("Transaction ID::" + widget.model!.suppTransID.toString());
+      debugPrint("Transaction Details are passed now");
+      debugPrint("Transaction ID::" + widget.model!.suppTransID.toString());
       //start uploading image
 
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -130,7 +125,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
           .child(fileName);
       if (imageXFile == null) {
         custTransImageUrl = widget.model!.thumbnailUrl!.toString();
-        print("Image URL" + custTransImageUrl);
+        debugPrint("Image URL" + custTransImageUrl);
       } else {
         fStorage.UploadTask uploadTask =
             reference.putFile(File(imageXFile!.path));
@@ -143,10 +138,10 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
       //save info to firestore
       saveDataToFirestore(custTransImageUrl);
 
-      print('Purchase Trans Updated ');
+      debugPrint('Purchase Trans Updated ');
       Navigator.pop(context);
       //send user to homePage
-      Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+      Route newRoute = MaterialPageRoute(builder: (c) => const HomeScreen());
       Navigator.pushReplacement(context, newRoute);
     } else {
       showDialog(
@@ -166,7 +161,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
         .collection("suppliers")
         .doc(widget.model!.supplierID)
         .collection("suppTrans");
-    print("data Firestore reference is created.");
+    debugPrint("data Firestore reference is created.");
 
     ref.doc(widget.model!.suppTransID!.toString()).update({
       "transName": transNameController.text.toString(),
@@ -179,7 +174,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
       "transClosedDate": DateTime.parse(transClosedDateController.text.trim()),
       "thumbnailUrl": downloadUrl,
     }).then((value) {
-      print("First Firestore data is updated");
+      debugPrint("First Firestore data is updated");
       final itemsRef = FirebaseFirestore.instance.collection("suppTrans");
 
       itemsRef.doc(widget.model!.suppTransID.toString()).update({
@@ -194,8 +189,8 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
             DateTime.parse(transClosedDateController.text.trim()),
         "thumbnailUrl": downloadUrl,
       });
-      print("Second FireStore Data is Updated");
-      print("Payment details::" + transAmountController.text.trim());
+      debugPrint("Second FireStore Data is Updated");
+      debugPrint("Payment details::" + transAmountController.text.trim());
     }).then((value) {
       clearMenusUploadForm();
 
@@ -289,15 +284,15 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                   color: Colors.amber,
                   thickness: 1,
                 ),*/
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Card(
                 elevation: 4,
                 color: Colors.grey.shade200,
                 child: Container(
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: TextField(
                     style: const TextStyle(color: Colors.black),
@@ -334,22 +329,22 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                   color: Colors.amber,
                   thickness: 1,
                 ),*/
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Card(
                 elevation: 4,
                 color: Colors.grey.shade200,
                 child: Container(
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.menu),
-                      SizedBox(
+                      const Icon(Icons.menu),
+                      const SizedBox(
                         width: 20,
                       ),
                       Expanded(
@@ -437,7 +432,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                     color: Colors.cyan,
                   ),
                   title:*/
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               InkWell(
@@ -467,7 +462,8 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       height: 60,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
                       ),
                       padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                       //margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
@@ -475,7 +471,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                       child: transDateTime == null
                           ? Padding(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Row(
                                 children: const [
                                   Icon(Icons.calendar_today),
@@ -484,17 +480,17 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                                   ),
                                   Text(
                                     'Transaction Date',
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: TextStyle(color: Colors.grey),
                                   ),
                                   Text(" :Date"),
                                 ],
                               ))
                           : Padding(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Row(
                                 children: [
-                                  Icon(Icons.calendar_today),
-                                  SizedBox(
+                                  const Icon(Icons.calendar_today),
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   Text(
@@ -516,17 +512,17 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                     color: Colors.cyan,
                   ),
                   title: */
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Card(
                 elevation: 4,
                 color: Colors.grey.shade200,
                 child: Container(
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: TextField(
                     keyboardType: TextInputType.number,
@@ -551,17 +547,17 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                     color: Colors.cyan,
                   ),
                   title: */
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Card(
                 elevation: 4,
                 color: Colors.grey.shade200,
                 child: Container(
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: TextField(
                     style: const TextStyle(color: Colors.black),
@@ -576,7 +572,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -606,7 +602,8 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       height: 60,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
                       ),
                       padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                       //margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
@@ -614,30 +611,30 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                       child: transDueDateTime == null
                           ? Padding(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Row(
-                                children: [
+                                children: const [
                                   Icon(Icons.calendar_today),
                                   SizedBox(
                                     width: 15,
                                   ),
                                   Text(
                                     'Bill Due Date',
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: TextStyle(color: Colors.grey),
                                   ),
-                                  const Text(" :DueDate"),
+                                  Text(" :DueDate"),
                                 ],
                               ))
                           : Padding(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Row(
                                 children: [
-                                  Icon(Icons.calendar_today),
-                                  SizedBox(
+                                  const Icon(Icons.calendar_today),
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   Text(
-                                    '${transDueDateTime}',
+                                    '$transDueDateTime',
                                     style: const TextStyle(color: Colors.black),
                                   ),
                                   const Text(" :DueDate"),
@@ -648,7 +645,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
@@ -678,7 +675,8 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       height: 60,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
                       ),
                       padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                       //margin: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
@@ -686,30 +684,30 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                       child: transClosedDateTime == null
                           ? Padding(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Row(
-                                children: [
+                                children: const [
                                   Icon(Icons.calendar_today),
                                   SizedBox(
                                     width: 15,
                                   ),
                                   Text(
                                     'Bill Closed Date',
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: TextStyle(color: Colors.grey),
                                   ),
-                                  const Text(" :ClosedDate"),
+                                  Text(" :ClosedDate"),
                                 ],
                               ))
                           : Padding(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Row(
                                 children: [
-                                  Icon(Icons.calendar_today),
-                                  SizedBox(
+                                  const Icon(Icons.calendar_today),
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   Text(
-                                    '${transClosedDateTime}',
+                                    '$transClosedDateTime',
                                     style: const TextStyle(color: Colors.black),
                                   ),
                                   const Text(" :ClosedDate"),
@@ -720,17 +718,17 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                       ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Card(
                 elevation: 4,
                 color: Colors.grey.shade200,
                 child: Container(
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: TextField(
                     keyboardType: TextInputType.number,
@@ -746,7 +744,7 @@ class _SuppTransEditScreenState extends State<SuppTransEditScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10)
+              const SizedBox(height: 10)
             ],
           ),
         ),
