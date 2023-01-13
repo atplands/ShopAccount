@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:account/mainScreens/customersScreen.dart';
-import 'package:account/model/customers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,8 +54,8 @@ class _CustomersUploadScreenState extends State<CustomersUploadScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (c) => CustomersScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (c) => const CustomersScreen()));
           },
         ),
       ),

@@ -1,18 +1,13 @@
 import 'dart:io';
 
-import 'package:account/main.dart';
-import 'package:account/mainScreens/custTransScreen.dart';
 import 'package:account/mainScreens/customersScreen.dart';
-import 'package:account/mainScreens/suppliersScreen.dart';
 import 'package:account/model/customers.dart';
-import 'package:account/model/suppliers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:account/global/global.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/progress_bar.dart';
-import 'package:flutter/semantics.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storageRef;
 
@@ -74,8 +69,8 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (c) => CustomersScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (c) => const CustomersScreen()));
           },
         ),
       ),
@@ -342,9 +337,9 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               child: CupertinoButton(
                 padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                 child: transDateTime == null
-                    ? Text(
+                    ? const Text(
                         'Transaction Date',
-                        style: const TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey),
                       )
                     : Text(
                         '$transDateTime',
@@ -485,12 +480,12 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               child: CupertinoButton(
                 padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                 child: transClosedDateTime == null
-                    ? Text(
+                    ? const Text(
                         'Bill Closed Date',
-                        style: const TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey),
                       )
                     : Text(
-                        '${transClosedDateTime}',
+                        '$transClosedDateTime',
                         style: const TextStyle(color: Colors.black),
                       ),
                 //style: const TextStyle(color: Colors.grey),

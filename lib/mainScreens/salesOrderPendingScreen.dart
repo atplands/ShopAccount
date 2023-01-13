@@ -1,18 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/priceList_EditScreen.dart';
 import 'package:account/mainScreens/salesOrder_editScreen.dart';
-import 'package:account/model/priceList.dart';
 import 'package:account/model/salesOrder.dart';
-import 'package:account/uploadScreens/customers_upload_screen.dart';
-import 'package:account/uploadScreens/priceList_upload_screen.dart';
 import 'package:account/uploadScreens/salesOrder_upload_screen.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SalesOrderPendingList extends StatefulWidget {
   const SalesOrderPendingList({Key? key}) : super(key: key);
@@ -28,7 +23,6 @@ class _SalesOrderPendingListState extends State<SalesOrderPendingList> {
       .collection("salesOrders");
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {});
   }
@@ -78,7 +72,7 @@ class _SalesOrderPendingListState extends State<SalesOrderPendingList> {
                   name = value;
                 });
 
-                print("name : ${name}");
+                debugPrint("name : $name");
               }),
             ),
           ),

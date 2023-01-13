@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:account/mainScreens/item_detail_screen.dart';
-import 'package:account/mainScreens/itemsScreen.dart';
 import 'package:account/model/items.dart';
-import 'package:account/model/menus.dart';
 
 class ItemsDesignWidget extends StatefulWidget {
   Items? model;

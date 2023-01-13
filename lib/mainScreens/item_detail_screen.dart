@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:account/global/global.dart';
 import 'package:account/model/items.dart';
-import 'package:account/splashScreen/splash_screen.dart';
 import 'package:account/widgets/simple_app_bar.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
@@ -30,7 +29,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
         .then((value) {
       FirebaseFirestore.instance.collection("items").doc(itemID).delete();
 
-      Navigator.push(context, MaterialPageRoute(builder: (c) => HomeScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (c) => const HomeScreen()));
       Fluttertoast.showToast(msg: "Item Deleted Successfully.");
     });
   }

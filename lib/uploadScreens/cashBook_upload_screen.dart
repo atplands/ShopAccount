@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:account/global/global.dart';
 import 'package:account/mainScreens/cashBookScreen.dart';
-import 'package:account/model/cashBook.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/progress_bar.dart';
@@ -12,14 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
-class CashBookEditScreen extends StatefulWidget {
-  CashBook? model;
-  BuildContext? context;
-  CashBookEditScreen({this.model, this.context});
-  CashBookEditScreenState createState() => CashBookEditScreenState();
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fStorage;
+import 'package:shared_preferences/shared_preferences.dart';
+
+class CashBookUploadScreen extends StatefulWidget {
+  const CashBookUploadScreen({Key? key}) : super(key: key);
+  _CashBookUploadScreenState createState() => _CashBookUploadScreenState();
 }
 
-class CashBookEditScreenState extends State<CashBookEditScreen> {
+class _CashBookUploadScreenState extends State<CashBookUploadScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController imageController = TextEditingController();
   TextEditingController cashBookInfoController = TextEditingController();
@@ -29,7 +30,9 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
   TextEditingController onlineInAmountController = TextEditingController();
   TextEditingController onlineOutAmountController = TextEditingController();
 
+  XFile? imageXFile;
   //nameController = sharedPreferences!.getString("name")!;
+  final ImagePicker _picker = ImagePicker();
 
   //nameController = sharedPreferences!.getString("name")!;
   bool uploading = false;
@@ -37,6 +40,8 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
 
   Position? position;
   List<Placemark>? placeMarks;
+
+  String imageUrl = "";
   DateTime? todayDateTime = DateTime.now();
   DateTime? transDateTime = DateTime.now();
   //String completeAddress = "";
@@ -49,15 +54,15 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
 
   getUser() async {
     setState(() {
-      imageController.text = sharedPreferences!.getString("photoUrl")!;
-      cashBookInfoController.text = widget.model!.cashBookInfo!.toString();
-      cashInAmountController.text = widget.model!.cashInAmount!.toString();
-      transDateController.text = widget.model!.transDate!.toDate().toString();
-      cashOutAmountController.text = widget.model!.cashOutAmount!.toString();
-      onlineInAmountController.text = widget.model!.onlineInAmount!.toString();
-      onlineOutAmountController.text =
-          widget.model!.onlineOutAmount!.toString();
-      transDateTime = widget.model!.transDate!.toDate();
+      imageController.text =
+          sharedPreferences!.getString("photoUrl")!.toString();
+      cashBookInfoController.text = "Info";
+      cashInAmountController.text = 0.toString();
+      cashOutAmountController.text = 0.toString();
+      onlineInAmountController.text = 0.toString();
+      onlineOutAmountController.text = 0.toString();
+      transDateController.text = "TransDate";
+      transDateTime = DateTime.now();
     });
   }
 
@@ -66,12 +71,10 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
       setState(() {
         uploading = true;
       });
-      debugPrint("Transaction Details are passed now");
-      //start uploading image
 
       //save info to firestore
       saveDataToFirestore();
-      debugPrint('CashBook Updated in two docs ');
+      debugPrint('CashBook Uploaded in two docs');
       Navigator.pop(context);
       //send user to homePage
       Route newRoute =
@@ -82,21 +85,19 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
           context: context,
           builder: (c) {
             return ErrorDialog(
-              message: "Please write the complete required info for  CashBook.",
+              message: "Please write the complete required info for CashBook.",
             );
           });
     }
   }
 
   clearMenusUploadForm() {
-    setState(() {
-      imageController.clear();
-      cashBookInfoController.clear();
-      cashInAmountController.clear();
-      cashOutAmountController.clear();
-      onlineInAmountController.clear();
-      onlineOutAmountController.clear();
-    });
+    imageController.clear();
+    cashBookInfoController.clear();
+    cashInAmountController.clear();
+    cashOutAmountController.clear();
+    onlineInAmountController.clear();
+    onlineOutAmountController.clear();
   }
 
   saveDataToFirestore() {
@@ -105,38 +106,44 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
         .doc(sharedPreferences!.getString("uid"))
         .collection("cashBook");
 
-    ref.doc(widget.model!.cashBookID!.toString()).update({
+    ref.doc(uniqueIdName).set({
+      "cashBookID": uniqueIdName,
+      "shopUID": sharedPreferences!.getString("uid"),
       "cashBookInfo": cashBookInfoController.text.trim(),
       "cashInAmount": num.parse(cashInAmountController.text.trim()),
       "cashOutAmount": num.parse(cashOutAmountController.text.trim()),
-      "onlineInAmount": num.parse(onlineInAmountController.text.trim()),
-      "onlineOutAmount": num.parse(onlineOutAmountController.text.trim()),
+      "onlineInAmount": int.parse(onlineInAmountController.text.trim()),
+      "onlineOutAmount": int.parse(onlineOutAmountController.text.trim()),
       "transDate": DateTime.parse(transDateTime.toString()),
+      "publishedDate": DateTime.now(),
+      "status": "available",
     }).then(
       (value) {
-        debugPrint("First Firestore data is updated");
-        final custRef = FirebaseFirestore.instance.collection("cashBook");
+        final poRef = FirebaseFirestore.instance.collection("cashBook");
 
-        custRef.doc(widget.model!.cashBookID!.toString()).update(
+        poRef.doc(uniqueIdName).set(
           {
+            "cashBookID": uniqueIdName,
+            "shopUID": sharedPreferences!.getString("uid"),
             "cashBookInfo": cashBookInfoController.text.trim(),
-            "cashInAmount": num.parse(cashInAmountController.text.trim()),
-            "cashOutAmount": num.parse(cashOutAmountController.text.trim()),
-            "onlineInAmount": num.parse(onlineInAmountController.text.trim()),
-            "onlineOutAmount": num.parse(onlineOutAmountController.text.trim()),
+            "cashInAmount": int.parse(cashInAmountController.text.trim()),
+            "cashOutAmount": int.parse(cashOutAmountController.text.trim()),
+            "onlineInAmount": int.parse(onlineInAmountController.text.trim()),
+            "onlineOutAmount": int.parse(onlineOutAmountController.text.trim()),
             "transDate": DateTime.parse(transDateTime.toString()),
+            "publishedDate": DateTime.now(),
+            "status": "available",
           },
-        ).then((value) {
-          debugPrint("second Firestore data is updated");
-          clearMenusUploadForm();
-
-          setState(() {
-            uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
-            uploading = false;
-          });
-        });
+        );
       },
-    );
+    ).then((value) {
+      clearMenusUploadForm();
+
+      setState(() {
+        uniqueIdName = DateTime.now().millisecondsSinceEpoch.toString();
+        uploading = false;
+      });
+    });
   }
 
   @override
@@ -145,21 +152,20 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.cyan,
-                Colors.amber,
-              ],
-              begin: FractionalOffset(0.0, 0.0),
-              end: FractionalOffset(1.0, 0.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp,
-            ),
-          ),
+              gradient: LinearGradient(
+            colors: [
+              Colors.cyan,
+              Colors.amber,
+            ],
+            begin: FractionalOffset(0.0, 0.0),
+            end: FractionalOffset(1.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          )),
         ),
         automaticallyImplyLeading: true,
         title: const Text(
-          'Cash Edit',
+          'Cash Upload',
           style: TextStyle(
             fontSize: 18,
             color: Colors.white,
@@ -195,7 +201,7 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: cashBookInfoController,
-                        hintText: "Info",
+                        hintText: "Cash Info",
                         isObsecre: false,
                       ),
                     ),
@@ -237,7 +243,7 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
                             margin:
                                 const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
 
-                            // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                            //padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                             child: transDateTime == null
                                 ? Padding(
                                     padding: const EdgeInsets.only(left: 10),
@@ -253,7 +259,8 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
                                         ),
                                         Text(" :Date"),
                                       ],
-                                    ))
+                                    ),
+                                  )
                                 : Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Row(
@@ -278,27 +285,25 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
                     CustomTextField(
                       data: Icons.book,
                       controller: cashInAmountController,
-                      hintText: "Cash In Amount*",
+                      hintText: "Cash In Hand*",
                       isObsecre: false,
                     ),
                     CustomTextField(
-                      //keyboardType: TextInputType.number,
-                      //style: const TextStyle(color: Colors.black),
-                      data: Icons.price_change,
+                      data: Icons.price_check,
                       controller: cashOutAmountController,
-                      hintText: "Cash Out Amount",
+                      hintText: "Cash Out Hand",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.stacked_line_chart,
                       controller: onlineInAmountController,
-                      hintText: "Online In Amount",
+                      hintText: "Online In Account",
                       isObsecre: false,
                     ),
                     CustomTextField(
-                      data: Icons.local_shipping,
+                      data: Icons.price_change,
                       controller: onlineOutAmountController,
-                      hintText: "Online Out Amount",
+                      hintText: "Online Out Account",
                       isObsecre: false,
                     ),
                   ],
@@ -309,7 +314,7 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
               ),
               ElevatedButton(
                 child: const Text(
-                  "Update Cash",
+                  "Add Cash",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

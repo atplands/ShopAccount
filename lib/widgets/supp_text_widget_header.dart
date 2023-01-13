@@ -1,14 +1,7 @@
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/salesScreen.dart';
-import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
-import 'package:account/views/dashboard.dart';
-import 'package:account/widgets/progress_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class SuppTextWidgetHeader extends SliverPersistentHeaderDelegate {
   String? title;
@@ -54,7 +47,7 @@ class SuppTextWidgetHeader extends SliverPersistentHeaderDelegate {
         alignment: Alignment.center,
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 1.0,
               //width: 10.0,
             ),
@@ -67,9 +60,9 @@ class SuppTextWidgetHeader extends SliverPersistentHeaderDelegate {
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  debugPrint("builder had -->> cashTotal:: ${cashTotal}");
+                  debugPrint("builder had -->> cashTotal:: $cashTotal");
                   if (snapshot.hasData) {
-                    debugPrint("has data -->> cashTotal:: ${cashTotal}");
+                    debugPrint("has data -->> cashTotal:: $cashTotal");
 
                     //int lenthCount = snapshot.data!.docs.length;
                     for (var i = 0;
@@ -93,13 +86,16 @@ class SuppTextWidgetHeader extends SliverPersistentHeaderDelegate {
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [Text(""), Text("$creditTotal")],
+                                children: [
+                                  const Text(""),
+                                  Text("$creditTotal")
+                                ],
                               ),
                             )
-                          : Container(child: Text("no display"));
+                          : Container();
                     }
                   }
-                  return Text("number of snapshots documents:: 2");
+                  return const Text("number of snapshots documents:: 2");
                   /*while(snapshot.data!.docs.length)
                     return snapshot.data!.docs[index]['transType']
                                           .toString()
@@ -179,11 +175,9 @@ class SuppTextWidgetHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  // TODO: implement maxExtent
   double get maxExtent => 180;
 
   @override
-  // TODO: implement minExtent
   double get minExtent => 150;
 
   @override

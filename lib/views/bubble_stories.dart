@@ -1,7 +1,5 @@
 import 'package:account/global/global.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class BubbleStories extends StatelessWidget {
   //const BubbleStories({Key? key}) : super(key: key);
@@ -26,7 +24,7 @@ class BubbleStories extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -43,7 +41,7 @@ class BubbleStories extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             /*ExpansionTile(
@@ -65,14 +63,14 @@ class BubbleStories extends StatelessWidget {
               ],
             ),*/
             Text(
-              '  ${text}'.toString(),
-              style: TextStyle(
+              '  $text'.toString(),
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ),
             Text(
               '  20000'.toString(),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.red,
               ),
             ),

@@ -1,12 +1,4 @@
 import 'package:account/constants/constants.dart';
-import 'package:account/global/global.dart';
-//import 'package:account/mainScreens/purchase_Info_design.dart';
-//import 'package:account/model/menus.dart';
-//import 'package:account/model/supTrans.dart';
-//import 'package:account/views/bubble_stories.dart';
-//import 'package:account/views/dashboard.dart';
-//import 'package:account/widgets/custTrans_design.dart';
-//import 'package:account/widgets/cust_info_design.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
 //import 'package:account/widgets/purchase_Info_design.dart';>
@@ -15,7 +7,6 @@ import 'package:account/widgets/sales_info_design.dart';
 //import 'package:account/widgets/sales_text_widget_header.dart';
 //import 'package:account/widgets/transactions_info_design.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -188,7 +179,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                             children: [
                                               Container(
                                                 alignment: Alignment.topCenter,
-                                                padding: EdgeInsets.all(
+                                                padding: const EdgeInsets.all(
                                                     defaultPadding),
                                                 decoration: const BoxDecoration(
                                                   gradient: LinearGradient(
@@ -206,7 +197,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     tileMode: TileMode.clamp,
                                                   ),
                                                   borderRadius:
-                                                      const BorderRadius.all(
+                                                      BorderRadius.all(
                                                           Radius.circular(10)),
                                                 ),
                                                 child: Column(
@@ -223,7 +214,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                       children: [
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Credit",
                                                               maxLines: 1,
                                                               overflow:
@@ -251,7 +242,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -274,7 +265,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                                 0xffb49e5c))),
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Cash",
                                                               maxLines: 1,
                                                               overflow:
@@ -302,7 +293,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -332,7 +323,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                       children: [
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Total",
                                                               maxLines: 1,
                                                               overflow:
@@ -360,7 +351,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -425,8 +416,6 @@ class _SalesScreenState extends State<SalesScreen> {
                                 staggeredTileBuilder: (c) =>
                                     const StaggeredTile.fit(1),
                                 itemBuilder: (context, index) {
-                                  scrollDirection:
-                                  Axis.vertical;
                                   CustTrans model = CustTrans.fromJson(
                                     snapshot.data!.docs[index].data()!
                                         as Map<String, dynamic>,
@@ -516,7 +505,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                             children: [
                                               Container(
                                                 alignment: Alignment.topCenter,
-                                                padding: EdgeInsets.all(
+                                                padding: const EdgeInsets.all(
                                                     defaultPadding),
                                                 decoration: const BoxDecoration(
                                                   gradient: LinearGradient(
@@ -534,7 +523,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     tileMode: TileMode.clamp,
                                                   ),
                                                   borderRadius:
-                                                      const BorderRadius.all(
+                                                      BorderRadius.all(
                                                           Radius.circular(10)),
                                                 ),
                                                 child: Column(
@@ -551,7 +540,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                       children: [
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Credit",
                                                               maxLines: 1,
                                                               overflow:
@@ -579,7 +568,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -602,7 +591,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                                 0xffb49e5c))),
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Cash",
                                                               maxLines: 1,
                                                               overflow:
@@ -630,7 +619,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(
@@ -660,7 +649,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                       children: [
                                                         Column(
                                                           children: [
-                                                            Text(
+                                                            const Text(
                                                               "Total",
                                                               maxLines: 1,
                                                               overflow:
@@ -688,7 +677,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
                                                           children: [
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 10,
                                                             ),
                                                             Text(

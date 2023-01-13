@@ -1,6 +1,4 @@
 import 'package:account/mainScreens/itemsScreen.dart';
-import 'package:account/model/supTrans.dart';
-import 'package:account/views/bubble_stories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
@@ -47,7 +45,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 30.0,
               ),
               Divider(
@@ -80,7 +78,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
                       ListTile(
                         title: Text(
                           '  20000'.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.red,
                           ),
                         ),
@@ -107,7 +105,7 @@ class _InfoDesignWidgetState extends State<InfoDesignWidget> {
                   ),*/
                   Text(
                     '  20000'.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.red,
                     ),
                   ),

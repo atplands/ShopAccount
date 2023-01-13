@@ -1,20 +1,13 @@
 import 'dart:io';
 
 import 'package:account/global/global.dart';
-import 'package:account/mainScreens/home_screen.dart';
 import 'package:account/mainScreens/salesOrderPendingScreen.dart';
-import 'package:account/mainScreens/salesPriceListScreen.dart';
-import 'package:account/model/customers.dart';
-import 'package:account/model/priceList.dart';
 import 'package:account/model/salesOrder.dart';
-import 'package:account/model/suppliers.dart';
 import 'package:account/widgets/custom_text_field.dart';
 import 'package:account/widgets/error_dialog.dart';
 import 'package:account/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -116,7 +109,7 @@ class SalesOrderPendingEditScreenState
           Navigator.pop(context);
           //send user to homePage
           Route newRoute =
-              MaterialPageRoute(builder: (c) => SalesOrderPendingList());
+              MaterialPageRoute(builder: (c) => const SalesOrderPendingList());
           Navigator.pushReplacement(context, newRoute);
         },
       );
@@ -201,7 +194,7 @@ class SalesOrderPendingEditScreenState
           )),
         ),
         automaticallyImplyLeading: true,
-        title: Text(
+        title: const Text(
           'Sales Order Edit',
           style: TextStyle(
             fontSize: 18,
@@ -303,7 +296,8 @@ class SalesOrderPendingEditScreenState
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.cyan,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
                   formValidation();

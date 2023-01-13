@@ -12,7 +12,6 @@ import 'package:account/notifications/supp_creditDue_notification.dart';
 //import 'package:account/providers/supp_details_provider.dart';
 //import 'package:account/views/bubble_stories.dart';
 import 'package:account/views/dashboard.dart';
-import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 //import 'package:flutter/cupertino.dart';
@@ -228,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      staggeredTileBuilder: (c) => const StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
                         SupTrans model = SupTrans.fromJson(
                           snapshot.data!.docs[index].data()!
@@ -411,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      staggeredTileBuilder: (c) => const StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
                         CustTrans model = CustTrans.fromJson(
                           snapshot.data!.docs[index].data()!
@@ -791,7 +790,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      staggeredTileBuilder: (c) => const StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
                         CustTrans model = CustTrans.fromJson(
                           snapshot.data!.docs[index].data()!

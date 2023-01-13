@@ -1,12 +1,8 @@
-import 'package:account/mainScreens/custTran_detail_screen.dart';
+//
 import 'package:account/mainScreens/suppTran_details_screen.dart';
-import 'package:account/model/custTrans.dart';
+
 import 'package:account/model/supTrans.dart';
 import 'package:flutter/material.dart';
-import 'package:account/mainScreens/item_detail_screen.dart';
-import 'package:account/mainScreens/itemsScreen.dart';
-import 'package:account/model/items.dart';
-import 'package:account/model/menus.dart';
 
 class SuppTransDesignWidget extends StatefulWidget {
   SupTrans? model;
@@ -35,7 +31,7 @@ class _SuppTransDesignWidgetState extends State<SuppTransDesignWidget> {
           elevation: 5,
           color: Colors.grey.shade200,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             height: 80,
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
@@ -43,7 +39,7 @@ class _SuppTransDesignWidgetState extends State<SuppTransDesignWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 8.0,
                   ),
                   Divider(
@@ -97,7 +93,7 @@ class _SuppTransDesignWidgetState extends State<SuppTransDesignWidget> {
                       widget.model!.transAmount!.toString(),
                       //widget.model!.transDate!  DateTime.now(),
 
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.red,
                           fontFamily: "Train",
                           fontSize: 16,

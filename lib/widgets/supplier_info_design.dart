@@ -1,5 +1,4 @@
-import 'package:account/mainScreens/custTransScreen.dart';
-import 'package:account/mainScreens/itemsScreen.dart';
+//
 import 'package:account/mainScreens/suppTransScreen.dart';
 import 'package:account/mainScreens/suppliersEditScreen.dart';
 import 'package:account/model/suppliers.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:account/global/global.dart';
 //import 'package:foodpanda_sellers_app/mainScreens/itemsScreen.dart';
-import 'package:account/model/customers.dart';
 
 class SuppliersInfoDesignWidget extends StatefulWidget {
   Suppliers? model;
@@ -80,7 +78,7 @@ class _SuppliersInfoDesignWidgetState extends State<SuppliersInfoDesignWidget> {
               ),
               ListTile(
                 leading: IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: (() {
                     Navigator.push(
                         context,

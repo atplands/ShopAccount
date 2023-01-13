@@ -1,16 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:account/global/global.dart';
 import 'package:account/mainScreens/priceList_EditScreen.dart';
 import 'package:account/model/priceList.dart';
-import 'package:account/uploadScreens/customers_upload_screen.dart';
 import 'package:account/uploadScreens/priceList_upload_screen.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class SalesPriceListScreen extends StatefulWidget {
@@ -79,7 +75,7 @@ class _SalesPriceListScreenState extends State<SalesPriceListScreen> {
                   name = value;
                 });
 
-                print("name : ${name}");
+                debugPrint("name : $name");
               }),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:account/mainScreens/cashBookScreen.dart';
 import 'package:account/mainScreens/customersScreen.dart';
+import 'package:account/mainScreens/expensesScreen.dart';
 import 'package:account/mainScreens/profileEditScreen.dart';
 import 'package:account/mainScreens/purchaseOrderPendingScreen.dart';
 import 'package:account/mainScreens/purchasesScreen.dart';
@@ -58,12 +59,12 @@ class MyDrawer extends StatelessWidget {
                   children: [
                     Text(
                       sharedPreferences!.getString("name")!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontFamily: "Train"),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 4.0,
                     ),
                     IconButton(
@@ -124,8 +125,10 @@ class MyDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => PurchasesScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const PurchasesScreen()));
                   },
                 ),
                 const Divider(
@@ -162,8 +165,10 @@ class MyDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => CustomersScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const CustomersScreen()));
                   },
                 ),
                 const Divider(
@@ -181,8 +186,52 @@ class MyDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => SuppliersScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const SuppliersScreen()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.money_off_outlined,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Cash In Hand",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const CashBookScreen()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.money_off_csred_rounded,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Expenses",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const ExpensesScreen()));
                   },
                 ),
                 const Divider(
@@ -203,7 +252,7 @@ class MyDrawer extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (c) => SalesPriceListScreen()));
+                            builder: (c) => const SalesPriceListScreen()));
                   },
                 ),
                 const Divider(
@@ -224,7 +273,7 @@ class MyDrawer extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (c) => SalesOrderPendingList()));
+                            builder: (c) => const SalesOrderPendingList()));
                   },
                 ),
                 const Divider(
@@ -245,26 +294,7 @@ class MyDrawer extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (c) => PurchaseOrdersPendingList()));
-                  },
-                ),
-                const Divider(
-                  height: 10,
-                  color: Colors.grey,
-                  thickness: 2,
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.money_off_outlined,
-                    color: Colors.black,
-                  ),
-                  title: const Text(
-                    "Cash In Hand",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => CashBookScreen()));
+                            builder: (c) => const PurchaseOrdersPendingList()));
                   },
                 ),
                 const Divider(

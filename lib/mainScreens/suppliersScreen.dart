@@ -1,20 +1,12 @@
 import 'package:account/constants/constants.dart';
 import 'package:account/global/global.dart';
-import 'package:account/model/books.dart';
-import 'package:account/model/customers.dart';
 import 'package:account/model/suppliers.dart';
-import 'package:account/uploadScreens/customers_upload_screen.dart';
-import 'package:account/uploadScreens/menus_upload_screen.dart';
 import 'package:account/uploadScreens/suppliers_upload_screen.dart';
-import 'package:account/widgets/cust_info_design.dart';
 import 'package:account/widgets/my_drawer.dart';
 import 'package:account/widgets/progress_bar.dart';
-import 'package:account/widgets/supp_text_widget_header.dart';
 import 'package:account/widgets/supplier_info_design.dart';
-import 'package:account/widgets/text_widget_header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class SuppliersScreen extends StatefulWidget {
@@ -33,6 +25,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
   double creditTotal = 0;
   double transTotal = 0;
   int suppliersCount = 0;
+  @override
   initState() {
     setState(() {});
   }
@@ -86,10 +79,10 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
             ),
           ),
         ),
-        title: Text(
+        title: const Text(
           //sharedPreferences!.getString("name")!,
           'Suppliers',
-          style: const TextStyle(fontSize: 30, fontFamily: "Lobster"),
+          style: TextStyle(fontSize: 30, fontFamily: "Lobster"),
         ),
         centerTitle: true,
         automaticallyImplyLeading: true,
@@ -108,12 +101,12 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Card(
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
             color: Colors.cyan,
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search),
                 hintText: ("Search Supplier"),
               ),
@@ -187,8 +180,8 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                     stops: [0.0, 1.0],
                                     tileMode: TileMode.clamp,
                                   ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +221,8 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                             ),
                                           ),*/
                                     Container(
-                                      padding: EdgeInsets.all(defaultPadding),
+                                      padding:
+                                          const EdgeInsets.all(defaultPadding),
                                       decoration: const BoxDecoration(
                                         gradient: LinearGradient(
                                           //begin: Alignment.topRight,
@@ -242,7 +236,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                           stops: [0.0, 1.0],
                                           tileMode: TileMode.clamp,
                                         ),
-                                        borderRadius: const BorderRadius.all(
+                                        borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
                                       ),
                                       child: Column(
@@ -257,7 +251,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                             children: [
                                               Column(
                                                 children: [
-                                                  Text(
+                                                  const Text(
                                                     "Credit",
                                                     maxLines: 1,
                                                     overflow:
@@ -282,7 +276,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 10,
                                                   ),
                                                   Text(
@@ -302,7 +296,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                                   color: (Color(0xffb49e5c))),
                                               Column(
                                                 children: [
-                                                  Text(
+                                                  const Text(
                                                     "Cash",
                                                     maxLines: 1,
                                                     overflow:
@@ -327,7 +321,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 10,
                                                   ),
                                                   Text(
@@ -353,7 +347,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                             children: [
                                               Column(
                                                 children: [
-                                                  Text(
+                                                  const Text(
                                                     "Total",
                                                     maxLines: 1,
                                                     overflow:
@@ -378,7 +372,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 10,
                                                   ),
                                                   Text(
@@ -424,7 +418,7 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                     )
                   : SliverStaggeredGrid.countBuilder(
                       crossAxisCount: 1,
-                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      staggeredTileBuilder: (c) => const StaggeredTile.fit(1),
                       itemBuilder: (context, index) {
                         //print("printed at ItemBuilder");
                         Suppliers model = Suppliers.fromJson(

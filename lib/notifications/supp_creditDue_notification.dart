@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+//
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -17,7 +17,7 @@ class NotificationService extends ChangeNotifier {
         .requestPermission();
 
     AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings("ic_launcher");
+        const AndroidInitializationSettings("ic_launcher");
 
     final InitializationSettings initializationSettings =
         InitializationSettings(
@@ -29,7 +29,7 @@ class NotificationService extends ChangeNotifier {
 
   //Instant Notifications
   Future instantNofitication() async {
-    var android = AndroidNotificationDetails(
+    var android = const AndroidNotificationDetails(
       "id",
       "channel",
     );
@@ -45,7 +45,7 @@ class NotificationService extends ChangeNotifier {
 
   //Image notification
   Future imageNotification() async {
-    var bigPicture = BigPictureStyleInformation(
+    var bigPicture = const BigPictureStyleInformation(
         DrawableResourceAndroidBitmap("ic_launcher"),
         largeIcon: DrawableResourceAndroidBitmap("ic_launcher"),
         contentTitle: "Demo image notification",
@@ -68,7 +68,7 @@ class NotificationService extends ChangeNotifier {
       {index = 0,
       title = "Supplier CreditDue",
       body = "Please looking After the Amount"}) async {
-    var android = AndroidNotificationDetails("id", "channel",
+    var android = const AndroidNotificationDetails("id", "channel",
         color: Colors.deepOrange,
         enableLights: true,
         enableVibration: true,
@@ -85,7 +85,7 @@ class NotificationService extends ChangeNotifier {
 
   Future sheduledNotification() async {
     var interval = RepeatInterval.everyMinute;
-    var bigPicture = BigPictureStyleInformation(
+    var bigPicture = const BigPictureStyleInformation(
         DrawableResourceAndroidBitmap("ic_launcher"),
         largeIcon: DrawableResourceAndroidBitmap("ic_launcher"),
         contentTitle: "Demo image notification",

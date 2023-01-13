@@ -1,7 +1,6 @@
 import 'package:account/mainScreens/salesScreen.dart';
 import 'package:account/views/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
   String? title;
@@ -42,7 +41,7 @@ class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
         alignment: Alignment.center,
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 1.0,
               //width: 10.0,
             ),
@@ -80,7 +79,7 @@ class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 60.0,
               width: 80.0,
             ),
@@ -91,11 +90,9 @@ class SalesTextWidgetHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  // TODO: implement maxExtent
   double get maxExtent => 50;
 
   @override
-  // TODO: implement minExtent
   double get minExtent => 50;
 
   @override
