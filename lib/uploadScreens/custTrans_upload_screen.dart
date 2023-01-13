@@ -275,8 +275,9 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: transNameController,
                 decoration: const InputDecoration(
-                  hintText: "Transaction Name",
-                  hintStyle: TextStyle(color: Colors.grey),
+                  label: Text("Transaction Name *"),
+                  hintText: "Transaction Name *",
+                  hintStyle: TextStyle(color: Color(0xffcb6262)),
                   border: InputBorder.none,
                 ),
               ),
@@ -291,6 +292,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               Icons.menu,
               color: Colors.cyan,
             ),
+            trailing: const Text(" :Type"),
             title: Container(
               width: 250,
               /*decoration: InputDecoration(
@@ -332,6 +334,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               Icons.calendar_today,
               color: Colors.cyan,
             ),
+            trailing: const Text(" :Date"),
             title: Container(
               width: 250,
               padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
@@ -344,7 +347,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
                         style: const TextStyle(color: Colors.grey),
                       )
                     : Text(
-                        '${transDateTime}',
+                        '$transDateTime',
                         style: const TextStyle(color: Colors.black),
                       ),
                 //style: const TextStyle(color: Colors.grey),
@@ -386,8 +389,9 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: transAmountController,
                 decoration: const InputDecoration(
-                  hintText: "Transaction Amount",
-                  hintStyle: TextStyle(color: Colors.grey),
+                  label: Text("Transaction Amount *"),
+                  hintText: "Transaction Amount *",
+                  hintStyle: TextStyle(color: Color(0xffcb6262)),
                   border: InputBorder.none,
                 ),
               ),
@@ -408,6 +412,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: transInfoController,
                 decoration: const InputDecoration(
+                  label: Text("Transaction Info*"),
                   hintText: "Transaction Info",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
@@ -424,6 +429,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               Icons.calendar_month_sharp,
               color: Colors.cyan,
             ),
+            trailing: const Text(" :DueDate"),
             title: Container(
               width: 250,
               padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
@@ -431,12 +437,12 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               child: CupertinoButton(
                 padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
                 child: transDueDateTime == null
-                    ? Text(
+                    ? const Text(
                         'Bill Due Date',
-                        style: const TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey),
                       )
                     : Text(
-                        '${transDueDateTime}',
+                        '$transDueDateTime',
                         style: const TextStyle(color: Colors.black),
                       ),
                 //style: const TextStyle(color: Colors.grey),
@@ -471,6 +477,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
               Icons.calendar_view_day_outlined,
               color: Colors.cyan,
             ),
+            trailing: const Text(" :ClosedDate"),
             title: Container(
               width: 250,
               padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
@@ -525,6 +532,7 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
                 style: const TextStyle(color: Colors.black),
                 controller: transPaymentDetailsController,
                 decoration: const InputDecoration(
+                  label: Text("Partial Payment Details"),
                   hintText: "Partial Payment Details",
                   hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
@@ -560,8 +568,6 @@ class _CustTransUploadScreenState extends State<CustTransUploadScreen> {
     if (imageXFile != null) {
       if (transNameController.text.isNotEmpty &&
               transTypeController.text.isNotEmpty &&
-              transInfoController.text.isNotEmpty &&
-              transPaymentDetailsController.text.isNotEmpty &&
               transAmountController.text.isNotEmpty
           //transDateController.text.isNotEmpty &&
           //transDueDateController.text.isNotEmpty &&

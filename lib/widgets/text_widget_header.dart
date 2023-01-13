@@ -11,12 +11,14 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
   String? transamount1 = '';
   String? transamount2 = '';
   String? query = '';
-  TextWidgetHeader(
-      {this.title,
-      this.transType1,
-      this.transType2,
-      this.transamount1,
-      this.transamount2});
+  TextWidgetHeader({
+    this.title,
+    this.transType1,
+    this.transType2,
+    this.transamount1,
+    this.transamount2,
+    this.query,
+  });
 
   @override
   Widget build(
@@ -94,7 +96,7 @@ class TextWidgetHeader extends SliverPersistentHeaderDelegate {
 
   @override
   // TODO: implement maxExtent
-  double get maxExtent => 50;
+  double get maxExtent => 80;
 
   @override
   // TODO: implement minExtent

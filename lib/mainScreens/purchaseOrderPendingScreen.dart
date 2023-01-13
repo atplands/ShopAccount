@@ -104,53 +104,57 @@ class _PurchaseOrdersPendingListState extends State<PurchaseOrdersPendingList> {
                             as Map<String, dynamic>);
                     return model.purchaseOrderName.toString().contains(name)
                         ? SingleChildScrollView(
-                            child: ExpansionTile(
-                              leading: Image.network(
-                                model.thumbnailUrl.toString(),
-                                //width: 80.0,
-                              ),
-                              title: Text(model.purchaseOrderName.toString()),
-                              children: [
-                                ListTile(
-                                  leading: IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: (() {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (c) =>
-                                                  PoPendingEditScreen(
-                                                    model: model,
-                                                    context: context,
-                                                  )));
-                                    }),
+                            child: Card(
+                              elevation: 5,
+                              child: ExpansionTile(
+                                leading: Image.network(
+                                  model.thumbnailUrl.toString(),
+                                  //width: 80.0,
+                                ),
+                                title: Text(model.purchaseOrderName.toString()),
+                                children: [
+                                  ListTile(
+                                    leading: IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: (() {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (c) =>
+                                                    PoPendingEditScreen(
+                                                      model: model,
+                                                      context: context,
+                                                    )));
+                                      }),
+                                    ),
+                                    title: Text(
+                                        model.purchaseOrderInfo.toString()),
+                                    trailing:
+                                        Text(model.totalAmount.toString()),
                                   ),
-                                  title:
-                                      Text(model.purchaseOrderInfo.toString()),
-                                  trailing: Text(model.totalAmount.toString()),
-                                ),
-                                ListTile(
-                                  leading:
-                                      Text("₹" + model.totalAmount.toString()),
-                                  title: Text(
-                                      "Stock" + model.itemsCount.toString()),
-                                  trailing:
-                                      Text("♢" + model.supplierName.toString()),
-                                ),
-                                /*ListTile(
-                            title: Text("Query String ${name}" +
-                                model.inStockCount.toString()),
-                            trailing: model.priceListName
-                                    .toString()
-                                    .startsWith(name)
-                                ? Text(
-                                    "query matched ${model.priceListName.toString().startsWith(name)}")
-                                : Text("query not matched."),
+                                  ListTile(
+                                    leading: Text(
+                                        "₹" + model.totalAmount.toString()),
+                                    title: Text(
+                                        "Stock" + model.itemsCount.toString()),
+                                    trailing: Text(
+                                        "♢" + model.supplierName.toString()),
+                                  ),
+                                  /*ListTile(
+                              title: Text("Query String ${name}" +
+                                  model.inStockCount.toString()),
+                              trailing: model.priceListName
+                                      .toString()
+                                      .startsWith(name)
+                                  ? Text(
+                                      "query matched ${model.priceListName.toString().startsWith(name)}")
+                                  : Text("query not matched."),
                           ),*/
-                              ],
-                              onExpansionChanged: (isExpanded) {
-                                //print("Expanded: ${isExpanded}");
-                              },
+                                ],
+                                onExpansionChanged: (isExpanded) {
+                                  //print("Expanded: ${isExpanded}");
+                                },
+                              ),
                             ),
                           )
                         : Center(child: Text(""));

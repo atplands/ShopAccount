@@ -42,6 +42,19 @@ class _CustTransDetailsScreenState extends State<CustTransDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Colors.cyan,
+              Colors.amber,
+            ],
+            begin: FractionalOffset(0.0, 0.0),
+            end: FractionalOffset(1.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          )),
+        ),
         title: Text(sharedPreferences!.getString("name").toString()),
         actions: [
           IconButton(
@@ -60,70 +73,192 @@ class _CustTransDetailsScreenState extends State<CustTransDetailsScreen> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 120,
-            height: 80,
-            child: Image.network(widget.model!.thumbnailUrl.toString()),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.model!.transName.toString(),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 250.0,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30)),
+                  image: DecorationImage(
+                      image:
+                          NetworkImage(widget.model!.thumbnailUrl!.toString()),
+                      fit: BoxFit.cover)),
+              /* child: Image.network(widget.model!.thumbnailUrl.toString(),
+                  height: 180.0, fit: BoxFit.cover),*/
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.model!.transInfo.toString(),
-              textAlign: TextAlign.justify,
-              style:
-                  const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.model!.transName!.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 26),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            widget.model!.transInfo!.toString(),
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        widget.model!.transAmount!.toString() + " €",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 25),
+                      ),
+                    ],
+                  ),
+                ),
+                elevation: 5,
+                color: Colors.grey.shade200,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.model!.transAmount.toString() + " €",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: InkWell(
-              onTap: () {
-                //delete item
-                deleteItem(widget.model!.custTransID!);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [
-                    Colors.cyan,
-                    Colors.amber,
-                  ],
-                  begin: FractionalOffset(0.0, 0.0),
-                  end: FractionalOffset(1.0, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp,
-                )),
-                width: MediaQuery.of(context).size.width - 13,
-                height: 50,
-                child: const Center(
-                  child: Text(
-                    "Delete this Transaction",
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Card(
+                elevation: 5,
+                color: Colors.grey.shade200,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.calendar_month,
+                        color: Colors.cyan,
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "Date: " + widget.model!.transDate!.toDate().toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 20),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Card(
+                elevation: 5,
+                color: Colors.grey.shade200,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.calendar_month,
+                        color: Colors.cyan,
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "Due: " +
+                            widget.model!.transDueDate!.toDate().toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Card(
+                elevation: 5,
+                color: Colors.grey.shade200,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.calendar_month,
+                        color: Colors.cyan,
+                        size: 30,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "Close: " +
+                            widget.model!.transClosedDate!.toDate().toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: InkWell(
+        onTap: () {
+          //delete item
+          deleteItem(widget.model!.custTransID!);
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Colors.cyan,
+              Colors.amber,
+            ],
+            begin: FractionalOffset(0.0, 0.0),
+            end: FractionalOffset(1.0, 0.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          )),
+          width: MediaQuery.of(context).size.width - 13,
+          height: 60,
+          child: const Center(
+            child: Text(
+              "Delete this Transaction",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400),
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

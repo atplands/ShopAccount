@@ -266,20 +266,20 @@ class _SalesOrderUploadScreenState extends State<SalesOrderUploadScreen> {
                       child: CustomTextField(
                         data: Icons.person,
                         controller: salesOrderNameController,
-                        hintText: "SalesOrder Name",
+                        hintText: "SalesOrder Name*",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.book,
                       controller: salesOrderInfoController,
-                      hintText: "Per Kgs, Numbers, Dozens",
+                      hintText: "Per Kgs, Numbers, Dozens*",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.price_check,
                       controller: totalAmountController,
-                      hintText: "Total Amount",
+                      hintText: "Total Amount*",
                       isObsecre: false,
                     ),
                     CustomTextField(

@@ -41,7 +41,7 @@ class PurchaseTextWidgetHeader extends SliverPersistentHeaderDelegate {
         height: 420.0,
         width: MediaQuery.of(context).size.width,
         alignment: Alignment.center,
-        child: Column(
+        child: Row(
           children: [
             SizedBox(
               height: 1.0,
@@ -54,10 +54,8 @@ class PurchaseTextWidgetHeader extends SliverPersistentHeaderDelegate {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) => const PurchasesScreen()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (c) => PurchasesScreen()));
                     },
                     child: Column(
                       children: [
@@ -71,10 +69,8 @@ class PurchaseTextWidgetHeader extends SliverPersistentHeaderDelegate {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) => const PurchasesScreen()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (c) => PurchasesScreen()));
                     },
                     child: DashBoard(
                       name: title.toString(),

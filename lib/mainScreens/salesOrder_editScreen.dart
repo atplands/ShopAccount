@@ -155,7 +155,6 @@ class SalesOrderPendingEditScreenState
       "customerName": customerNameController.text.toString(),
       "totalAmount": int.parse(totalAmountController.text.toString()),
       "itemsCount": int.parse(itemsCountController.text.toString()),
-      "publishedDate": DateTime.now(),
       "status": "available",
       "thumbnailUrl": downloadUrl,
     }).then(
@@ -169,7 +168,6 @@ class SalesOrderPendingEditScreenState
             "customerName": customerNameController.text.toString(),
             "totalAmount": int.parse(totalAmountController.text.toString()),
             "itemsCount": int.parse(itemsCountController.text.toString()),
-            "publishedDate": DateTime.now(),
             "status": "available",
             "thumbnailUrl": downloadUrl,
           },
@@ -261,20 +259,20 @@ class SalesOrderPendingEditScreenState
                       child: CustomTextField(
                         data: Icons.person,
                         controller: salesOrderNameController,
-                        hintText: "Sales Order Name",
+                        hintText: "Name*",
                         isObsecre: false,
                       ),
                     ),
                     CustomTextField(
                       data: Icons.book,
                       controller: salesOrderInfoController,
-                      hintText: "Per Kgs, Numbers, Dozens",
+                      hintText: "Per Kgs, Numbers, Dozens *",
                       isObsecre: false,
                     ),
                     CustomTextField(
                       data: Icons.price_check,
                       controller: totalAmountController,
-                      hintText: "Sale Order Amount",
+                      hintText: "Sale Order Amount *",
                       isObsecre: false,
                     ),
                     CustomTextField(
