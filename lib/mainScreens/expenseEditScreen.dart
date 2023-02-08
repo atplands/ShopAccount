@@ -36,7 +36,7 @@ class _ExpenseEditScreenState extends State<ExpenseEditScreen> {
 
   String? billType1;
   String? billType2;
-
+  String? expenseType = "Salaries";
   String custTransImageUrl = "";
   String completeAddress = "";
   bool uploading = false;
@@ -50,6 +50,8 @@ class _ExpenseEditScreenState extends State<ExpenseEditScreen> {
   void initState() {
     super.initState();
     setState(() {
+      //expenseType = widget.model!.expenseType!.toString();
+      //debugPrint("Expense Type:: $expenseType");
       //billType = widget.model!.transType.toString() ?? "Cash";
     });
     getUser();
@@ -68,7 +70,13 @@ class _ExpenseEditScreenState extends State<ExpenseEditScreen> {
       //print("Trans Name ID:: " + widget.model!.suppTransID!.toString());
       billType1 = widget.model!.expenseType!.toString().contains("ShopRent")
           ? "ShopRent"
-          : "Salaries";
+          : widget.model!.expenseType!.toString().contains("Salaries")
+              ? "Salaries"
+              : widget.model!.expenseType!.toString().contains("Electricity")
+                  ? "Electricity"
+                  : widget.model!.expenseType!.toString().contains("Labour")
+                      ? "Labour"
+                      : "Other";
       //billType2 = billType1!.contains("Cash") ? "Credit" : "Cash";
     });
   }
@@ -356,6 +364,18 @@ class _ExpenseEditScreenState extends State<ExpenseEditScreen> {
                             DropdownMenuItem<String>(
                               value: 'Salaries',
                               child: Text('Salaries'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: "Electricity",
+                              child: Text('Electricity'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'Labour',
+                              child: Text('Labour'),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'Other',
+                              child: Text('Other'),
                             ),
                           ],
                         ),

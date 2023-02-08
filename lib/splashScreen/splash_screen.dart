@@ -96,7 +96,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  FlatButton(
+                  MaterialButton(
                     child: const Text(
                       'Getting Started',
                       style: TextStyle(

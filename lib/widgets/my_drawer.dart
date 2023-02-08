@@ -117,7 +117,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(
-                    Icons.monetization_on,
+                    Icons.wallet_membership,
                     color: Colors.black,
                   ),
                   title: const Text(
@@ -138,7 +138,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(
-                    Icons.monetization_on,
+                    Icons.money_off_sharp,
                     color: Colors.black,
                   ),
                   title: const Text(
@@ -199,28 +199,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(
-                    Icons.money_off_outlined,
-                    color: Colors.black,
-                  ),
-                  title: const Text(
-                    "Cash In Hand",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (c) => const CashBookScreen()));
-                  },
-                ),
-                const Divider(
-                  height: 10,
-                  color: Colors.grey,
-                  thickness: 2,
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.money_off_csred_rounded,
+                    Icons.account_balance_wallet_sharp,
                     color: Colors.black,
                   ),
                   title: const Text(
@@ -232,6 +211,27 @@ class MyDrawer extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (c) => const ExpensesScreen()));
+                  },
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.money,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Cash In Hand",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const CashBookScreen()));
                   },
                 ),
                 const Divider(
