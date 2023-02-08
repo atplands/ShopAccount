@@ -14,6 +14,7 @@ import 'package:account/notifications/supp_creditDue_notification.dart';
 import 'package:account/views/dashboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 //import 'package:flutter/cupertino.dart';
 //import 'package:flutter/cupertino.dart';
 //import 'package:flutter/cupertino.dart';
@@ -594,8 +595,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 BorderRadius.circular(8),
                                             gradient: const LinearGradient(
                                               colors: [
-                                                Colors.cyan,
-                                                Color(0xffffc107),
+                                                Color(0xff4d38c8),
+                                                Color(0xff1c10c8),
                                               ],
                                               begin: FractionalOffset(0.0, 0.0),
                                               end: FractionalOffset(1.0, 0.0),
@@ -644,7 +645,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: primaryColor,
                                                             value:
                                                                 custCashTotal,
-                                                            showTitle: false,
+                                                            showTitle: true,
                                                             radius: 25,
                                                           ),
                                                           PieChartSectionData(
@@ -652,7 +653,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 0xf6e76124),
                                                             value:
                                                                 custCreditTotal,
-                                                            showTitle: false,
+                                                            showTitle: true,
                                                             radius: 30,
                                                           ),
                                                         ],
@@ -668,7 +669,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               height:
                                                                   defaultPadding),
                                                           Text(
-                                                            "{$transCustTotal/1000}",
+                                                            "${transCustTotal / 1000}k",
                                                             style: Theme.of(
                                                                     context)
                                                                 .textTheme
@@ -682,8 +683,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   height: 0.5,
                                                                 ),
                                                           ),
-                                                          const Text(
-                                                              "thousand Amount"),
+                                                          const Text("Amount"),
                                                         ],
                                                       ),
                                                     ),
@@ -879,8 +879,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     gradient:
                                                         const LinearGradient(
                                                       colors: [
-                                                        Colors.cyan,
-                                                        Color(0xffffc107),
+                                                        Color(0xff564ac5),
+                                                        Color(0xff1c10c8),
                                                       ],
                                                       begin: FractionalOffset(
                                                           0.0, 0.0),
@@ -938,7 +938,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     value:
                                                                         custCashTotal,
                                                                     showTitle:
-                                                                        false,
+                                                                        true,
                                                                     radius: 25,
                                                                   ),
                                                                   PieChartSectionData(
@@ -947,7 +947,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     value:
                                                                         custCreditTotal,
                                                                     showTitle:
-                                                                        false,
+                                                                        true,
                                                                     radius: 30,
                                                                   ),
                                                                 ],
@@ -963,7 +963,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       height:
                                                                           defaultPadding),
                                                                   Text(
-                                                                    "{$transCustTotal/1000}",
+                                                                    "${transCustTotal / 1000}k",
                                                                     style: Theme.of(
                                                                             context)
                                                                         .textTheme
@@ -978,7 +978,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         ),
                                                                   ),
                                                                   const Text(
-                                                                      "thousand Amount"),
+                                                                      "Amount"),
                                                                 ],
                                                               ),
                                                             ),
@@ -1148,8 +1148,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 BorderRadius.circular(8),
                                             gradient: const LinearGradient(
                                               colors: [
-                                                Colors.cyan,
-                                                Color(0xffffc107),
+                                                Color(0xff424bc3),
+                                                Color(0xff1c10c8),
                                               ],
                                               begin: FractionalOffset(0.0, 0.0),
                                               end: FractionalOffset(1.0, 0.0),
@@ -1222,7 +1222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               height:
                                                                   defaultPadding),
                                                           Text(
-                                                            "{$transSuppTotal/1000}",
+                                                            "${transSuppTotal / 1000}K",
                                                             style: Theme.of(
                                                                     context)
                                                                 .textTheme
@@ -1236,8 +1236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   height: 0.5,
                                                                 ),
                                                           ),
-                                                          const Text(
-                                                              "Thousands Amount"),
+                                                          const Text("Amount"),
                                                         ],
                                                       ),
                                                     ),
@@ -1436,8 +1435,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     gradient:
                                                         const LinearGradient(
                                                       colors: [
-                                                        Colors.cyan,
-                                                        Color(0xffffc107),
+                                                        Color(0xff4a41b4),
+                                                        Color(0xff1c10c8),
                                                       ],
                                                       begin: FractionalOffset(
                                                           0.0, 0.0),
@@ -1520,7 +1519,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       height:
                                                                           defaultPadding),
                                                                   Text(
-                                                                    "{$transSuppTotal/1000}",
+                                                                    "${transSuppTotal / 1000}K",
                                                                     style: Theme.of(
                                                                             context)
                                                                         .textTheme
@@ -1535,7 +1534,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         ),
                                                                   ),
                                                                   const Text(
-                                                                      "Thousands Amount"),
+                                                                      "Amount"),
                                                                 ],
                                                               ),
                                                             ),

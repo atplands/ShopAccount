@@ -190,17 +190,11 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomTextField(
-                        data: Icons.person,
-                        controller: cashBookInfoController,
-                        hintText: "Info",
-                        isObsecre: false,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
+                    CustomTextField(
+                      data: Icons.person,
+                      controller: cashBookInfoController,
+                      hintText: "Info",
+                      isObsecre: false,
                     ),
                     InkWell(
                       onTap: () {
@@ -221,58 +215,55 @@ class CashBookEditScreenState extends State<CashBookEditScreen> {
                           ),
                         );
                       },
-                      child: Card(
-                        elevation: 4,
-                        color: Colors.grey.shade200,
-                        child: Container(
-                            width: double.infinity,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                            padding:
-                                const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                            margin:
-                                const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Card(
+                          elevation: 4,
+                          color: Colors.white,
 
-                            // padding: const EdgeInsets.fromLTRB(1.0, 2.0, 1.0, 1.0),
-                            child: transDateTime == null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Row(
-                                      children: const [
-                                        Icon(Icons.calendar_today),
-                                        SizedBox(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          'Transaction Date',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        Text(" :Date"),
-                                      ],
-                                    ))
-                                : Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.calendar_today),
-                                        const SizedBox(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          '$transDateTime',
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        const Text(" :Date"),
-                                      ],
-                                    ))
-
-                            //style: const TextStyle(color: Colors.grey),
-                            ),
+                          margin: const EdgeInsets.all(6),
+//                          margin:EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            //set border radius more than 50% of height and width to make circle
+                          ),
+                          child: transDateTime == null
+                              ? Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 22),
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.calendar_today),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(
+                                        'Transaction Date',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text(" :Date"),
+                                    ],
+                                  ),
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 22),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.calendar_today),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(
+                                        '$transDateTime',
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                      ),
+                                      const Text(" :Date"),
+                                    ],
+                                  ),
+                                ),
+                        ),
                       ),
                     ),
                     CustomTextField(

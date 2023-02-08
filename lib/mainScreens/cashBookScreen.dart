@@ -95,11 +95,12 @@ class _CashBookScreenState extends State<CashBookScreen> {
                             child: Card(
                               elevation: 5,
                               child: ExpansionTile(
-                                leading: Text(model.publishedDate!
+                                title: Text(model.transDate!
                                     .toDate()
                                     .toString()) //width: 80.0,
                                 ,
-                                title: Text(model.cashBookInfo.toString()),
+                                subtitle: Text(
+                                    "₹ ${model.cashInAmount!.toDouble() + model.onlineInAmount!.toDouble()}"),
                                 children: [
                                   ListTile(
                                     leading: IconButton(
@@ -116,27 +117,19 @@ class _CashBookScreenState extends State<CashBookScreen> {
                                       }),
                                     ),
                                     title: Text(model.cashBookInfo.toString()),
-                                    trailing:
-                                        Text(model.cashInAmount.toString()),
                                   ),
                                   ListTile(
-                                    leading: Text(
-                                        "₹" + model.cashInAmount.toString()),
-                                    title: Text("Stock" +
+                                    title: Text("Cash In: ₹" +
+                                        model.cashInAmount.toString()),
+                                    trailing: Text("Out: ₹" +
                                         model.cashOutAmount.toString()),
-                                    trailing: Text(
-                                        "♢" + model.onlineInAmount.toString()),
                                   ),
-                                  /*ListTile(
-                              title: Text("Query String ${name}" +
-                                  model.inStockCount.toString()),
-                              trailing: model.priceListName
-                                      .toString()
-                                      .startsWith(name)
-                                  ? Text(
-                                      "query matched ${model.priceListName.toString().startsWith(name)}")
-                                  : Text("query not matched."),
-                          ),*/
+                                  ListTile(
+                                    title: Text("Online In: ₹" +
+                                        model.onlineInAmount.toString()),
+                                    trailing: Text("Out: ₹" +
+                                        model.onlineOutAmount.toString()),
+                                  ),
                                 ],
                                 onExpansionChanged: (isExpanded) {
                                   //print("Expanded: ${isExpanded}");

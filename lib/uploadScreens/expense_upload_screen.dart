@@ -304,6 +304,18 @@ class _ExpenseUploadScreenState extends State<ExpenseUploadScreen> {
                             value: 'Salaries',
                             child: Text('Salaries'),
                           ),
+                          DropdownMenuItem<String>(
+                            value: "Electricity",
+                            child: Text('Electricity'),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Labour',
+                            child: Text('Labour'),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'Other',
+                            child: Text('Other'),
+                          ),
                         ],
                       ),
                     ),
